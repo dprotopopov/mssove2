@@ -34,8 +34,10 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Arcfour.cs" />
@@ -43,6 +45,7 @@
     <Compile Include="BitmapSteganography.cs" />
     <Compile Include="BroadbandSignals.cs" />
     <Compile Include="Comparer.cs" />
+    <Compile Include="SteganographyOptions.cs" />
     <Compile Include="SequenceIndicator.cs" />
     <Compile Include="ErrorCorrection.cs" />
     <Compile Include="BoxFilter.cs" />
@@ -55,6 +58,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewSequenceForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ViewSequenceForm.Designer.cs">
+      <DependentUpon>ViewSequenceForm.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="SteganographyForm.resx">
       <DependentUpon>SteganographyForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -67,6 +76,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="ViewSequenceForm.resx">
+      <DependentUpon>ViewSequenceForm.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
