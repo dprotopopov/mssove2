@@ -126,13 +126,9 @@ namespace Steganography
         {
             try
             {
+                openSampleDialog.Filter = "bitmap|*.bmp";
                 if (openSampleDialog.ShowDialog() != DialogResult.OK) return;
-                Image image = Image.FromFile(openSampleDialog.FileName);
-                if (image.PixelFormat != PixelFormat.Format32bppArgb)
-                    if (MessageBox.Show(@"Формат файла отличен от BMP32ARGB",
-                        @"Предупреждение",
-                        MessageBoxButtons.OKCancel) == DialogResult.Cancel)
-                        return;
+                Image image = new Bitmap(openSampleDialog.FileName);
                 packingSample.Image = image;
             }
             catch (Exception exception)
@@ -145,9 +141,10 @@ namespace Steganography
         {
             try
             {
+                saveImageDialog.Filter = "bitmap|*.bmp";
                 if (packingImage.Image == null) throw new Exception("Нет изображения");
                 if (saveImageDialog.ShowDialog() != DialogResult.OK) return;
-                packingImage.Image.Save(saveImageDialog.FileName);
+                packingImage.Image.Save(saveImageDialog.FileName, ImageFormat.Bmp);
                 Debug.WriteLine(packingImage.Image.PixelFormat);
             }
             catch (Exception exception)
@@ -160,12 +157,12 @@ namespace Steganography
         {
             try
             {
+                openImageDialog.Filter = "bitmap|*.bmp";
                 if (openImageDialog.ShowDialog() != DialogResult.OK) return;
-                var bitmap = new Bitmap(Image.FromFile(openImageDialog.FileName));
+                var bitmap = new Bitmap(openImageDialog.FileName);
                 Debug.WriteLine(bitmap.PixelFormat);
-                if (bitmap.PixelFormat != PixelFormat.Format32bppArgb) throw new Exception("Неизвестный формат");
                 unpackingImage.Image = bitmap;
-            }
+             }
             catch (Exception exception)
             {
                 MessageBox.Show(exception.Message);
