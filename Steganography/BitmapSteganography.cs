@@ -1,10 +1,7 @@
 using System;
 using System.Diagnostics;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.IO.Compression;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -12,11 +9,11 @@ namespace Steganography
 {
     public class BitmapSteganography
     {
+        private const int BitsPerByte = 8;
         private static readonly RandomNumberGenerator Rng = RandomNumberGenerator.Create();
 
-        public Bitmap Packing(SteganographyOptions steganographyOptions)
+        public SteganographyBitmap Packing(SteganographyOptions steganographyOptions)
         {
-            Image imageSample = steganographyOptions.ImageSample;
             string steganographyKey = steganographyOptions.SteganographyKey;
             int expandSize = steganographyOptions.ExpandSize;
             int alpha = steganographyOptions.Alpha;
@@ -28,6 +25,10 @@ namespace Steganography
             bool politicsRandom = steganographyOptions.PoliticsRandom;
             bool politicsFake = steganographyOptions.PoliticsFake;
             string politicsText = steganographyOptions.PoliticsText;
+            int mixerIndex = steganographyOptions.MixerIndex;
+            int gammaIndex = steganographyOptions.GammaIndex;
+            int pixelFormatIndex = steganographyOptions.PixelFormatIndex;
+            SteganographyBitmap sampleBitmap = steganographyOptions.SampleBitmap;
 
             var decompressed = new MemoryStream(Encoding.Default.GetBytes(text));
             var compressed = new MemoryStream();
@@ -52,26 +53,16 @@ namespace Steganography
             compressed.Seek(0, SeekOrigin.Begin);
             decompressed.Seek(0, SeekOrigin.Begin);
 
-            int count = (int) enveloped.Length*expandSize*8; // “ребуемое число бит
-            double ratio = Math.Sqrt((double) count/(imageSample.Width*imageSample.Height*3));
-            Bitmap bitmap = autoResize
-                ? new Bitmap(
-                    (int) (ratio*imageSample.Width + 1),
-                    (int) (ratio*imageSample.Height + 1),
-                    PixelFormat.Format32bppArgb)
-                : new Bitmap(
-                    imageSample.Width,
-                    imageSample.Height,
-                    PixelFormat.Format32bppArgb);
+            int count = (int) enveloped.Length*expandSize*BitsPerByte; // “ребуемое число пикселей
+
+            var outputBitmap = new SteganographyBitmap(sampleBitmap, count, pixelFormatIndex, autoResize);
 
             // дл€ каждого бита сообщени€ нужно N байт носител€
-            if (enveloped.Length*expandSize*8 > bitmap.Width*bitmap.Height*3)
+            if (enveloped.Length*expandSize*BitsPerByte > outputBitmap.Length)
                 throw new Exception("–азмер изображени€ недостаточен дл€ сохранени€ данных " +
-                                    (enveloped.Length*expandSize*8) + "/" + (bitmap.Width*bitmap.Height*3));
+                                    (enveloped.Length*expandSize*BitsPerByte) + "/" + outputBitmap.Length);
 
-            Graphics.FromImage(bitmap).DrawImage(imageSample, new Rectangle(0, 0, bitmap.Width, bitmap.Height));
-
-            var data = new byte[politicsNone ? enveloped.Length : bitmap.Width*bitmap.Height*3/8/expandSize];
+            var data = new byte[politicsNone ? enveloped.Length : (outputBitmap.Length/BitsPerByte/expandSize)];
             if (politicsZero) Array.Clear(data, 0, data.Length);
             if (politicsRandom) Rng.GetBytes(data);
             if (politicsFake)
@@ -83,43 +74,39 @@ namespace Steganography
             }
             Array.Copy(enveloped.ToArray(), data, enveloped.Length);
 
-            int[] index = new Arcfour(steganographyKey).Ksa(bitmap.Width*bitmap.Height*3);
-            byte[] colors = new BitmapTools(bitmap).Select(index);
-            byte[] gamma = new Arcfour(steganographyKey).Prga((expandSize + 7)/8);
-
-            byte[] cw = new BroadbandSignals(expandSize).EncodeAndCombine(colors, data, gamma, alpha);
-            new BitmapTools(bitmap).Replace(index, cw);
+            int[] index = new Mixer(mixerIndex, steganographyKey).GetIndeces(outputBitmap.Length);
+            byte[] gamma = new Gamma(gammaIndex, steganographyKey).GetGamma((expandSize + BitsPerByte - 1)/BitsPerByte);
+            byte[] colors = outputBitmap.Select(index);
+            byte[] cw = new BroadbandSignals(expandSize).EncodeAndCombine(colors, data, gamma, (byte) alpha);
+            outputBitmap.Replace(index, cw);
 
             enveloped.Seek(0, SeekOrigin.Begin);
             compressed.Seek(0, SeekOrigin.Begin);
             decompressed.Seek(0, SeekOrigin.Begin);
 
-            Debug.WriteLine("decompressed" + string.Join("", decompressed.ToArray().Select(x => x.ToString("X02"))));
-            Debug.WriteLine("  compressed" + string.Join("", compressed.ToArray().Select(x => x.ToString("X02"))));
-            Debug.WriteLine("   enveloped" + string.Join("", enveloped.ToArray().Select(x => x.ToString("X02"))));
-            Debug.WriteLine("       gamma" + string.Join("", gamma.ToArray().Select(x => x.ToString("X02"))));
-            Debug.WriteLine("          cw" + string.Join("", cw.ToArray().Select(x => x.ToString("X02"))));
-
-            Debug.WriteLine(decompressed.Length);
-            Debug.WriteLine(compressed.Length);
-            Debug.WriteLine(enveloped.Length);
-            Debug.WriteLine(bitmap.Width*bitmap.Height*3);
-
-            return bitmap;
+            steganographyOptions.OutputBitmap = outputBitmap;
+            return outputBitmap;
         }
 
         public string Unpacking(SteganographyOptions steganographyOptions)
         {
-            Bitmap bitmap = steganographyOptions.Bitmap;
             string steganographyKey = steganographyOptions.SteganographyKey;
             int expandSize = steganographyOptions.ExpandSize;
             int filterStep = steganographyOptions.FilterStep;
             bool decompress = steganographyOptions.Compress;
+            int mixerIndex = steganographyOptions.MixerIndex;
+            int gammaIndex = steganographyOptions.GammaIndex;
 
-            byte[] gamma = new Arcfour(steganographyKey).Prga((expandSize + 7)/8);
-            int[] index = new Arcfour(steganographyKey).Ksa(bitmap.Width*bitmap.Height*3);
-            byte[] cw = new BitmapTools(bitmap).Select(index);
-            byte[] median = new BitmapTools(new BoxFilter(filterStep).Filter(bitmap)).Select(index);
+            SteganographyBitmap inputBitmap = steganographyOptions.InputBitmap;
+            var blurBitmap = new SteganographyBitmap(inputBitmap, filterStep);
+
+            Debug.WriteLine(inputBitmap.Length);
+            Debug.WriteLine(blurBitmap.Length);
+
+            int[] index = new Mixer(mixerIndex, steganographyKey).GetIndeces(inputBitmap.Length);
+            byte[] gamma = new Gamma(gammaIndex, steganographyKey).GetGamma((expandSize + BitsPerByte - 1)/BitsPerByte);
+            byte[] cw = inputBitmap.Select(index);
+            byte[] median = blurBitmap.Select(index);
             byte[] data = new BroadbandSignals(expandSize).DecodeAndExtract(cw, gamma, median);
 
             var enveloped = new MemoryStream(data);
@@ -145,18 +132,7 @@ namespace Steganography
             compressed.Seek(0, SeekOrigin.Begin);
             decompressed.Seek(0, SeekOrigin.Begin);
 
-            Debug.WriteLine(bitmap.Width*bitmap.Height*3);
-            Debug.WriteLine(enveloped.Length);
-            Debug.WriteLine(compressed.Length);
-            Debug.WriteLine(decompressed.Length);
-
-            Debug.WriteLine("          cw" + string.Join("", cw.ToArray().Select(x => x.ToString("X02"))));
-            Debug.WriteLine("      median" + string.Join("", median.ToArray().Select(x => x.ToString("X02"))));
-            Debug.WriteLine("       gamma" + string.Join("", gamma.ToArray().Select(x => x.ToString("X02"))));
-            Debug.WriteLine("   enveloped" + string.Join("", enveloped.ToArray().Select(x => x.ToString("X02"))));
-            Debug.WriteLine("  compressed" + string.Join("", compressed.ToArray().Select(x => x.ToString("X02"))));
-            Debug.WriteLine("decompressed" + string.Join("", decompressed.ToArray().Select(x => x.ToString("X02"))));
-
+            steganographyOptions.BlurBitmap = blurBitmap;
             return Encoding.Default.GetString(decompressed.ToArray());
         }
     }

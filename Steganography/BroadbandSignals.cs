@@ -10,6 +10,7 @@ namespace Steganography
     /// </summary>
     public class BroadbandSignals
     {
+        private const int BitsPerByte = 8;
         private readonly int _expandSize;
 
         public BroadbandSignals(int expandSize)
@@ -17,54 +18,50 @@ namespace Steganography
             _expandSize = expandSize;
         }
 
-        public byte[] EncodeAndCombine(byte[] colors, byte[] data, byte[] gamma, int alpha)
+        public byte[] EncodeAndCombine(byte[] colors, byte[] data, byte[] gamma, byte alpha)
         {
-            Debug.Assert(colors.Length >= data.Length*8*_expandSize);
-            Debug.Assert(gamma.Length*8 >= _expandSize);
+            Debug.Assert(colors.Length >= data.Length*BitsPerByte*_expandSize);
+            Debug.Assert(gamma.Length*BitsPerByte >= _expandSize);
 
             var result = new byte[colors.Length];
             Array.Copy(colors, result, colors.Length);
 
+            ulong delta = alpha;
             for (int m = 0; m < _expandSize; m++)
-            {
-                int index = m*colors.Length/_expandSize; // Индекс начала строки
-                for (int i = 0; i < data.Length*8; i++)
+                for (int i = 0, index = m*colors.Length/_expandSize; i < data.Length*BitsPerByte; i++, index++)
                 {
-                    var color = (int) colors[index];
+                    ulong color = colors[index];
                     int b = (data[i >> 3] >> (i & 7)) & 1;
                     int g = (gamma[m >> 3] >> (m & 7)) & 1;
-                    if ((b ^ g) == 0) color += alpha;
-                    else color -= alpha;
-                    if (color < 0) color = 0;
+                    if ((b ^ g) == 0) color += delta;
+                    else if (delta <= color) color -= delta;
+                    else color = 0;
                     if (color > 255) color = 255;
-                    result[index++] = (byte) color;
+                    result[index] = (byte) color;
                 }
-            }
             return result;
         }
 
         public byte[] DecodeAndExtract(byte[] colors, byte[] gamma, byte[] median)
         {
-            Debug.Assert(gamma.Length*8 >= _expandSize);
+            Debug.Assert(gamma.Length*BitsPerByte >= _expandSize);
 
-            int count = colors.Length/8/_expandSize; // Длина строки в байтах
-            var votes = new int[8*count];
+            int count = colors.Length/BitsPerByte/_expandSize; // Длина строки в байтах
+            var votes = new long[BitsPerByte*count];
             var result = new byte[count];
 
             Array.Clear(votes, 0, votes.Length);
             Array.Clear(result, 0, result.Length);
 
             for (int m = 0; m < _expandSize; m++)
-            {
-                int index = m*colors.Length/_expandSize; // Индекс начала строки
-                for (int i = 0; i < 8*count; i++)
+                for (int i = 0, index = m*colors.Length/_expandSize; i < BitsPerByte*count; i++, index++)
                 {
-                    int d = colors[index + i] - median[index + i];
-                    int b = (((gamma[m >> 3] >> (m & 7)) & 1) == 0) ? d : -d;
-                    votes[i] += b;
+                    ulong value1 = colors[index];
+                    ulong value2 = median[index];
+                    long d = (long) value1 - (long) value2;
+                    votes[i] += (((gamma[m >> 3] >> (m & 7)) & 1) == 0) ? d : -d;
                 }
-            }
-            for (int i = 0; i < 8*count; i++)
+            for (int i = 0; i < BitsPerByte*count; i++)
                 if (votes[i] < 0)
                     result[i >> 3] |= (byte) (1 << (i & 7));
             return result;

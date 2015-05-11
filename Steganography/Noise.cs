@@ -46,5 +46,12 @@ namespace Steganography
                 output.Write(buffer, 0, r);
             }
         }
+
+        public void GetBytes(long[] noise)
+        {
+            var temp = new byte[noise.Length*8];
+            GetBytes(temp);
+            Buffer.BlockCopy(temp, 0, noise, 0, noise.Length*8);
+        }
     }
 }

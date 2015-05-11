@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Drawing;
 using System.Runtime.Serialization;
 
 namespace Steganography
@@ -11,17 +10,22 @@ namespace Steganography
     public class SteganographyOptions : ISerializable //derive your class from ISerializable
     {
         public int Alpha;
-        public Bitmap Bitmap;
+        public SteganographyBitmap BlurBitmap;
         public bool Compress;
         public int ExpandSize;
         public int FilterStep;
-        public Image ImageSample;
+        public int GammaIndex;
+        public SteganographyBitmap InputBitmap;
+        public int MixerIndex;
+        public SteganographyBitmap OutputBitmap;
+        public int PixelFormatIndex;
         public bool PoliticsFake;
         public bool PoliticsNone;
         public bool PoliticsRandom;
         public string PoliticsText;
         public bool PoliticsZero;
         public bool SampleAutoresize;
+        public SteganographyBitmap SampleBitmap;
         public string SteganographyKey;
         public string Text;
 
@@ -34,11 +38,9 @@ namespace Steganography
         {
             //Get the values from info and assign them to the appropriate properties
             Alpha = (int) info.GetValue("Alpha", typeof (int));
-            Bitmap = (Bitmap) info.GetValue("Bitmap", typeof (Bitmap));
             Compress = (bool) info.GetValue("Compress", typeof (bool));
             ExpandSize = (int) info.GetValue("ExpandSize", typeof (int));
             FilterStep = (int) info.GetValue("FilterStep", typeof (int));
-            ImageSample = (Image) info.GetValue("ImageSample", typeof (Image));
             SteganographyKey = (string) info.GetValue("SteganographyKey", typeof (string));
             Text = (string) info.GetValue("Text", typeof (string));
             SampleAutoresize = (bool) info.GetValue("SampleAutoresize", typeof (bool));
@@ -47,6 +49,9 @@ namespace Steganography
             PoliticsRandom = (bool) info.GetValue("PoliticsRandom", typeof (bool));
             PoliticsFake = (bool) info.GetValue("PoliticsFake", typeof (bool));
             PoliticsText = (string) info.GetValue("PoliticsText", typeof (string));
+            MixerIndex = (int) info.GetValue("MixerIndex", typeof (int));
+            GammaIndex = (int) info.GetValue("GammaIndex", typeof (int));
+            PixelFormatIndex = (int) info.GetValue("PixelFormatIndex", typeof (int));
         }
 
         // Serialization function.
@@ -56,11 +61,9 @@ namespace Steganography
             // read the values with the same name. For ex:- If you write EmpId as "EmployeeId"
             // then you should read the same with "EmployeeId"
             info.AddValue("Alpha", Alpha);
-            info.AddValue("Bitmap", Bitmap);
             info.AddValue("Compress", Compress);
             info.AddValue("ExpandSize", ExpandSize);
             info.AddValue("FilterStep", FilterStep);
-            info.AddValue("ImageSample", ImageSample);
             info.AddValue("SteganographyKey", SteganographyKey);
             info.AddValue("Text", Text);
             info.AddValue("SampleAutoresize", SampleAutoresize);
@@ -69,6 +72,9 @@ namespace Steganography
             info.AddValue("PoliticsRandom", PoliticsRandom);
             info.AddValue("PoliticsFake", PoliticsFake);
             info.AddValue("PoliticsText", PoliticsText);
+            info.AddValue("MixerIndex", MixerIndex);
+            info.AddValue("GammaIndex", GammaIndex);
+            info.AddValue("PixelFormatIndex", PixelFormatIndex);
         }
     }
 }

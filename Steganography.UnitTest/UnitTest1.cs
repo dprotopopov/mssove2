@@ -98,28 +98,6 @@ namespace Steganography.UnitTest
         }
 
         [TestMethod]
-        public void TestMethod3()
-        {
-            for (int i = 0; i < 10; i++)
-            {
-                var data = new byte[1000];
-                var gamma = new byte[1000];
-                var colors = new byte[1000*8];
-                var median = new byte[1000*8];
-
-                new Noise(0, 1).GetBytes(data);
-                new Noise(0, 1).GetBytes(gamma);
-                new Noise(0.5, 0.5).GetBytes(colors);
-                new Noise(0.5, 0.5).GetBytes(median);
-
-                byte[] cw = new BroadbandSignals(10).EncodeAndCombine(colors, data, gamma, 64);
-                byte[] data1 = new BroadbandSignals(10).DecodeAndExtract(cw, gamma, median);
-
-                Console.WriteLine(new Comparer().Distance(data, data1));
-            }
-        }
-
-        [TestMethod]
         public void TestMethod4()
         {
             for (int i = 0; i < 10; i++)

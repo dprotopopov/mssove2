@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
@@ -10,12 +8,21 @@ namespace Steganography
 {
     public partial class SteganographyForm : Form
     {
+        private const string BitmapImagesFilter = "Bitmap Images|*.bmp";
         private readonly BitmapSteganography _bitmapSteganography = new BitmapSteganography();
+        private SteganographyBitmap _inputBitmap;
         private SteganographyOptions _options = new SteganographyOptions();
+        private SteganographyBitmap _outputBitmap;
+        private SteganographyBitmap _sampleBitmap;
 
         public SteganographyForm()
         {
             InitializeComponent();
+            packingMixer.Items.AddRange(Mixer.ComboBoxItems);
+            packingGamma.Items.AddRange(Gamma.ComboBoxItems);
+            packingPixelFormat.Items.AddRange(SteganographyBitmap.ComboBoxItems);
+            unpackingMixer.Items.AddRange(Mixer.ComboBoxItems);
+            unpackingGamma.Items.AddRange(Gamma.ComboBoxItems);
             try
             {
                 Stream stream = File.Open("default.options", FileMode.Open);
@@ -25,6 +32,9 @@ namespace Steganography
             }
             catch (Exception)
             {
+                _options.PixelFormatIndex = 0;
+                _options.GammaIndex = 1;
+                _options.MixerIndex = 1;
                 _options.ExpandSize = 64;
                 _options.Alpha = 10;
                 _options.Compress = false;
@@ -37,14 +47,13 @@ namespace Steganography
                 _options.SteganographyKey = "WELCOME";
                 _options.FilterStep = 3;
             }
-            
-            ApplyPackingOption();
-            ApplyUnpackingOption();
+
+            SetPackingOption();
+            SetUnpackingOption();
         }
 
-        private void ApplyPackingOption()
+        private void SetPackingOption()
         {
-            packingSample.Image = _options.ImageSample;
             packingKey.Text = _options.SteganographyKey;
             packingExpand.Value = _options.ExpandSize;
             packingAlpha.Value = _options.Alpha;
@@ -56,20 +65,29 @@ namespace Steganography
             packingPoliticsRandom.Checked = _options.PoliticsRandom;
             packingPoliticsFake.Checked = _options.PoliticsFake;
             packingPoliticsText.Text = _options.PoliticsText;
+            packingMixer.SelectedIndex = _options.MixerIndex;
+            packingGamma.SelectedIndex = _options.GammaIndex;
+            packingPixelFormat.SelectedIndex = _options.PixelFormatIndex;
+            _sampleBitmap = _options.SampleBitmap;
+            _inputBitmap = _options.InputBitmap;
+            _outputBitmap = _options.OutputBitmap;
         }
 
-        private void ApplyUnpackingOption()
+        private void SetUnpackingOption()
         {
-            unpackingImage.Image = _options.Bitmap;
             unpackingKey.Text = _options.SteganographyKey;
             unpackingExpand.Value = _options.ExpandSize;
             unpackingFilter.Value = _options.FilterStep;
             unpackingDecompress.Checked = _options.Compress;
+            unpackingMixer.SelectedIndex = _options.MixerIndex;
+            unpackingGamma.SelectedIndex = _options.GammaIndex;
+            _sampleBitmap = _options.SampleBitmap;
+            _inputBitmap = _options.InputBitmap;
+            _outputBitmap = _options.OutputBitmap;
         }
 
         private void GetPackingOption()
         {
-            _options.ImageSample = packingSample.Image;
             _options.SteganographyKey = packingKey.Text;
             _options.ExpandSize = (int) packingExpand.Value;
             _options.Alpha = (int) packingAlpha.Value;
@@ -81,15 +99,25 @@ namespace Steganography
             _options.PoliticsRandom = packingPoliticsRandom.Checked;
             _options.PoliticsFake = packingPoliticsFake.Checked;
             _options.PoliticsText = packingPoliticsText.Text;
+            _options.MixerIndex = packingMixer.SelectedIndex;
+            _options.GammaIndex = packingGamma.SelectedIndex;
+            _options.PixelFormatIndex = packingPixelFormat.SelectedIndex;
+            _options.SampleBitmap = _sampleBitmap;
+            _options.InputBitmap = _inputBitmap;
+            _options.OutputBitmap = _outputBitmap;
         }
 
         private void GetUnpackingOption()
         {
-            _options.Bitmap = (Bitmap) unpackingImage.Image;
             _options.SteganographyKey = unpackingKey.Text;
             _options.ExpandSize = (int) unpackingExpand.Value;
             _options.FilterStep = (int) unpackingFilter.Value;
             _options.Compress = unpackingDecompress.Checked;
+            _options.MixerIndex = unpackingMixer.SelectedIndex;
+            _options.GammaIndex = unpackingGamma.SelectedIndex;
+            _options.SampleBitmap = _sampleBitmap;
+            _options.InputBitmap = _inputBitmap;
+            _options.OutputBitmap = _outputBitmap;
         }
 
         private void packing_Click(object sender, EventArgs e)
@@ -98,8 +126,9 @@ namespace Steganography
             {
                 if (packingSample.Image == null) throw new Exception("Нет изображения");
                 GetPackingOption();
-                packingImage.Image = _bitmapSteganography.Packing(_options);
-                ApplyUnpackingOption();
+                _outputBitmap = _bitmapSteganography.Packing(_options);
+                packingImage.Image = _outputBitmap.GetBitmap();
+                SetUnpackingOption();
             }
             catch (Exception exception)
             {
@@ -115,6 +144,7 @@ namespace Steganography
 
                 GetUnpackingOption();
                 unpackingDest.Text = _bitmapSteganography.Unpacking(_options);
+                pictureBox1.Image = _options.BlurBitmap.GetBitmap();
             }
             catch (Exception exception)
             {
@@ -126,10 +156,10 @@ namespace Steganography
         {
             try
             {
-                openSampleDialog.Filter = "bitmap|*.bmp";
+                openSampleDialog.Filter = BitmapImagesFilter;
                 if (openSampleDialog.ShowDialog() != DialogResult.OK) return;
-                Image image = new Bitmap(openSampleDialog.FileName);
-                packingSample.Image = image;
+                _sampleBitmap = new SteganographyBitmap(openSampleDialog.FileName);
+                packingSample.Image = _sampleBitmap.GetBitmap();
             }
             catch (Exception exception)
             {
@@ -141,11 +171,11 @@ namespace Steganography
         {
             try
             {
-                saveImageDialog.Filter = "bitmap|*.bmp";
-                if (packingImage.Image == null) throw new Exception("Нет изображения");
+                saveImageDialog.Filter = BitmapImagesFilter;
+                if (_outputBitmap == null) throw new Exception("Нет изображения");
                 if (saveImageDialog.ShowDialog() != DialogResult.OK) return;
-                packingImage.Image.Save(saveImageDialog.FileName, ImageFormat.Bmp);
-                Debug.WriteLine(packingImage.Image.PixelFormat);
+                _outputBitmap.Save(saveImageDialog.FileName);
+                Debug.WriteLine(_outputBitmap.Length);
             }
             catch (Exception exception)
             {
@@ -157,12 +187,11 @@ namespace Steganography
         {
             try
             {
-                openImageDialog.Filter = "bitmap|*.bmp";
+                openImageDialog.Filter = BitmapImagesFilter;
                 if (openImageDialog.ShowDialog() != DialogResult.OK) return;
-                var bitmap = new Bitmap(openImageDialog.FileName);
-                Debug.WriteLine(bitmap.PixelFormat);
-                unpackingImage.Image = bitmap;
-             }
+                _inputBitmap = new SteganographyBitmap(openImageDialog.FileName);
+                unpackingImage.Image = _inputBitmap.GetBitmap();
+            }
             catch (Exception exception)
             {
                 MessageBox.Show(exception.Message);
@@ -171,12 +200,12 @@ namespace Steganography
 
         private void packingViewSequence_Click(object sender, EventArgs e)
         {
-            new ViewSequenceForm(packingKey.Text, (int) packingExpand.Value).ShowDialog();
+            new GammaForm(packingKey.Text, (int) packingExpand.Value, packingGamma.SelectedIndex).ShowDialog();
         }
 
         private void unpackingViewSequence_Click(object sender, EventArgs e)
         {
-            new ViewSequenceForm(packingKey.Text, (int) packingExpand.Value).ShowDialog();
+            new GammaForm(packingKey.Text, (int) packingExpand.Value, unpackingGamma.SelectedIndex).ShowDialog();
         }
 
         private void packingSave_Click(object sender, EventArgs e)
@@ -198,7 +227,7 @@ namespace Steganography
             Debug.WriteLine("Reading Options Information");
             _options = (SteganographyOptions) new BinaryFormatter().Deserialize(stream);
             stream.Close();
-            ApplyPackingOption();
+            SetPackingOption();
         }
 
         private void unpackingSave_Click(object sender, EventArgs e)
@@ -224,7 +253,7 @@ namespace Steganography
             Debug.WriteLine("Reading Options Information");
             _options = (SteganographyOptions) new BinaryFormatter().Deserialize(stream);
             stream.Close();
-            ApplyUnpackingOption();
+            SetUnpackingOption();
         }
 
         private void packingPoliticsFake_CheckedChanged(object sender, EventArgs e)

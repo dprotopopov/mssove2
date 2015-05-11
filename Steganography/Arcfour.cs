@@ -31,6 +31,10 @@ namespace Steganography
     {
         private int[] _key; // Ключевое слово
 
+        public Arcfour()
+        {
+        }
+
         public Arcfour(string text)
         {
             SetKey(text);

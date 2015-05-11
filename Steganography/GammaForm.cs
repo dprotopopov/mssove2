@@ -5,17 +5,20 @@ using System.Windows.Forms;
 
 namespace Steganography
 {
-    public partial class ViewSequenceForm : Form
+    public partial class GammaForm : Form
     {
+        private const int BitsPerByte = 8;
         private readonly int _expandSize;
+        private readonly int _gammaIndex;
         private readonly string _steganographyKey;
 
-        public ViewSequenceForm(string steganographyKey, int expandSize)
+        public GammaForm(string steganographyKey, int expandSize, int gammaIndex)
         {
             _steganographyKey = steganographyKey;
             _expandSize = expandSize;
+            _gammaIndex = gammaIndex;
             InitializeComponent();
-            byte[] gamma = new Arcfour(steganographyKey).Prga((expandSize + 7)/8);
+            byte[] gamma = new Gamma(gammaIndex, steganographyKey).GetGamma((expandSize + BitsPerByte - 1)/BitsPerByte);
             textBox1.Text = string.Join("", gamma.ToArray().Select(x => x.ToString("X02")));
         }
 

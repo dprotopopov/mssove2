@@ -1,6 +1,6 @@
 ﻿namespace Steganography
 {
-    partial class ViewSequenceForm
+    partial class GammaForm
     {
         /// <summary>
         /// Required designer variable.
@@ -71,7 +71,7 @@
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.textBox1);
-            this.Name = "ViewSequenceForm";
+            this.Name = "GammaForm";
             this.Text = "Просмотр последовательности";
             this.ResumeLayout(false);
             this.PerformLayout();
