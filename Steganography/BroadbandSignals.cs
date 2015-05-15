@@ -27,8 +27,9 @@ namespace Steganography
             Array.Copy(colors, result, colors.Length);
 
             ulong delta = alpha;
-            for (int m = 0; m < _expandSize; m++)
-                for (int i = 0, index = m*colors.Length/_expandSize; i < data.Length*BitsPerByte; i++, index++)
+            int index = 0;
+            for (int i = 0; i < data.Length*BitsPerByte; i++)
+                for (int m = 0; m < _expandSize; m++)
                 {
                     ulong color = colors[index];
                     int b = (data[i >> 3] >> (i & 7)) & 1;
@@ -37,7 +38,7 @@ namespace Steganography
                     else if (delta <= color) color -= delta;
                     else color = 0;
                     if (color > 255) color = 255;
-                    result[index] = (byte) color;
+                    result[index++] = (byte) color;
                 }
             return result;
         }
@@ -53,13 +54,15 @@ namespace Steganography
             Array.Clear(votes, 0, votes.Length);
             Array.Clear(result, 0, result.Length);
 
-            for (int m = 0; m < _expandSize; m++)
-                for (int i = 0, index = m*colors.Length/_expandSize; i < BitsPerByte*count; i++, index++)
+            int index = 0;
+            for (int i = 0; i < BitsPerByte*count; i++)
+                for (int m = 0; m < _expandSize; m++)
                 {
                     ulong value1 = colors[index];
                     ulong value2 = median[index];
                     long d = (long) value1 - (long) value2;
                     votes[i] += (((gamma[m >> 3] >> (m & 7)) & 1) == 0) ? d : -d;
+                    index++;
                 }
             for (int i = 0; i < BitsPerByte*count; i++)
                 if (votes[i] < 0)
