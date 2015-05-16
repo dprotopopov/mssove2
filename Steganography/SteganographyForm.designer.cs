@@ -47,7 +47,6 @@
             this.packingViewSequence = new System.Windows.Forms.Button();
             this.packingLoad = new System.Windows.Forms.Button();
             this.packingSave = new System.Windows.Forms.Button();
-            this.packingCompress = new System.Windows.Forms.CheckBox();
             this.packingExpand = new System.Windows.Forms.NumericUpDown();
             this.label10 = new System.Windows.Forms.Label();
             this.packingSample = new System.Windows.Forms.PictureBox();
@@ -61,6 +60,7 @@
             this.packingSource = new System.Windows.Forms.TextBox();
             this.packingKey = new System.Windows.Forms.TextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.unpackingGamma = new System.Windows.Forms.ComboBox();
             this.label15 = new System.Windows.Forms.Label();
             this.unpackingMixer = new System.Windows.Forms.ComboBox();
@@ -68,7 +68,6 @@
             this.unpackingViewSequence = new System.Windows.Forms.Button();
             this.unpackingLoad = new System.Windows.Forms.Button();
             this.unpackingSave = new System.Windows.Forms.Button();
-            this.unpackingDecompress = new System.Windows.Forms.CheckBox();
             this.unpackingExpand = new System.Windows.Forms.NumericUpDown();
             this.label9 = new System.Windows.Forms.Label();
             this.unpackingFilter = new System.Windows.Forms.NumericUpDown();
@@ -85,7 +84,10 @@
             this.openImageDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveFileOptions = new System.Windows.Forms.SaveFileDialog();
             this.openFileOptions = new System.Windows.Forms.OpenFileDialog();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.packingCompress = new System.Windows.Forms.ComboBox();
+            this.label18 = new System.Windows.Forms.Label();
+            this.unpackingDecompress = new System.Windows.Forms.ComboBox();
+            this.label19 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.packingExpand)).BeginInit();
@@ -93,10 +95,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.packingImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.packingAlpha)).BeginInit();
             this.tabPage2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.unpackingExpand)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.unpackingFilter)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.unpackingImage)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -112,6 +114,8 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.packingCompress);
+            this.tabPage1.Controls.Add(this.label18);
             this.tabPage1.Controls.Add(this.packingPixelFormat);
             this.tabPage1.Controls.Add(this.label17);
             this.tabPage1.Controls.Add(this.label16);
@@ -129,7 +133,6 @@
             this.tabPage1.Controls.Add(this.packingViewSequence);
             this.tabPage1.Controls.Add(this.packingLoad);
             this.tabPage1.Controls.Add(this.packingSave);
-            this.tabPage1.Controls.Add(this.packingCompress);
             this.tabPage1.Controls.Add(this.packingExpand);
             this.tabPage1.Controls.Add(this.label10);
             this.tabPage1.Controls.Add(this.packingSample);
@@ -179,7 +182,7 @@
             // packingGamma
             // 
             this.packingGamma.FormattingEnabled = true;
-            this.packingGamma.Location = new System.Drawing.Point(254, 281);
+            this.packingGamma.Location = new System.Drawing.Point(254, 296);
             this.packingGamma.Name = "packingGamma";
             this.packingGamma.Size = new System.Drawing.Size(121, 28);
             this.packingGamma.TabIndex = 35;
@@ -187,7 +190,7 @@
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(23, 287);
+            this.label14.Location = new System.Drawing.Point(23, 302);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(137, 20);
             this.label14.TabIndex = 34;
@@ -196,7 +199,7 @@
             // packingMixer
             // 
             this.packingMixer.FormattingEnabled = true;
-            this.packingMixer.Location = new System.Drawing.Point(254, 249);
+            this.packingMixer.Location = new System.Drawing.Point(254, 261);
             this.packingMixer.Name = "packingMixer";
             this.packingMixer.Size = new System.Drawing.Size(121, 28);
             this.packingMixer.TabIndex = 33;
@@ -204,7 +207,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(23, 255);
+            this.label12.Location = new System.Drawing.Point(23, 267);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(211, 20);
             this.label12.TabIndex = 32;
@@ -311,16 +314,6 @@
             this.packingSave.Text = "Сохранить параметры ...";
             this.packingSave.UseVisualStyleBackColor = true;
             this.packingSave.Click += new System.EventHandler(this.packingSave_Click);
-            // 
-            // packingCompress
-            // 
-            this.packingCompress.AutoSize = true;
-            this.packingCompress.Location = new System.Drawing.Point(27, 103);
-            this.packingCompress.Name = "packingCompress";
-            this.packingCompress.Size = new System.Drawing.Size(126, 24);
-            this.packingCompress.TabIndex = 21;
-            this.packingCompress.Text = "Компрессия";
-            this.packingCompress.UseVisualStyleBackColor = true;
             // 
             // packingExpand
             // 
@@ -461,6 +454,8 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.unpackingDecompress);
+            this.tabPage2.Controls.Add(this.label19);
             this.tabPage2.Controls.Add(this.pictureBox1);
             this.tabPage2.Controls.Add(this.unpackingGamma);
             this.tabPage2.Controls.Add(this.label15);
@@ -469,7 +464,6 @@
             this.tabPage2.Controls.Add(this.unpackingViewSequence);
             this.tabPage2.Controls.Add(this.unpackingLoad);
             this.tabPage2.Controls.Add(this.unpackingSave);
-            this.tabPage2.Controls.Add(this.unpackingDecompress);
             this.tabPage2.Controls.Add(this.unpackingExpand);
             this.tabPage2.Controls.Add(this.label9);
             this.tabPage2.Controls.Add(this.unpackingFilter);
@@ -488,6 +482,15 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Режим распаковки";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Location = new System.Drawing.Point(452, 51);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(316, 238);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox1.TabIndex = 38;
+            this.pictureBox1.TabStop = false;
             // 
             // unpackingGamma
             // 
@@ -552,16 +555,6 @@
             this.unpackingSave.Text = "Сохранить параметры ...";
             this.unpackingSave.UseVisualStyleBackColor = true;
             this.unpackingSave.Click += new System.EventHandler(this.unpackingSave_Click);
-            // 
-            // unpackingDecompress
-            // 
-            this.unpackingDecompress.AutoSize = true;
-            this.unpackingDecompress.Location = new System.Drawing.Point(29, 197);
-            this.unpackingDecompress.Name = "unpackingDecompress";
-            this.unpackingDecompress.Size = new System.Drawing.Size(145, 24);
-            this.unpackingDecompress.TabIndex = 22;
-            this.unpackingDecompress.Text = "Декомпрессия";
-            this.unpackingDecompress.UseVisualStyleBackColor = true;
             // 
             // unpackingExpand
             // 
@@ -701,14 +694,39 @@
             // 
             this.openFileOptions.FileName = "openFileDialog3";
             // 
-            // pictureBox1
+            // packingCompress
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(452, 51);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(316, 238);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 38;
-            this.pictureBox1.TabStop = false;
+            this.packingCompress.FormattingEnabled = true;
+            this.packingCompress.Location = new System.Drawing.Point(254, 332);
+            this.packingCompress.Name = "packingCompress";
+            this.packingCompress.Size = new System.Drawing.Size(121, 28);
+            this.packingCompress.TabIndex = 40;
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(23, 338);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(177, 20);
+            this.label18.TabIndex = 39;
+            this.label18.Text = "Алгоритм компрессии";
+            // 
+            // unpackingDecompress
+            // 
+            this.unpackingDecompress.FormattingEnabled = true;
+            this.unpackingDecompress.Location = new System.Drawing.Point(258, 330);
+            this.unpackingDecompress.Name = "unpackingDecompress";
+            this.unpackingDecompress.Size = new System.Drawing.Size(121, 28);
+            this.unpackingDecompress.TabIndex = 40;
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(25, 333);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(197, 20);
+            this.label19.TabIndex = 39;
+            this.label19.Text = "Алгоритм декомпрессии";
             // 
             // SteganographyForm
             // 
@@ -727,10 +745,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.packingAlpha)).EndInit();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.unpackingExpand)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.unpackingFilter)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.unpackingImage)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -766,8 +784,6 @@
         private System.Windows.Forms.OpenFileDialog openSampleDialog;
         private System.Windows.Forms.SaveFileDialog saveImageDialog;
         private System.Windows.Forms.OpenFileDialog openImageDialog;
-        private System.Windows.Forms.CheckBox packingCompress;
-        private System.Windows.Forms.CheckBox unpackingDecompress;
         private System.Windows.Forms.Button packingViewSequence;
         private System.Windows.Forms.Button packingLoad;
         private System.Windows.Forms.Button packingSave;
@@ -795,6 +811,10 @@
         private System.Windows.Forms.ComboBox packingPixelFormat;
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.ComboBox packingCompress;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.ComboBox unpackingDecompress;
+        private System.Windows.Forms.Label label19;
     }
 }
 

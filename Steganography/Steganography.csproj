@@ -40,7 +40,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -149,6 +149,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Arcfour.cs" />
+    <Compile Include="ComboBoxItem.cs" />
     <Compile Include="SteganographyBitmap.cs" />
     <Compile Include="BitmapSteganography.cs" />
     <Compile Include="BroadbandSignals.cs" />
@@ -174,6 +175,7 @@
     <Compile Include="GammaForm.Designer.cs">
       <DependentUpon>GammaForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Archiver.cs" />
     <EmbeddedResource Include="SteganographyForm.resx">
       <DependentUpon>SteganographyForm.cs</DependentUpon>
     </EmbeddedResource>

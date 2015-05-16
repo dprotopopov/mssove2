@@ -10,8 +10,8 @@ namespace Steganography
     public class SteganographyOptions : ISerializable //derive your class from ISerializable
     {
         public int Alpha;
+        public int ArchiverIndex;
         public SteganographyBitmap BlurBitmap;
-        public bool Compress;
         public int ExpandSize;
         public int FilterStep;
         public int GammaIndex;
@@ -38,7 +38,6 @@ namespace Steganography
         {
             //Get the values from info and assign them to the appropriate properties
             Alpha = (int) info.GetValue("Alpha", typeof (int));
-            Compress = (bool) info.GetValue("Compress", typeof (bool));
             ExpandSize = (int) info.GetValue("ExpandSize", typeof (int));
             FilterStep = (int) info.GetValue("FilterStep", typeof (int));
             SteganographyKey = (string) info.GetValue("SteganographyKey", typeof (string));
@@ -51,6 +50,7 @@ namespace Steganography
             PoliticsText = (string) info.GetValue("PoliticsText", typeof (string));
             MixerIndex = (int) info.GetValue("MixerIndex", typeof (int));
             GammaIndex = (int) info.GetValue("GammaIndex", typeof (int));
+            ArchiverIndex = (int) info.GetValue("ArchiverIndex", typeof (int));
             PixelFormatIndex = (int) info.GetValue("PixelFormatIndex", typeof (int));
         }
 
@@ -61,7 +61,6 @@ namespace Steganography
             // read the values with the same name. For ex:- If you write EmpId as "EmployeeId"
             // then you should read the same with "EmployeeId"
             info.AddValue("Alpha", Alpha);
-            info.AddValue("Compress", Compress);
             info.AddValue("ExpandSize", ExpandSize);
             info.AddValue("FilterStep", FilterStep);
             info.AddValue("SteganographyKey", SteganographyKey);
@@ -74,6 +73,7 @@ namespace Steganography
             info.AddValue("PoliticsText", PoliticsText);
             info.AddValue("MixerIndex", MixerIndex);
             info.AddValue("GammaIndex", GammaIndex);
+            info.AddValue("ArchiverIndex", ArchiverIndex);
             info.AddValue("PixelFormatIndex", PixelFormatIndex);
         }
     }

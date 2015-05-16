@@ -5,12 +5,11 @@ namespace Steganography
     public class Mixer
     {
         private static readonly Arcfour Arcfour = new Arcfour();
-        private static readonly None None = new None();
 
         public static readonly object[] ComboBoxItems =
         {
-            new ComboBoxItem(MixerId.None, "Нет"),
-            new ComboBoxItem(MixerId.Arcfour, "ARCFOUR")
+            new ComboBoxItem<MixerId>(MixerId.None, "Нет"),
+            new ComboBoxItem<MixerId>(MixerId.Arcfour, "ARCFOUR")
         };
 
         private readonly string _key;
@@ -18,7 +17,7 @@ namespace Steganography
 
         public Mixer(int itemIndex, string key)
         {
-            _mixerId = ((ComboBoxItem) ComboBoxItems[itemIndex]).HiddenValue;
+            _mixerId = ((ComboBoxItem<MixerId>) ComboBoxItems[itemIndex]).HiddenValue;
             _key = key;
         }
 
@@ -35,30 +34,6 @@ namespace Steganography
             throw new NotImplementedException();
         }
 
-        private class ComboBoxItem
-        {
-            private readonly string _displayValue;
-            private readonly MixerId _hiddenValue;
-
-            //Constructor
-            public ComboBoxItem(MixerId h, string d)
-            {
-                _displayValue = d;
-                _hiddenValue = h;
-            }
-
-            //Accessor
-            public MixerId HiddenValue
-            {
-                get { return _hiddenValue; }
-            }
-
-            //Override ToString method
-            public override string ToString()
-            {
-                return _displayValue;
-            }
-        }
 
         private enum MixerId
         {

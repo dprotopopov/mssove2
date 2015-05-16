@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Text;
 
 namespace Steganography
@@ -31,15 +32,6 @@ namespace Steganography
     {
         private int[] _key; // Ключевое слово
 
-        public Arcfour()
-        {
-        }
-
-        public Arcfour(string text)
-        {
-            SetKey(text);
-        }
-
         /// <summary>
         ///     Алгоритм также известен как «key-scheduling algorithm» или «KSA». Этот алгоритм использует ключ, подаваемый на вход
         ///     пользователем, сохранённый в Key, и имеющий длину L байт. Инициализация начинается с заполнения массива S, далее
@@ -47,17 +39,16 @@ namespace Steganography
         ///     то должно выполняться утверждение, что S всегда содержит один набор значений , который был дан при первоначальной
         ///     инициализации (S[i] := i).
         /// </summary>
-        /// <param name="n"></param>
-        /// <returns>Перестановку</returns>
-        public int[] Ksa(int n)
+        /// <param name="len">Длина перестановки</param>
+        /// <returns>Перестановка</returns>
+        public int[] Ksa(int len)
         {
-            int l = _key.Length;
+            int keyLength = _key.Length;
             int[] key = _key;
-            var s = new int[n];
-            for (int i = 0; i < n; i++) s[i] = i;
-            for (int i = 0, j = 0; i < n; i++)
+            int[] s = Enumerable.Range(0, len).ToArray();
+            for (int i = 0, j = 0; i < len; i++)
             {
-                j = (j + s[i] + key[i%l])%n;
+                j = (j + s[i] + key[i%keyLength])%len;
                 int temp = s[i];
                 s[i] = s[j];
                 s[j] = temp;
@@ -70,21 +61,21 @@ namespace Steganography
         ///     algorithm, PRGA). Генератор ключевого потока RC4 переставляет значения, хранящиеся в S. В одном цикле RC4
         ///     определяется одно n-битное слово K из ключевого потока.
         /// </summary>
-        /// <param name="n"></param>
-        /// <returns></returns>
-        public byte[] Prga(int n)
+        /// <param name="len">Длина гаммы</param>
+        /// <returns>Гамма</returns>
+        public byte[] Prga(int len)
         {
-            int l = _key.Length;
-            var k = new byte[n];
+            int keyLength = _key.Length;
+            var k = new byte[len];
             int[] s = Ksa(256);
-            for (int index = 0, i = 0, j = 0; index < n; index++)
+            for (int index = 0, i = 0, j = 0; index < len; index++)
             {
-                i = (i + 1)%l;
-                j = (j + s[i])%l;
+                i = (i + 1)%keyLength;
+                j = (j + s[i])%keyLength;
                 int temp = s[i];
                 s[i] = s[j];
                 s[j] = temp;
-                int t = (s[i] + s[j])%l;
+                int t = (s[i] + s[j])%keyLength;
                 k[index] = (byte) s[t];
             }
             return k;

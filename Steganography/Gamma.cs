@@ -8,8 +8,8 @@ namespace Steganography
 
         public static readonly object[] ComboBoxItems =
         {
-            new ComboBoxItem(GammaId.None, "Нет"),
-            new ComboBoxItem(GammaId.Arcfour, "ARCFOUR")
+            new ComboBoxItem<GammaId>(GammaId.None, "Нет"),
+            new ComboBoxItem<GammaId>(GammaId.Arcfour, "ARCFOUR")
         };
 
         private readonly string _key;
@@ -17,7 +17,7 @@ namespace Steganography
 
         public Gamma(int itemIndex, string key)
         {
-            _mixerId = ((ComboBoxItem) ComboBoxItems[itemIndex]).HiddenValue;
+            _mixerId = ((ComboBoxItem<GammaId>) ComboBoxItems[itemIndex]).HiddenValue;
             _key = key;
         }
 
@@ -32,31 +32,6 @@ namespace Steganography
                     return Arcfour.Prga(n);
             }
             throw new NotImplementedException();
-        }
-
-        private class ComboBoxItem
-        {
-            private readonly string _displayValue;
-            private readonly GammaId _hiddenValue;
-
-            //Constructor
-            public ComboBoxItem(GammaId h, string d)
-            {
-                _displayValue = d;
-                _hiddenValue = h;
-            }
-
-            //Accessor
-            public GammaId HiddenValue
-            {
-                get { return _hiddenValue; }
-            }
-
-            //Override ToString method
-            public override string ToString()
-            {
-                return _displayValue;
-            }
         }
 
         private enum GammaId

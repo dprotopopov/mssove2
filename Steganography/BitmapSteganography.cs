@@ -1,7 +1,6 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.IO.Compression;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -17,7 +16,6 @@ namespace Steganography
             string steganographyKey = steganographyOptions.SteganographyKey;
             int expandSize = steganographyOptions.ExpandSize;
             int alpha = steganographyOptions.Alpha;
-            bool compress = steganographyOptions.Compress;
             string text = steganographyOptions.Text;
             bool autoResize = steganographyOptions.SampleAutoresize;
             bool politicsNone = steganographyOptions.PoliticsNone;
@@ -27,6 +25,7 @@ namespace Steganography
             string politicsText = steganographyOptions.PoliticsText;
             int mixerIndex = steganographyOptions.MixerIndex;
             int gammaIndex = steganographyOptions.GammaIndex;
+            int archiverIndex = steganographyOptions.ArchiverIndex;
             int pixelFormatIndex = steganographyOptions.PixelFormatIndex;
             SteganographyBitmap sampleBitmap = steganographyOptions.SampleBitmap;
 
@@ -38,10 +37,7 @@ namespace Steganography
             compressed.Seek(0, SeekOrigin.Begin);
             decompressed.Seek(0, SeekOrigin.Begin);
 
-            if (compress)
-                using (var compessionStream = new DeflateStream(compressed, CompressionMode.Compress, true))
-                    decompressed.CopyTo(compessionStream);
-            else decompressed.CopyTo(compressed);
+            new Archiver(archiverIndex).Compress(decompressed, compressed);
 
             enveloped.Seek(0, SeekOrigin.Begin);
             compressed.Seek(0, SeekOrigin.Begin);
@@ -93,9 +89,9 @@ namespace Steganography
             string steganographyKey = steganographyOptions.SteganographyKey;
             int expandSize = steganographyOptions.ExpandSize;
             int filterStep = steganographyOptions.FilterStep;
-            bool decompress = steganographyOptions.Compress;
             int mixerIndex = steganographyOptions.MixerIndex;
             int gammaIndex = steganographyOptions.GammaIndex;
+            int archiverIndex = steganographyOptions.ArchiverIndex;
 
             SteganographyBitmap inputBitmap = steganographyOptions.InputBitmap;
             var blurBitmap = new SteganographyBitmap(inputBitmap, filterStep);
@@ -123,10 +119,7 @@ namespace Steganography
             compressed.Seek(0, SeekOrigin.Begin);
             decompressed.Seek(0, SeekOrigin.Begin);
 
-            if (decompress)
-                using (var decompessionStream = new DeflateStream(compressed, CompressionMode.Decompress, true))
-                    decompessionStream.CopyTo(decompressed);
-            else compressed.CopyTo(decompressed);
+            new Archiver(archiverIndex).Decompress(compressed, decompressed);
 
             enveloped.Seek(0, SeekOrigin.Begin);
             compressed.Seek(0, SeekOrigin.Begin);
