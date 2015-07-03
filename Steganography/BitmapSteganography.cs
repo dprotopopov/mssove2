@@ -1,109 +1,106 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Security.Cryptography;
 using System.Text;
+using Steganography.Options;
 
 namespace Steganography
 {
     public class BitmapSteganography
     {
         private const int BitsPerByte = 8;
-        private static readonly RandomNumberGenerator Rng = RandomNumberGenerator.Create();
 
-        public SteganographyBitmap Packing(SteganographyOptions steganographyOptions)
+        public CvBitmap Pack(BbsOptions bbsOptions)
         {
-            string steganographyKey = steganographyOptions.SteganographyKey;
-            int expandSize = steganographyOptions.ExpandSize;
-            int alpha = steganographyOptions.Alpha;
-            string text = steganographyOptions.Text;
-            bool autoResize = steganographyOptions.SampleAutoresize;
-            bool politicsNone = steganographyOptions.PoliticsNone;
-            bool politicsZero = steganographyOptions.PoliticsZero;
-            bool politicsRandom = steganographyOptions.PoliticsRandom;
-            bool politicsFake = steganographyOptions.PoliticsFake;
-            string politicsText = steganographyOptions.PoliticsText;
-            int mixerIndex = steganographyOptions.MixerIndex;
-            int gammaIndex = steganographyOptions.GammaIndex;
-            int archiverIndex = steganographyOptions.ArchiverIndex;
-            int pixelFormatIndex = steganographyOptions.PixelFormatIndex;
-            SteganographyBitmap sampleBitmap = steganographyOptions.SampleBitmap;
+            string steganographyKey = bbsOptions.Key;
+            int expandSize = bbsOptions.ExpandSize;
+            int alpha = bbsOptions.Alpha;
+            string text = bbsOptions.RtfText;
+            bool autoResize = bbsOptions.SampleAutoresize;
+            bool maximumGamma = bbsOptions.MaximumGamma;
+            int politicIndex = bbsOptions.PoliticIndex;
+            string politicText = bbsOptions.PoliticText;
+            int mixerIndex = bbsOptions.MixerIndex;
+            int gammaIndex = bbsOptions.GammaIndex;
+            int archiverIndex = bbsOptions.ArchiverIndex;
+            int pixelFormatIndex = bbsOptions.PixelFormatIndex;
+            CvBitmap sampleBitmap = bbsOptions.SampleBitmap;
 
             var decompressed = new MemoryStream(Encoding.Default.GetBytes(text));
             var compressed = new MemoryStream();
             var enveloped = new MemoryStream();
+            var output = new MemoryStream();
 
             enveloped.Seek(0, SeekOrigin.Begin);
             compressed.Seek(0, SeekOrigin.Begin);
             decompressed.Seek(0, SeekOrigin.Begin);
+            output.Seek(0, SeekOrigin.Begin);
 
             new Archiver(archiverIndex).Compress(decompressed, compressed);
 
             enveloped.Seek(0, SeekOrigin.Begin);
             compressed.Seek(0, SeekOrigin.Begin);
             decompressed.Seek(0, SeekOrigin.Begin);
+            output.Seek(0, SeekOrigin.Begin);
 
             new SequenceIndicator().Envelop(compressed, enveloped);
 
             enveloped.Seek(0, SeekOrigin.Begin);
             compressed.Seek(0, SeekOrigin.Begin);
             decompressed.Seek(0, SeekOrigin.Begin);
+            output.Seek(0, SeekOrigin.Begin);
 
             int count = (int) enveloped.Length*expandSize*BitsPerByte; // Требуемое число пикселей
-
-            var outputBitmap = new SteganographyBitmap(sampleBitmap, count, pixelFormatIndex, autoResize);
+            var outputBitmap = new CvBitmap(sampleBitmap, count, pixelFormatIndex, autoResize);
 
             // для каждого бита сообщения нужно N байт носителя
             if (enveloped.Length*expandSize*BitsPerByte > outputBitmap.Length)
-                throw new Exception("Размер изображения недостаточен для сохранения данных " +
-                                    (enveloped.Length*expandSize*BitsPerByte) + "/" + outputBitmap.Length);
+                throw new Exception(string.Format("Размер изображения недостаточен для сохранения данных {0}/{1}",
+                    enveloped.Length*expandSize*BitsPerByte, outputBitmap.Length));
 
-            var data = new byte[politicsNone ? enveloped.Length : (outputBitmap.Length/BitsPerByte/expandSize)];
-            if (politicsZero) Array.Clear(data, 0, data.Length);
-            if (politicsRandom) Rng.GetBytes(data);
-            if (politicsFake)
-            {
-                if (string.IsNullOrWhiteSpace(politicsText)) throw new Exception("Отсутствует заполняющий текст");
-                byte[] buffer = Encoding.Default.GetBytes(politicsText);
-                for (int i = 0; i < data.Length; i += buffer.Length)
-                    Array.Copy(buffer, 0, data, i, Math.Min(buffer.Length, data.Length - i));
-            }
-            Array.Copy(enveloped.ToArray(), data, enveloped.Length);
-
-            int[] index = new Mixer(mixerIndex, steganographyKey).GetIndeces(outputBitmap.Length);
-            byte[] gamma = new Gamma(gammaIndex, steganographyKey).GetGamma((expandSize + BitsPerByte - 1)/BitsPerByte);
-            byte[] colors = outputBitmap.Select(index);
-            byte[] cw = new BroadbandSignals(expandSize).EncodeAndCombine(colors, data, gamma, (byte) alpha);
-            outputBitmap.Replace(index, cw);
+            var politic = new Politic(politicIndex, outputBitmap, expandSize, politicText);
+            politic.Fill(enveloped, output);
 
             enveloped.Seek(0, SeekOrigin.Begin);
             compressed.Seek(0, SeekOrigin.Begin);
             decompressed.Seek(0, SeekOrigin.Begin);
+            output.Seek(0, SeekOrigin.Begin);
 
-            steganographyOptions.OutputBitmap = outputBitmap;
-            return outputBitmap;
+            byte[] data = output.ToArray();
+
+            int[] index = new Mixer(mixerIndex, steganographyKey).GetIndeces(outputBitmap.Length);
+            byte[] gamma = new Gamma(gammaIndex, steganographyKey).GetGamma(maximumGamma
+                ? ((outputBitmap.Length + BitsPerByte - 1)/BitsPerByte)
+                : ((expandSize + BitsPerByte - 1)/BitsPerByte));
+            byte[] colors = outputBitmap.Select(index);
+            byte[] cw = new BbSignals(expandSize, maximumGamma).EncodeAndCombine(colors, data, gamma, (byte) alpha);
+            outputBitmap.Replace(index, cw);
+            return bbsOptions.OutputBitmap = outputBitmap;
         }
 
-        public string Unpacking(SteganographyOptions steganographyOptions)
+        public string Unpack(BbsOptions bbsOptions)
         {
-            string steganographyKey = steganographyOptions.SteganographyKey;
-            int expandSize = steganographyOptions.ExpandSize;
-            int filterStep = steganographyOptions.FilterStep;
-            int mixerIndex = steganographyOptions.MixerIndex;
-            int gammaIndex = steganographyOptions.GammaIndex;
-            int archiverIndex = steganographyOptions.ArchiverIndex;
+            string steganographyKey = bbsOptions.Key;
+            int expandSize = bbsOptions.ExpandSize;
+            int filterStep = bbsOptions.FilterStep;
+            int mixerIndex = bbsOptions.MixerIndex;
+            int gammaIndex = bbsOptions.GammaIndex;
+            int archiverIndex = bbsOptions.ArchiverIndex;
+            bool maximumGamma = bbsOptions.MaximumGamma;
 
-            SteganographyBitmap inputBitmap = steganographyOptions.InputBitmap;
-            var blurBitmap = new SteganographyBitmap(inputBitmap, filterStep);
+            CvBitmap inputBitmap = bbsOptions.InputBitmap;
+            var medianBitmap = new CvBitmap(inputBitmap, filterStep);
 
             Debug.WriteLine(inputBitmap.Length);
-            Debug.WriteLine(blurBitmap.Length);
+            Debug.WriteLine(medianBitmap.Length);
 
             int[] index = new Mixer(mixerIndex, steganographyKey).GetIndeces(inputBitmap.Length);
-            byte[] gamma = new Gamma(gammaIndex, steganographyKey).GetGamma((expandSize + BitsPerByte - 1)/BitsPerByte);
+            byte[] gamma = new Gamma(gammaIndex, steganographyKey).GetGamma(maximumGamma
+                ? ((inputBitmap.Length + BitsPerByte - 1)/BitsPerByte)
+                : ((expandSize + BitsPerByte - 1)/BitsPerByte));
             byte[] cw = inputBitmap.Select(index);
-            byte[] median = blurBitmap.Select(index);
-            byte[] data = new BroadbandSignals(expandSize).DecodeAndExtract(cw, gamma, median);
+            byte[] median = medianBitmap.Select(index);
+            byte[] data = new BbSignals(expandSize, maximumGamma).DecodeAndExtract(cw, gamma, median);
 
             var enveloped = new MemoryStream(data);
             var compressed = new MemoryStream();
@@ -125,8 +122,8 @@ namespace Steganography
             compressed.Seek(0, SeekOrigin.Begin);
             decompressed.Seek(0, SeekOrigin.Begin);
 
-            steganographyOptions.BlurBitmap = blurBitmap;
-            return Encoding.Default.GetString(decompressed.ToArray());
+            bbsOptions.MedianBitmap = medianBitmap;
+            return bbsOptions.RtfText = Encoding.Default.GetString(decompressed.ToArray());
         }
     }
 }

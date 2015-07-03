@@ -2,15 +2,23 @@
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using DevExpress.XtraEditors;
+using Steganography.Options;
 
 namespace Steganography
 {
-    public partial class GammaForm : Form
+    public partial class GammaForm : XtraForm
     {
         private const int BitsPerByte = 8;
+// ReSharper disable NotAccessedField.Local
         private readonly int _expandSize;
+// ReSharper restore NotAccessedField.Local
+// ReSharper disable NotAccessedField.Local
         private readonly int _gammaIndex;
+// ReSharper restore NotAccessedField.Local
+// ReSharper disable NotAccessedField.Local
         private readonly string _steganographyKey;
+// ReSharper restore NotAccessedField.Local
 
         public GammaForm(string steganographyKey, int expandSize, int gammaIndex)
         {
@@ -31,7 +39,7 @@ namespace Steganography
             }
             catch (Exception exception)
             {
-                MessageBox.Show(exception.Message);
+                XtraMessageBox.Show(exception.Message);
             }
         }
     }

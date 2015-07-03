@@ -3,6 +3,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Steganography.Utils;
 
 namespace Steganography.UnitTest
 {

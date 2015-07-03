@@ -1,4 +1,2 @@
-﻿1. Установить дистрибутив Emgu CV по ссылке http://sourceforge.net/project/showfiles.php?group_id=216500
-2. Скопировать из дирректории установки дистрибутив Emgu CV папку <директория Emgu CV>\bin\ и создать копию папки mssove2\bin\
-3. Из папки mssove2\bin\ удаляем exe-ники примеров Emgu CV
-4. Если в проекте потерянны референсы на библиотеки Eghu.....dll то удалить эти референцы и добавить по-новой из папки mssove2\bin\
+﻿http://www.ess.ru/sites/default/files/files/articles/1998/0405/1998_0405_03.pdf
+https://www.devexpress.com/Subscriptions/
