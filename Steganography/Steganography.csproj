@@ -471,8 +471,8 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\FFTTools\FFTTools\FFTTools.csproj">
-      <Project>{04EBCB94-404A-474F-94CD-F58EAFFF890A}</Project>
+    <ProjectReference Include="..\FFTTools\FFTTools\FFTTools.csproj">
+      <Project>{04ebcb94-404a-474f-94cd-f58eafff890a}</Project>
       <Name>FFTTools</Name>
     </ProjectReference>
     <ProjectReference Include="..\FFTWSharp\FFTWSharp\FFTWSharp.csproj">

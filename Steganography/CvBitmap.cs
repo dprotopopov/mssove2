@@ -84,20 +84,26 @@ namespace Steganography
             }
         }
 
-        public CvBitmap(CvBitmap input, int boxSize)
+        /// <summary>
+        ///     Blur bitmap with the Fastest Fourier Transform
+        /// </summary>
+        public CvBitmap(CvBitmap input, int filterStep)
         {
-            switch (NumberOfChannels = input.NumberOfChannels)
-            {
-                case 1:
-                    Image = ((Image<Gray, Byte>) input.Image).SmoothBlur(boxSize, boxSize);
-                    break;
-                case 3:
-                case 4:
-                    Image = ((Image<Bgr, Byte>) input.Image).SmoothBlur(boxSize, boxSize);
-                    break;
-                default:
-                    throw new NotImplementedException();
-            }
+            Size size = input.Image.Size;
+            var blinderSize = new Size(size.Width/filterStep, size.Height/filterStep);
+            using (var builder = new BlurBuilder(blinderSize))
+                switch (NumberOfChannels = input.NumberOfChannels)
+                {
+                    case 1:
+                        Image = builder.Blur(input.Image as Image<Gray, Byte>);
+                        break;
+                    case 3:
+                    case 4:
+                        Image = builder.Blur(input.Image as Image<Bgr, Byte>);
+                        break;
+                    default:
+                        throw new NotImplementedException();
+                }
         }
 
 // ReSharper disable MemberCanBePrivate.Global

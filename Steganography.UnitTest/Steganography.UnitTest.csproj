@@ -152,7 +152,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\FFTTools\FFTTools\FFTTools.csproj">
+    <ProjectReference Include="..\FFTTools\FFTTools\FFTTools.csproj">
       <Project>{04ebcb94-404a-474f-94cd-f58eafff890a}</Project>
       <Name>FFTTools</Name>
     </ProjectReference>
