@@ -4,8 +4,8 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
 using Emgu.CV;
-using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
+using FFTTools;
 
 namespace Steganography
 {
@@ -31,7 +31,7 @@ namespace Steganography
                         break;
                     case 3:
                     case 4:
-                        Image = new Image<Rgb, Byte>(bitmap);
+                        Image = new Image<Bgr, Byte>(bitmap);
                         break;
                     default:
                         throw new NotImplementedException();
@@ -40,15 +40,15 @@ namespace Steganography
 
         public CvBitmap(CvBitmap sample, int requiredLength, int itemIndex, bool autoResize)
         {
-            Image<Rgb, Byte> temp;
+            Image<Bgr, Byte> temp;
             switch (sample.NumberOfChannels)
             {
                 case 1:
-                    temp = ((Image<Gray, Byte>) sample.Image).Convert<Rgb, Byte>();
+                    temp = ((Image<Gray, Byte>) sample.Image).Convert<Bgr, Byte>();
                     break;
                 case 3:
                 case 4:
-                    temp = ((Image<Rgb, Byte>) sample.Image).Convert<Rgb, Byte>();
+                    temp = ((Image<Bgr, Byte>) sample.Image).Convert<Bgr, Byte>();
                     break;
                 default:
                     throw new NotImplementedException();
@@ -62,10 +62,12 @@ namespace Steganography
             {
                 Size size = temp.Size;
                 double ratio = Math.Sqrt((double) requiredLength/(size.Height*size.Width*numberOfChannels));
-                temp = temp.Resize(
-                    (int) Math.Ceiling(ratio*size.Width),
-                    (int) Math.Ceiling(ratio*size.Height),
-                    INTER.CV_INTER_CUBIC);
+                var imageSize = new Size((int) Math.Ceiling(ratio*size.Width),
+                    (int) Math.Ceiling(ratio*size.Height));
+
+                //     Resize bitmap with the Fastest Fourier Transform
+                using (var builder = new StretchBuilder(imageSize))
+                    temp = builder.Stretch(temp);
             }
 
             switch (NumberOfChannels)
@@ -75,7 +77,7 @@ namespace Steganography
                     break;
                 case 3:
                 case 4:
-                    Image = temp.Convert<Rgb, Byte>();
+                    Image = temp.Convert<Bgr, Byte>();
                     break;
                 default:
                     throw new NotImplementedException();
@@ -91,7 +93,7 @@ namespace Steganography
                     break;
                 case 3:
                 case 4:
-                    Image = ((Image<Rgb, Byte>) input.Image).SmoothBlur(boxSize, boxSize);
+                    Image = ((Image<Bgr, Byte>) input.Image).SmoothBlur(boxSize, boxSize);
                     break;
                 default:
                     throw new NotImplementedException();
@@ -122,7 +124,7 @@ namespace Steganography
                         return ((Image<Gray, Byte>) Image).Data;
                     case 3:
                     case 4:
-                        return ((Image<Rgb, Byte>) Image).Data;
+                        return ((Image<Bgr, Byte>) Image).Data;
                     default:
                         throw new NotImplementedException();
                 }

@@ -152,6 +152,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\FFTTools\FFTTools\FFTTools.csproj">
+      <Project>{04ebcb94-404a-474f-94cd-f58eafff890a}</Project>
+      <Name>FFTTools</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FFTWSharp\FFTWSharp\FFTWSharp.csproj">
+      <Project>{bea875b8-e28a-49c5-8e7e-6512da65f7e1}</Project>
+      <Name>FFTWSharp</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Steganography\Steganography.csproj">
       <Project>{7b06e3f7-7c68-4145-a313-716fdf08996f}</Project>
       <Name>Steganography</Name>
