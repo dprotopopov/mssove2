@@ -10,7 +10,7 @@ namespace Steganography
     public partial class GammaForm : XtraForm
     {
         private const int BitsPerByte = 8;
-// ReSharper disable NotAccessedField.Local
+        // ReSharper disable NotAccessedField.Local
         private readonly int _expandSize;
 // ReSharper restore NotAccessedField.Local
 // ReSharper disable NotAccessedField.Local
@@ -26,7 +26,7 @@ namespace Steganography
             _expandSize = expandSize;
             _gammaIndex = gammaIndex;
             InitializeComponent();
-            byte[] gamma = new Gamma(gammaIndex, steganographyKey).GetGamma((expandSize + BitsPerByte - 1)/BitsPerByte);
+            byte[] gamma = new Gamma(gammaIndex, steganographyKey).GetGamma((expandSize + BitsPerByte - 1) / BitsPerByte);
             textBox1.Text = string.Join("", gamma.ToArray().Select(x => x.ToString("X02")));
         }
 

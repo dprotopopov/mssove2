@@ -31,5 +31,15 @@ namespace Steganography.Options
         {
             input.CopyTo(output);
         }
+
+        public static void Encode(Stream input, Stream output)
+        {
+            input.CopyTo(output);
+        }
+
+        public static void Decode(Stream input, Stream output)
+        {
+            input.CopyTo(output);
+        }
     }
 }

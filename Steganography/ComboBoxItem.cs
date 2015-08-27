@@ -1,4 +1,4 @@
-namespace Steganography
+﻿namespace Steganography
 {
     public class ComboBoxItem<T>
     {

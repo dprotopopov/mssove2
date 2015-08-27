@@ -37,15 +37,13 @@ namespace Steganography.Options
         };
 
         private static readonly RandomNumberGenerator Rng = RandomNumberGenerator.Create();
-        private readonly int _expandSize;
         private readonly CvBitmap _outputBitmap;
         private readonly PoliticId _politicId; // Идентификатор политики
         private readonly string _politicsText;
 
-        public Politic(int itemIndex, CvBitmap outputBitmap, int expandSize, string politicsText)
+        public Politic(int itemIndex, CvBitmap outputBitmap, string politicsText)
         {
             _outputBitmap = outputBitmap;
-            _expandSize = expandSize;
             _politicsText = politicsText;
             _politicId = ((ComboBoxItem<PoliticId>) ComboBoxItems[itemIndex]).HiddenValue;
         }
@@ -54,10 +52,11 @@ namespace Steganography.Options
         ///     Вызов метода
         /// </summary>
         /// <param name="input">Входной поток данных</param>
-        /// <param name="output">Выходной поток данных</param>
-        public void Fill(Stream input, Stream output)
+        /// <returns>Выходной поток данных</returns>
+        public Stream Fill(Stream input)
         {
-            var length = (int) (_outputBitmap.Length/BitsPerByte/_expandSize - input.Length);
+            Stream output = new MemoryStream();
+            var length = (int)(_outputBitmap.Length / BitsPerByte - input.Length);
             input.CopyTo(output);
             switch (_politicId)
             {
@@ -76,11 +75,13 @@ namespace Steganography.Options
                     if (string.IsNullOrWhiteSpace(_politicsText)) throw new Exception("Отсутствует заполняющий текст");
                     byte[] buffer = Encoding.Default.GetBytes(_politicsText);
                     for (int i = 0; i < length; i += buffer.Length)
-                        output.Write(buffer, 0, Math.Min(buffer.Length, length - i));
+                        output.Write(buffer, 0, System.Math.Min(buffer.Length, length - i));
                     break;
                 default:
                     throw new NotImplementedException();
             }
+            output.Seek(0, SeekOrigin.Begin);
+            return output;
         }
     }
 }

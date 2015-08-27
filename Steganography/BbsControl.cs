@@ -41,10 +41,12 @@ namespace Steganography
         {
             InitializeComponent();
             repositoryItemComboBoxArchiver.Items.AddRange(Archiver.ComboBoxItems);
+            repositoryItemComboBoxEcc.Items.AddRange(Ecc.ComboBoxItems);
             repositoryItemComboBoxGamma.Items.AddRange(Gamma.ComboBoxItems);
             repositoryItemComboBoxMixer.Items.AddRange(Mixer.ComboBoxItems);
             repositoryItemComboBoxPolitic.Items.AddRange(Politic.ComboBoxItems);
             repositoryItemComboBoxPixelFormat.Items.AddRange(CvBitmap.ComboBoxItems);
+            repositoryItemComboBoxBarcode.Items.AddRange(Barcode.ComboBoxItems);
             try
             {
                 Stream stream = File.Open("default.options", FileMode.Open);
@@ -55,16 +57,21 @@ namespace Steganography
             catch (Exception)
             {
                 _bbsOptions.PixelFormatIndex = 0;
+                _bbsOptions.EccIndex = 1;
                 _bbsOptions.GammaIndex = 1;
                 _bbsOptions.MixerIndex = 1;
-                _bbsOptions.ArchiverIndex = 0;
-                _bbsOptions.ExpandSize = 64;
+                _bbsOptions.ArchiverIndex = 1;
+                _bbsOptions.ExpandSize = 15;
+                _bbsOptions.EccCodeSize = 255;
+                _bbsOptions.EccDataSize = 127;
                 _bbsOptions.Alpha = 10;
-                _bbsOptions.SampleAutoresize = false;
+                _bbsOptions.SampleAutoresize = true;
                 _bbsOptions.PoliticIndex = 0;
                 _bbsOptions.PoliticText = "FAKE";
                 _bbsOptions.Key = "WELCOME";
                 _bbsOptions.FilterStep = 3;
+                _bbsOptions.BarcodeIndex = 0;
+                _bbsOptions.ExtractBarcode = true;
                 _bbsOptions.IndexToObject();
             }
 
@@ -84,9 +91,11 @@ namespace Steganography
             {
                 repositoryItemComboBoxMixer,
                 repositoryItemComboBoxGamma,
+                repositoryItemComboBoxEcc,
                 repositoryItemComboBoxArchiver,
                 repositoryItemComboBoxPolitic,
                 repositoryItemComboBoxPixelFormat,
+                repositoryItemComboBoxBarcode,
                 repositoryItemMemoEditPoliticText,
                 repositoryItemCheckEditBoolean,
                 repositoryItemSpinEditNumber,
@@ -102,6 +111,7 @@ namespace Steganography
             {
                 repositoryItemComboBoxMixer,
                 repositoryItemComboBoxGamma,
+                repositoryItemComboBoxEcc,
                 repositoryItemComboBoxArchiver,
                 repositoryItemComboBoxPolitic,
                 repositoryItemComboBoxPixelFormat,
@@ -112,14 +122,18 @@ namespace Steganography
             });
 
             ArchiverComboBoxItem1.Properties.RowEdit = ArchiverComboBoxItem.Properties.RowEdit.Clone() as RepositoryItem;
+            EccComboBoxItem1.Properties.RowEdit = EccComboBoxItem.Properties.RowEdit.Clone() as RepositoryItem;
             MixerComboBoxItem1.Properties.RowEdit = MixerComboBoxItem.Properties.RowEdit.Clone() as RepositoryItem;
             GammaComboBoxItem1.Properties.RowEdit = GammaComboBoxItem.Properties.RowEdit.Clone() as RepositoryItem;
+            BarcodeComboBoxItem1.Properties.RowEdit = BarcodeComboBoxItem.Properties.RowEdit.Clone() as RepositoryItem;
             PoliticComboBoxItem1.Properties.RowEdit = PoliticComboBoxItem.Properties.RowEdit.Clone() as RepositoryItem;
             PoliticText1.Properties.RowEdit = PoliticText.Properties.RowEdit.Clone() as RepositoryItem;
             PixelFormatComboBoxItem1.Properties.RowEdit =
                 PixelFormatComboBoxItem.Properties.RowEdit.Clone() as RepositoryItem;
 
+
             ArchiverComboBoxItem2.Properties.RowEdit = ArchiverComboBoxItem.Properties.RowEdit.Clone() as RepositoryItem;
+            EccComboBoxItem2.Properties.RowEdit = EccComboBoxItem.Properties.RowEdit.Clone() as RepositoryItem;
             MixerComboBoxItem2.Properties.RowEdit = MixerComboBoxItem.Properties.RowEdit.Clone() as RepositoryItem;
             GammaComboBoxItem2.Properties.RowEdit = GammaComboBoxItem.Properties.RowEdit.Clone() as RepositoryItem;
 
@@ -196,7 +210,7 @@ namespace Steganography
 
         public void ViewSequence()
         {
-            new GammaForm(_bbsOptions.Key, _bbsOptions.ExpandSize, _bbsOptions.GammaIndex)
+            new GammaForm(_bbsOptions.Key, _bbsOptions.EccCodeSize, _bbsOptions.GammaIndex)
                 .ShowDialog();
         }
 

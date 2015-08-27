@@ -65,6 +65,7 @@
             this.barButtonItem17 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem18 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem19 = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItem20 = new DevExpress.XtraBars.BarButtonItem();
             this.ribbonMiniToolbar1 = new DevExpress.XtraBars.Ribbon.RibbonMiniToolbar(this.components);
             this.ribbonPageCategoryPack = new DevExpress.XtraBars.Ribbon.RibbonPageCategory();
             this.ribbonPagePack = new DevExpress.XtraBars.Ribbon.RibbonPage();
@@ -121,7 +122,7 @@
             this.mainControl = new Steganography.BbsControl();
             this.ribbonPageGroup4 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonPage2 = new DevExpress.XtraBars.Ribbon.RibbonPage();
-            this.barButtonItem20 = new DevExpress.XtraBars.BarButtonItem();
+            this.ribbonPageCategory1 = new DevExpress.XtraBars.Ribbon.RibbonPageCategory();
             ((System.ComponentModel.ISupportInitialize)(this.ribbonControl)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.applicationMenu2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl1)).BeginInit();
@@ -179,17 +180,17 @@
             this.barButtonItem19,
             this.barButtonItem20});
             this.ribbonControl.Location = new System.Drawing.Point(0, 0);
-            this.ribbonControl.MaxItemId = 26;
+            this.ribbonControl.MaxItemId = 1;
             this.ribbonControl.MiniToolbars.Add(this.ribbonMiniToolbar1);
             this.ribbonControl.Name = "ribbonControl";
             this.ribbonControl.PageCategories.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageCategory[] {
             this.ribbonPageCategoryPack,
             this.ribbonPageCategoryUnpack,
-            this.ribbonPageCategoryOptions});
+            this.ribbonPageCategoryOptions,
+            this.ribbonPageCategory1});
             this.ribbonControl.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] {
             this.ribbonPage1,
-            this.ribbonPage3,
-            this.ribbonPage7});
+            this.ribbonPage3});
             this.ribbonControl.Size = new System.Drawing.Size(1251, 183);
             this.ribbonControl.StatusBar = this.ribbonStatusBar2;
             this.ribbonControl.Toolbar.ItemLinks.Add(this.barButtonItemPack);
@@ -447,6 +448,14 @@
             this.barButtonItem19.Id = 24;
             this.barButtonItem19.LargeGlyph = ((System.Drawing.Image)(resources.GetObject("barButtonItem19.LargeGlyph")));
             this.barButtonItem19.Name = "barButtonItem19";
+            // 
+            // barButtonItem20
+            // 
+            this.barButtonItem20.Caption = "Ошибки";
+            this.barButtonItem20.Glyph = ((System.Drawing.Image)(resources.GetObject("barButtonItem20.Glyph")));
+            this.barButtonItem20.Id = 25;
+            this.barButtonItem20.LargeGlyph = ((System.Drawing.Image)(resources.GetObject("barButtonItem20.LargeGlyph")));
+            this.barButtonItem20.Name = "barButtonItem20";
             // 
             // ribbonMiniToolbar1
             // 
@@ -893,13 +902,13 @@
             this.ribbonPage2.Name = "ribbonPage2";
             this.ribbonPage2.Text = "Помощь";
             // 
-            // barButtonItem20
+            // ribbonPageCategory1
             // 
-            this.barButtonItem20.Caption = "Ошибки";
-            this.barButtonItem20.Glyph = ((System.Drawing.Image)(resources.GetObject("barButtonItem20.Glyph")));
-            this.barButtonItem20.Id = 25;
-            this.barButtonItem20.LargeGlyph = ((System.Drawing.Image)(resources.GetObject("barButtonItem20.LargeGlyph")));
-            this.barButtonItem20.Name = "barButtonItem20";
+            this.ribbonPageCategory1.Color = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.ribbonPageCategory1.Name = "ribbonPageCategory1";
+            this.ribbonPageCategory1.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] {
+            this.ribbonPage7});
+            this.ribbonPageCategory1.Text = "Помошь";
             // 
             // MainForm
             // 
@@ -1015,6 +1024,7 @@
         private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup36;
         private DevExpress.XtraBars.BarButtonItem barButtonItem19;
         private DevExpress.XtraBars.BarButtonItem barButtonItem20;
+        private DevExpress.XtraBars.Ribbon.RibbonPageCategory ribbonPageCategory1;
     }
 }
 

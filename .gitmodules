@@ -7,3 +7,9 @@
 [submodule "FFTTools"]
 	path = FFTTools
 	url = https://github.com/dprotopopov/FFTTools.git
+[submodule "emgucv"]
+	path = emgucv-code
+	url = git://git.code.sf.net/p/emgucv/code emgucv-code
+[submodule "opencv"]
+	path = opencv
+	url = https://github.com/Itseez/opencv.git

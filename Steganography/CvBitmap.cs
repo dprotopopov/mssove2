@@ -1,4 +1,4 @@
-using System;
+п»їusing System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -10,13 +10,13 @@ using FFTTools;
 namespace Steganography
 {
     /// <summary>
-    ///     Класс инструментов для работы с изображениями формата BMP
+    ///     В Р»Р°СЃСЃ РёРЅСЃС‚СЂСѓРјРµРЅС‚РѕРІ РґР»В¤ СЂР°Р±РѕС‚С‹ СЃ РёР·РѕР±СЂР°Р¶РµРЅРёВ¤РјРё С„РѕСЂРјР°С‚Р° BMP
     /// </summary>
-    public class CvBitmap
+    public class CvBitmap : IDisposable
     {
         public static readonly object[] ComboBoxItems =
         {
-            new ComboBoxItem(0, "Оригинал"),
+            new ComboBoxItem(0, "СњСЂРёРіРёРЅР°Р»"),
             new ComboBoxItem(1, "Grey"),
             new ComboBoxItem(3, "RGB")
         };
@@ -38,7 +38,7 @@ namespace Steganography
                 }
         }
 
-        public CvBitmap(CvBitmap sample, int requiredLength, int itemIndex, bool autoResize)
+        public CvBitmap(CvBitmap sample, long requiredLength, int itemIndex, bool autoResize)
         {
             Image<Bgr, Byte> temp;
             switch (sample.NumberOfChannels)
@@ -61,9 +61,9 @@ namespace Steganography
             if (autoResize)
             {
                 Size size = temp.Size;
-                double ratio = Math.Sqrt((double) requiredLength/(size.Height*size.Width*numberOfChannels));
-                var imageSize = new Size((int) Math.Ceiling(ratio*size.Width),
-                    (int) Math.Ceiling(ratio*size.Height));
+                double ratio = System.Math.Sqrt((double) requiredLength/(size.Height*size.Width*numberOfChannels));
+                var imageSize = new Size((int) System.Math.Ceiling(ratio*size.Width),
+                    (int) System.Math.Ceiling(ratio*size.Height));
 
                 //     Resize bitmap with the Fastest Fourier Transform
                 using (var builder = new StretchBuilder(imageSize))
@@ -215,6 +215,11 @@ namespace Steganography
             {
                 return _displayValue;
             }
+        }
+
+        public void Dispose()
+        {
+            throw new NotImplementedException();
         }
     }
 }

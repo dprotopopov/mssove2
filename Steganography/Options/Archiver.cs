@@ -30,9 +30,10 @@ namespace Steganography.Options
         ///     Вызов метода сжатия для текущего выбранного алгоритма сжатия данных
         /// </summary>
         /// <param name="input">Входной поток данных</param>
-        /// <param name="output">Выходной поток данных</param>
-        public void Compress(Stream input, Stream output)
+        /// <returns>Выходной поток данных</returns>
+        public Stream Compress(Stream input)
         {
+            Stream output = new MemoryStream();
             switch (_archiverId)
             {
                 case ArchiverId.None:
@@ -49,15 +50,18 @@ namespace Steganography.Options
                 default:
                     throw new NotImplementedException();
             }
+            output.Seek(0, SeekOrigin.Begin);
+            return output;
         }
 
         /// <summary>
         ///     Вызов метода расширения для текущего выбранного алгоритма сжатия данных
         /// </summary>
         /// <param name="input">Входной поток данных</param>
-        /// <param name="output">Выходной поток данных</param>
-        public void Decompress(Stream input, Stream output)
+        /// <returns>Выходной поток данных</returns>
+        public Stream Decompress(Stream input)
         {
+            Stream output = new MemoryStream();
             switch (_archiverId)
             {
                 case ArchiverId.None:
@@ -74,6 +78,8 @@ namespace Steganography.Options
                 default:
                     throw new NotImplementedException();
             }
+            output.Seek(0, SeekOrigin.Begin);
+            return output;
         }
 
         /// <summary>

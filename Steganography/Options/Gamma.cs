@@ -51,6 +51,7 @@ namespace Steganography.Options
             _key = key;
         }
 
+
         [SuppressMessage("Microsoft.Usage", "CA2202:Не ликвидировать объекты несколько раз")]
         public byte[] GetGamma(int n)
         {

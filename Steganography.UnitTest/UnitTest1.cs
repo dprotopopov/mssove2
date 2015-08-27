@@ -4,59 +4,34 @@ using System.IO.Compression;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Steganography.Utils;
+using ZXing.Common.ReedSolomon;
 
 namespace Steganography.UnitTest
 {
     [TestClass]
     public class UnitTest1
     {
+
         [TestMethod]
         public void TestMethod1()
         {
-            for (int i = 0; i < 10; i++)
-            {
-                var message = new byte[1000];
-                new Noise(0.5, 0.5).GetBytes(message);
-
-                var source = new MemoryStream(message);
-                var encoded = new MemoryStream();
-                var noised = new MemoryStream();
-                var decoded = new MemoryStream();
-
-                source.Seek(0, SeekOrigin.Begin);
-                encoded.Seek(0, SeekOrigin.Begin);
-                noised.Seek(0, SeekOrigin.Begin);
-                decoded.Seek(0, SeekOrigin.Begin);
-
-                new ErrorCorrection(10000, 10).Encode(source, encoded);
-
-                source.Seek(0, SeekOrigin.Begin);
-                encoded.Seek(0, SeekOrigin.Begin);
-                noised.Seek(0, SeekOrigin.Begin);
-                decoded.Seek(0, SeekOrigin.Begin);
-
-                new Noise(99/100, 1/100).Add(encoded, noised);
-
-                source.Seek(0, SeekOrigin.Begin);
-                encoded.Seek(0, SeekOrigin.Begin);
-                noised.Seek(0, SeekOrigin.Begin);
-                decoded.Seek(0, SeekOrigin.Begin);
-
-                new ErrorCorrection(10000, 10).Decode(noised, decoded);
-
-                source.Seek(0, SeekOrigin.Begin);
-                encoded.Seek(0, SeekOrigin.Begin);
-                noised.Seek(0, SeekOrigin.Begin);
-                decoded.Seek(0, SeekOrigin.Begin);
-
-                Console.WriteLine(string.Join("", source.ToArray().Select(x => x.ToString("X02"))));
-                Console.WriteLine(string.Join("", encoded.ToArray().Select(x => x.ToString("X02"))));
-                Console.WriteLine(string.Join("", noised.ToArray().Select(x => x.ToString("X02"))));
-                Console.WriteLine(string.Join("", decoded.ToArray().Select(x => x.ToString("X02"))));
-                Console.WriteLine();
-
-                Assert.IsTrue(new Comparer().Compare(source, decoded) == 0);
-            }
+            int codeSize = 255;
+            int dataSize = 15;
+            GenericGF gf = GenericGF.QR_CODE_FIELD_256;
+            var decoder = new ReedSolomonDecoder(gf);
+            var encoder = new ReedSolomonEncoder(gf);
+            int twoS = System.Math.Abs(codeSize - dataSize);
+            var buffer = new byte[System.Math.Max(codeSize, dataSize)];
+            new Noise(0.5, 0.5).GetBytes(buffer);
+            Console.WriteLine(string.Join("", buffer.ToList().GetRange(0, dataSize).Select(x => x.ToString("X02"))));
+            int[] array = buffer.Select(x => (int)x).ToArray();
+            encoder.encode(array, twoS);
+            buffer = array.Select(x => (byte)x).ToArray();
+            Console.WriteLine(string.Join("", buffer.ToList().GetRange(0, codeSize).Select(x => x.ToString("X02"))));
+            array = buffer.Select(x => (int)x).ToArray();
+            decoder.decode(array, twoS);
+            buffer = array.Select(x => (byte)x).ToArray();
+            Console.WriteLine(string.Join("", buffer.ToList().GetRange(0, dataSize).Select(x => x.ToString("X02"))));
         }
 
         [TestMethod]
@@ -110,27 +85,17 @@ namespace Steganography.UnitTest
                 new Noise(0.5, 0.5).GetBytes(random);
 
                 var source = new MemoryStream(message);
-                var enveloped = new MemoryStream();
-                var extracted = new MemoryStream();
+                var enveloped = new Envelope().Seal(source);
+                var temp = new MemoryStream();
+                enveloped.CopyTo(temp);
+                temp.Write(random, 0, random.Length);
+                temp.Seek(0, SeekOrigin.Begin);
+                var extracted = new Envelope().Extract(temp);
+                var memoryStream = new MemoryStream();
+                extracted.CopyTo(memoryStream);
 
-                source.Seek(0, SeekOrigin.Begin);
-                enveloped.Seek(0, SeekOrigin.Begin);
-                extracted.Seek(0, SeekOrigin.Begin);
 
-                new SequenceIndicator().Envelop(source, enveloped);
-                enveloped.Write(random, 0, random.Length);
-
-                source.Seek(0, SeekOrigin.Begin);
-                enveloped.Seek(0, SeekOrigin.Begin);
-                extracted.Seek(0, SeekOrigin.Begin);
-
-                new SequenceIndicator().Extract(enveloped, extracted);
-
-                source.Seek(0, SeekOrigin.Begin);
-                enveloped.Seek(0, SeekOrigin.Begin);
-                extracted.Seek(0, SeekOrigin.Begin);
-
-                Console.WriteLine(new Comparer().Distance(extracted.ToArray(), source.ToArray()));
+                Console.WriteLine(new Comparer().Distance(memoryStream.ToArray(), source.ToArray()));
 
                 Assert.IsTrue(new Comparer().Compare(source, extracted) == 0);
             }
