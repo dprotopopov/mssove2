@@ -30,7 +30,7 @@ namespace Steganography
             Options = 2
         }
 
-        private readonly BitmapSteganography _bitmapSteganography = new BitmapSteganography();
+        private readonly BbsBuilder _bbsBuilder = new BbsBuilder();
         private BbsOptions _bbsOptions = new BbsOptions();
         private CvBitmap _inputBitmap;
         private CvBitmap _medianBitmap;
@@ -178,7 +178,7 @@ namespace Steganography
                         _bbsOptions.IndexToObject();
                         _bbsOptions.RtfText = packFile.RtfText;
                         _bbsOptions.SampleBitmap = _sampleBitmap;
-                        _bitmapSteganography.Pack(_bbsOptions);
+                        _bbsBuilder.Pack(_bbsOptions);
                         _outputBitmap = _bbsOptions.OutputBitmap;
                         packingImage.Image = _outputBitmap.GetBitmap();
                     }
@@ -194,7 +194,7 @@ namespace Steganography
 
                         _bbsOptions.IndexToObject();
                         _bbsOptions.InputBitmap = _inputBitmap;
-                        _bitmapSteganography.Unpack(_bbsOptions);
+                        _bbsBuilder.Unpack(_bbsOptions);
                         _outputBitmap = _bbsOptions.OutputBitmap;
                         _medianBitmap = _bbsOptions.MedianBitmap;
                         unpackFile.RtfText = _bbsOptions.RtfText;
