@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             DevExpress.XtraSplashScreen.SplashScreenManager splashScreenManager1 = new DevExpress.XtraSplashScreen.SplashScreenManager(this, typeof(global::Steganography.SplashScreen1), true, true);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             DevExpress.Utils.Animation.PushTransition pushTransition1 = new DevExpress.Utils.Animation.PushTransition();
@@ -36,7 +35,7 @@
             this.ribbonStatusBar1 = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
             this.ribbonStatusBar2 = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
             this.ribbonControl = new DevExpress.XtraBars.Ribbon.RibbonControl();
-            this.applicationMenu2 = new DevExpress.XtraBars.Ribbon.ApplicationMenu(this.components);
+            this.applicationMenu2 = new DevExpress.XtraBars.Ribbon.ApplicationMenu();
             this.barButtonItemExit = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItemAbout = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItemUnpack = new DevExpress.XtraBars.BarButtonItem();
@@ -66,7 +65,8 @@
             this.barButtonItem18 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem19 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem20 = new DevExpress.XtraBars.BarButtonItem();
-            this.ribbonMiniToolbar1 = new DevExpress.XtraBars.Ribbon.RibbonMiniToolbar(this.components);
+            this.barButtonItem21 = new DevExpress.XtraBars.BarButtonItem();
+            this.ribbonMiniToolbar1 = new DevExpress.XtraBars.Ribbon.RibbonMiniToolbar();
             this.ribbonPageCategoryPack = new DevExpress.XtraBars.Ribbon.RibbonPageCategory();
             this.ribbonPagePack = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.ribbonPageGroup7 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
@@ -95,6 +95,11 @@
             this.ribbonPageGroup29 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonPageGroup15 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonPageGroup19 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
+            this.ribbonPageCategory1 = new DevExpress.XtraBars.Ribbon.RibbonPageCategory();
+            this.ribbonPage7 = new DevExpress.XtraBars.Ribbon.RibbonPage();
+            this.ribbonPageGroup30 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
+            this.ribbonPageGroup25 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
+            this.ribbonPageGroup22 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonPage1 = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.ribbonPageGroup5 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonPageGroup21 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
@@ -107,11 +112,7 @@
             this.ribbonPageGroup3 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonPageGroup24 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonPageGroup23 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
-            this.ribbonPage7 = new DevExpress.XtraBars.Ribbon.RibbonPage();
-            this.ribbonPageGroup30 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
-            this.ribbonPageGroup25 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
-            this.ribbonPageGroup22 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
-            this.defaultLookAndFeel1 = new DevExpress.LookAndFeel.DefaultLookAndFeel(this.components);
+            this.defaultLookAndFeel1 = new DevExpress.LookAndFeel.DefaultLookAndFeel();
             this.workspaceManager1 = new DevExpress.Utils.WorkspaceManager();
             this.splitContainerControl1 = new DevExpress.XtraEditors.SplitContainerControl();
             this.navBarControl1 = new DevExpress.XtraNavBar.NavBarControl();
@@ -122,7 +123,6 @@
             this.mainControl = new Steganography.BbsControl();
             this.ribbonPageGroup4 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonPage2 = new DevExpress.XtraBars.Ribbon.RibbonPage();
-            this.ribbonPageCategory1 = new DevExpress.XtraBars.Ribbon.RibbonPageCategory();
             ((System.ComponentModel.ISupportInitialize)(this.ribbonControl)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.applicationMenu2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl1)).BeginInit();
@@ -139,10 +139,10 @@
             // 
             // ribbonStatusBar2
             // 
-            this.ribbonStatusBar2.Location = new System.Drawing.Point(0, 861);
+            this.ribbonStatusBar2.Location = new System.Drawing.Point(0, 827);
             this.ribbonStatusBar2.Name = "ribbonStatusBar2";
             this.ribbonStatusBar2.Ribbon = this.ribbonControl;
-            this.ribbonStatusBar2.Size = new System.Drawing.Size(1251, 35);
+            this.ribbonStatusBar2.Size = new System.Drawing.Size(1251, 43);
             // 
             // ribbonControl
             // 
@@ -178,9 +178,10 @@
             this.barButtonItem17,
             this.barButtonItem18,
             this.barButtonItem19,
-            this.barButtonItem20});
+            this.barButtonItem20,
+            this.barButtonItem21});
             this.ribbonControl.Location = new System.Drawing.Point(0, 0);
-            this.ribbonControl.MaxItemId = 1;
+            this.ribbonControl.MaxItemId = 2;
             this.ribbonControl.MiniToolbars.Add(this.ribbonMiniToolbar1);
             this.ribbonControl.Name = "ribbonControl";
             this.ribbonControl.PageCategories.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageCategory[] {
@@ -191,7 +192,7 @@
             this.ribbonControl.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] {
             this.ribbonPage1,
             this.ribbonPage3});
-            this.ribbonControl.Size = new System.Drawing.Size(1251, 183);
+            this.ribbonControl.Size = new System.Drawing.Size(1251, 215);
             this.ribbonControl.StatusBar = this.ribbonStatusBar2;
             this.ribbonControl.Toolbar.ItemLinks.Add(this.barButtonItemPack);
             this.ribbonControl.Toolbar.ItemLinks.Add(this.barButtonItemUnpack);
@@ -457,6 +458,15 @@
             this.barButtonItem20.LargeGlyph = ((System.Drawing.Image)(resources.GetObject("barButtonItem20.LargeGlyph")));
             this.barButtonItem20.Name = "barButtonItem20";
             // 
+            // barButtonItem21
+            // 
+            this.barButtonItem21.Caption = "Баркод";
+            this.barButtonItem21.Glyph = ((System.Drawing.Image)(resources.GetObject("barButtonItem21.Glyph")));
+            this.barButtonItem21.Id = 1;
+            this.barButtonItem21.LargeGlyph = ((System.Drawing.Image)(resources.GetObject("barButtonItem21.LargeGlyph")));
+            this.barButtonItem21.Name = "barButtonItem21";
+            this.barButtonItem21.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.Barcode_ItemClick);
+            // 
             // ribbonMiniToolbar1
             // 
             this.ribbonMiniToolbar1.ItemLinks.Add(this.barButtonItemPack);
@@ -526,7 +536,7 @@
             this.ribbonPageGroup17.ItemLinks.Add(this.barButtonItem5);
             this.ribbonPageGroup17.ItemLinks.Add(this.barButtonItemAbout);
             this.ribbonPageGroup17.Name = "ribbonPageGroup17";
-            this.ribbonPageGroup17.Text = "Помошь";
+            this.ribbonPageGroup17.Text = "Помощь";
             // 
             // ribbonPage4
             // 
@@ -541,6 +551,7 @@
             // 
             this.ribbonPageGroup33.ItemLinks.Add(this.barButtonItem8);
             this.ribbonPageGroup33.ItemLinks.Add(this.barButtonItem19);
+            this.ribbonPageGroup33.ItemLinks.Add(this.barButtonItem21);
             this.ribbonPageGroup33.Name = "ribbonPageGroup33";
             this.ribbonPageGroup33.Text = "Анализ";
             // 
@@ -549,7 +560,7 @@
             this.ribbonPageGroup34.ItemLinks.Add(this.barButtonItem5);
             this.ribbonPageGroup34.ItemLinks.Add(this.barButtonItemAbout);
             this.ribbonPageGroup34.Name = "ribbonPageGroup34";
-            this.ribbonPageGroup34.Text = "Помошь";
+            this.ribbonPageGroup34.Text = "Помощь";
             // 
             // ribbonPageCategoryUnpack
             // 
@@ -613,7 +624,7 @@
             this.ribbonPageGroup18.ItemLinks.Add(this.barButtonItem5);
             this.ribbonPageGroup18.ItemLinks.Add(this.barButtonItemAbout);
             this.ribbonPageGroup18.Name = "ribbonPageGroup18";
-            this.ribbonPageGroup18.Text = "Помошь";
+            this.ribbonPageGroup18.Text = "Помощь";
             // 
             // ribbonPage5
             // 
@@ -627,6 +638,7 @@
             // ribbonPageGroup35
             // 
             this.ribbonPageGroup35.ItemLinks.Add(this.barButtonItem8);
+            this.ribbonPageGroup35.ItemLinks.Add(this.barButtonItem21);
             this.ribbonPageGroup35.Name = "ribbonPageGroup35";
             this.ribbonPageGroup35.Text = "Анализ";
             // 
@@ -635,7 +647,7 @@
             this.ribbonPageGroup36.ItemLinks.Add(this.barButtonItem5);
             this.ribbonPageGroup36.ItemLinks.Add(this.barButtonItemAbout);
             this.ribbonPageGroup36.Name = "ribbonPageGroup36";
-            this.ribbonPageGroup36.Text = "Помошь";
+            this.ribbonPageGroup36.Text = "Помощь";
             // 
             // ribbonPageCategoryOptions
             // 
@@ -680,7 +692,47 @@
             this.ribbonPageGroup19.ItemLinks.Add(this.barButtonItem5);
             this.ribbonPageGroup19.ItemLinks.Add(this.barButtonItemAbout);
             this.ribbonPageGroup19.Name = "ribbonPageGroup19";
-            this.ribbonPageGroup19.Text = "Помошь";
+            this.ribbonPageGroup19.Text = "Помощь";
+            // 
+            // ribbonPageCategory1
+            // 
+            this.ribbonPageCategory1.Color = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.ribbonPageCategory1.Name = "ribbonPageCategory1";
+            this.ribbonPageCategory1.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] {
+            this.ribbonPage7});
+            this.ribbonPageCategory1.Text = "Помощь";
+            // 
+            // ribbonPage7
+            // 
+            this.ribbonPage7.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] {
+            this.ribbonPageGroup30,
+            this.ribbonPageGroup25,
+            this.ribbonPageGroup22});
+            this.ribbonPage7.MergeOrder = 9999;
+            this.ribbonPage7.Name = "ribbonPage7";
+            this.ribbonPage7.Text = "Помощь";
+            // 
+            // ribbonPageGroup30
+            // 
+            this.ribbonPageGroup30.ItemLinks.Add(this.barButtonItem10);
+            this.ribbonPageGroup30.ItemLinks.Add(this.barButtonItem11);
+            this.ribbonPageGroup30.ItemLinks.Add(this.barButtonItem12);
+            this.ribbonPageGroup30.ItemLinks.Add(this.barButtonItem20);
+            this.ribbonPageGroup30.Name = "ribbonPageGroup30";
+            this.ribbonPageGroup30.Text = "Ссылки";
+            // 
+            // ribbonPageGroup25
+            // 
+            this.ribbonPageGroup25.ItemLinks.Add(this.barButtonItemExit);
+            this.ribbonPageGroup25.Name = "ribbonPageGroup25";
+            this.ribbonPageGroup25.Text = "Выход";
+            // 
+            // ribbonPageGroup22
+            // 
+            this.ribbonPageGroup22.ItemLinks.Add(this.barButtonItem5);
+            this.ribbonPageGroup22.ItemLinks.Add(this.barButtonItemAbout);
+            this.ribbonPageGroup22.Name = "ribbonPageGroup22";
+            this.ribbonPageGroup22.Text = "Помощь";
             // 
             // ribbonPage1
             // 
@@ -733,7 +785,7 @@
             this.ribbonPageGroup2.ItemLinks.Add(this.barButtonItem5);
             this.ribbonPageGroup2.ItemLinks.Add(this.barButtonItemAbout);
             this.ribbonPageGroup2.Name = "ribbonPageGroup2";
-            this.ribbonPageGroup2.Text = "Помошь";
+            this.ribbonPageGroup2.Text = "Помощь";
             // 
             // ribbonPage3
             // 
@@ -771,39 +823,7 @@
             this.ribbonPageGroup23.ItemLinks.Add(this.barButtonItem5);
             this.ribbonPageGroup23.ItemLinks.Add(this.barButtonItemAbout);
             this.ribbonPageGroup23.Name = "ribbonPageGroup23";
-            this.ribbonPageGroup23.Text = "Помошь";
-            // 
-            // ribbonPage7
-            // 
-            this.ribbonPage7.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] {
-            this.ribbonPageGroup30,
-            this.ribbonPageGroup25,
-            this.ribbonPageGroup22});
-            this.ribbonPage7.MergeOrder = 9999;
-            this.ribbonPage7.Name = "ribbonPage7";
-            this.ribbonPage7.Text = "Помошь";
-            // 
-            // ribbonPageGroup30
-            // 
-            this.ribbonPageGroup30.ItemLinks.Add(this.barButtonItem10);
-            this.ribbonPageGroup30.ItemLinks.Add(this.barButtonItem11);
-            this.ribbonPageGroup30.ItemLinks.Add(this.barButtonItem12);
-            this.ribbonPageGroup30.ItemLinks.Add(this.barButtonItem20);
-            this.ribbonPageGroup30.Name = "ribbonPageGroup30";
-            this.ribbonPageGroup30.Text = "Ссылки";
-            // 
-            // ribbonPageGroup25
-            // 
-            this.ribbonPageGroup25.ItemLinks.Add(this.barButtonItemExit);
-            this.ribbonPageGroup25.Name = "ribbonPageGroup25";
-            this.ribbonPageGroup25.Text = "Выход";
-            // 
-            // ribbonPageGroup22
-            // 
-            this.ribbonPageGroup22.ItemLinks.Add(this.barButtonItem5);
-            this.ribbonPageGroup22.ItemLinks.Add(this.barButtonItemAbout);
-            this.ribbonPageGroup22.Name = "ribbonPageGroup22";
-            this.ribbonPageGroup22.Text = "Помошь";
+            this.ribbonPageGroup23.Text = "Помощь";
             // 
             // workspaceManager1
             // 
@@ -813,13 +833,13 @@
             // splitContainerControl1
             // 
             this.splitContainerControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainerControl1.Location = new System.Drawing.Point(0, 183);
+            this.splitContainerControl1.Location = new System.Drawing.Point(0, 215);
             this.splitContainerControl1.Name = "splitContainerControl1";
             this.splitContainerControl1.Panel1.Controls.Add(this.navBarControl1);
             this.splitContainerControl1.Panel1.Text = "Panel1";
             this.splitContainerControl1.Panel2.Controls.Add(this.mainControl);
             this.splitContainerControl1.Panel2.Text = "Panel2";
-            this.splitContainerControl1.Size = new System.Drawing.Size(1251, 678);
+            this.splitContainerControl1.Size = new System.Drawing.Size(1251, 612);
             this.splitContainerControl1.SplitterPosition = 211;
             this.splitContainerControl1.TabIndex = 5;
             this.splitContainerControl1.Text = "splitContainerControl1";
@@ -837,14 +857,14 @@
             this.navBarControl1.Location = new System.Drawing.Point(0, 0);
             this.navBarControl1.Name = "navBarControl1";
             this.navBarControl1.OptionsNavPane.ExpandedWidth = 211;
-            this.navBarControl1.Size = new System.Drawing.Size(211, 678);
+            this.navBarControl1.Size = new System.Drawing.Size(211, 612);
             this.navBarControl1.TabIndex = 1;
             this.navBarControl1.Text = "navBarControl1";
             this.navBarControl1.View = new DevExpress.XtraNavBar.ViewInfo.SkinExplorerBarViewInfoRegistrator();
             // 
             // navBarGroup1
             // 
-            this.navBarGroup1.Caption = "Метод ШПС";
+            this.navBarGroup1.Caption = "Режим";
             this.navBarGroup1.Expanded = true;
             this.navBarGroup1.ItemLinks.AddRange(new DevExpress.XtraNavBar.NavBarItemLink[] {
             new DevExpress.XtraNavBar.NavBarItemLink(this.navBarItemPack),
@@ -884,7 +904,7 @@
             this.mainControl.Location = new System.Drawing.Point(0, 0);
             this.mainControl.Name = "mainControl";
             this.mainControl.SelectedMode = Steganography.BbsControl.Mode.Pack;
-            this.mainControl.Size = new System.Drawing.Size(1035, 678);
+            this.mainControl.Size = new System.Drawing.Size(1032, 612);
             this.mainControl.TabIndex = 3;
             this.mainControl.TabsVisible = true;
             this.mainControl.SelectedModeChanged += new Steganography.BbsControl.SelectedModeChangedEventHandler(this.SelectedModeChanged);
@@ -902,26 +922,18 @@
             this.ribbonPage2.Name = "ribbonPage2";
             this.ribbonPage2.Text = "Помощь";
             // 
-            // ribbonPageCategory1
-            // 
-            this.ribbonPageCategory1.Color = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.ribbonPageCategory1.Name = "ribbonPageCategory1";
-            this.ribbonPageCategory1.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] {
-            this.ribbonPage7});
-            this.ribbonPageCategory1.Text = "Помошь";
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1251, 896);
+            this.ClientSize = new System.Drawing.Size(1251, 870);
             this.Controls.Add(this.splitContainerControl1);
             this.Controls.Add(this.ribbonStatusBar2);
             this.Controls.Add(this.ribbonControl);
             this.Name = "MainForm";
             this.Ribbon = this.ribbonControl;
             this.StatusBar = this.ribbonStatusBar2;
-            this.Text = "Метод ШПС";
+            this.Text = "Метод Широкополосных сигналов";
             ((System.ComponentModel.ISupportInitialize)(this.ribbonControl)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.applicationMenu2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl1)).EndInit();
@@ -1025,6 +1037,7 @@
         private DevExpress.XtraBars.BarButtonItem barButtonItem19;
         private DevExpress.XtraBars.BarButtonItem barButtonItem20;
         private DevExpress.XtraBars.Ribbon.RibbonPageCategory ribbonPageCategory1;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem21;
     }
 }
 

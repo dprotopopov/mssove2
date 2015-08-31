@@ -116,15 +116,6 @@
     <Compile Include="AboutBox.Designer.cs">
       <DependentUpon>AboutBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="ComboBoxItem.cs" />
-    <Compile Include="Cryptography\Arcfour.cs" />
-    <Compile Include="Options\Archiver.cs" />
-    <Compile Include="Options\Barcode.cs" />
-    <Compile Include="Options\Ecc.cs" />
-    <Compile Include="Options\Gamma.cs" />
-    <Compile Include="Options\Mixer.cs" />
-    <Compile Include="Options\None.cs" />
-    <Compile Include="Options\Politic.cs" />
     <Compile Include="RichTextEditor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -137,17 +128,12 @@
     <Compile Include="SplashScreen1.Designer.cs">
       <DependentUpon>SplashScreen1.cs</DependentUpon>
     </Compile>
-    <Compile Include="CvBitmap.cs" />
-    <Compile Include="BbsBuilder.cs" />
-    <Compile Include="BbSignals.cs" />
     <Compile Include="BbsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="BbsControl.Designer.cs">
       <DependentUpon>BbsControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="BbsOptions.cs" />
-    <Compile Include="Envelope.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -162,8 +148,6 @@
     <Compile Include="GammaForm.Designer.cs">
       <DependentUpon>GammaForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Utils\Comparer.cs" />
-    <Compile Include="Utils\Noise.cs" />
     <EmbeddedResource Include="AboutBox.resx">
       <DependentUpon>AboutBox.cs</DependentUpon>
     </EmbeddedResource>
@@ -480,6 +464,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BBSLib\BBSLib.csproj">
+      <Project>{45737c32-6ba1-4f30-b9c5-ed31b954cb2c}</Project>
+      <Name>BBSLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FFTTools\FFTTools\FFTTools.csproj">
       <Project>{04ebcb94-404a-474f-94cd-f58eafff890a}</Project>
       <Name>FFTTools</Name>

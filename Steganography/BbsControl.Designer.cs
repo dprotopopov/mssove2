@@ -41,6 +41,7 @@ namespace Steganography
             this.xtraTabControl1 = new DevExpress.XtraTab.XtraTabControl();
             this.xtraTabPage1 = new DevExpress.XtraTab.XtraTabPage();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.labelControl3 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl7 = new DevExpress.XtraEditors.LabelControl();
             this.packingSample = new DevExpress.XtraEditors.PictureEdit();
             this.labelControl10 = new DevExpress.XtraEditors.LabelControl();
@@ -56,7 +57,7 @@ namespace Steganography
             this.EccCodeSize1 = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
             this.EccDataSize1 = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
             this.categoryPack = new DevExpress.XtraVerticalGrid.Rows.CategoryRow();
-            this.SampleAutoresize1 = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
+            this.AutoResize1 = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
             this.Key1 = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
             this.Alpha1 = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
             this.PixelFormatComboBoxItem1 = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
@@ -65,8 +66,10 @@ namespace Steganography
             this.BarcodeComboBoxItem1 = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
             this.PoliticComboBoxItem1 = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
             this.PoliticText1 = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
+            this.AutoAlpha1 = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
             this.xtraTabPage2 = new DevExpress.XtraTab.XtraTabPage();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl17 = new DevExpress.XtraEditors.LabelControl();
             this.pictureBox1 = new DevExpress.XtraEditors.PictureEdit();
             this.unpackImage = new DevExpress.XtraEditors.PictureEdit();
@@ -108,7 +111,7 @@ namespace Steganography
             this.EccCodeSize = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
             this.EccDataSize = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
             this.categoryPackUnpack = new DevExpress.XtraVerticalGrid.Rows.CategoryRow();
-            this.SampleAutoresize = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
+            this.AutoResize = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
             this.Key = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
             this.FilterStep = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
             this.Alpha = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
@@ -119,12 +122,11 @@ namespace Steganography
             this.ExtractBarcode = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
             this.PoliticComboBoxItem = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
             this.PoliticText = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
+            this.AutoAlpha = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
             this.PixelFormatIndex = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
             this.defaultLookAndFeel1 = new DevExpress.LookAndFeel.DefaultLookAndFeel(this.components);
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
-            this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
-            this.labelControl3 = new DevExpress.XtraEditors.LabelControl();
             ((System.ComponentModel.ISupportInitialize)(this.groupControl1)).BeginInit();
             this.groupControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).BeginInit();
@@ -191,10 +193,10 @@ namespace Steganography
             // xtraTabControl1
             // 
             this.xtraTabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.xtraTabControl1.Location = new System.Drawing.Point(2, 2);
+            this.xtraTabControl1.Location = new System.Drawing.Point(3, 3);
             this.xtraTabControl1.Name = "xtraTabControl1";
             this.xtraTabControl1.SelectedTabPage = this.xtraTabPage1;
-            this.xtraTabControl1.Size = new System.Drawing.Size(1231, 742);
+            this.xtraTabControl1.Size = new System.Drawing.Size(1229, 740);
             this.xtraTabControl1.TabIndex = 0;
             this.xtraTabControl1.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] {
             this.xtraTabPage1,
@@ -207,7 +209,7 @@ namespace Steganography
             this.xtraTabPage1.Controls.Add(this.tableLayoutPanel1);
             this.xtraTabPage1.Image = ((System.Drawing.Image)(resources.GetObject("xtraTabPage1.Image")));
             this.xtraTabPage1.Name = "xtraTabPage1";
-            this.xtraTabPage1.Size = new System.Drawing.Size(1225, 695);
+            this.xtraTabPage1.Size = new System.Drawing.Size(1219, 685);
             this.xtraTabPage1.Text = "Режим упаковки";
             // 
             // tableLayoutPanel1
@@ -232,13 +234,22 @@ namespace Steganography
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 36.43411F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1225, 695);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1219, 685);
             this.tableLayoutPanel1.TabIndex = 52;
+            // 
+            // labelControl3
+            // 
+            this.labelControl3.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.labelControl3.Location = new System.Drawing.Point(3, 3);
+            this.labelControl3.Name = "labelControl3";
+            this.labelControl3.Size = new System.Drawing.Size(82, 19);
+            this.labelControl3.TabIndex = 53;
+            this.labelControl3.Text = "Параметры";
             // 
             // labelControl7
             // 
             this.labelControl7.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.labelControl7.Location = new System.Drawing.Point(3, 437);
+            this.labelControl7.Location = new System.Drawing.Point(3, 431);
             this.labelControl7.Name = "labelControl7";
             this.labelControl7.Size = new System.Drawing.Size(62, 19);
             this.labelControl7.TabIndex = 47;
@@ -247,11 +258,11 @@ namespace Steganography
             // packingSample
             // 
             this.packingSample.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.packingSample.Location = new System.Drawing.Point(3, 462);
+            this.packingSample.Location = new System.Drawing.Point(3, 456);
             this.packingSample.Name = "packingSample";
             this.packingSample.Properties.ShowMenu = false;
             this.packingSample.Properties.SizeMode = DevExpress.XtraEditors.Controls.PictureSizeMode.Zoom;
-            this.packingSample.Size = new System.Drawing.Size(606, 230);
+            this.packingSample.Size = new System.Drawing.Size(603, 226);
             this.packingSample.TabIndex = 16;
             this.packingSample.Click += new System.EventHandler(this.packSample_Click);
             this.packingSample.DoubleClick += new System.EventHandler(this.packSample_Click);
@@ -259,7 +270,7 @@ namespace Steganography
             // labelControl10
             // 
             this.labelControl10.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.labelControl10.Location = new System.Drawing.Point(615, 3);
+            this.labelControl10.Location = new System.Drawing.Point(612, 3);
             this.labelControl10.Name = "labelControl10";
             this.labelControl10.Size = new System.Drawing.Size(84, 19);
             this.labelControl10.TabIndex = 50;
@@ -269,16 +280,17 @@ namespace Steganography
             // 
             this.packFile.Dock = System.Windows.Forms.DockStyle.Fill;
             this.packFile.EnableToolTips = true;
-            this.packFile.Location = new System.Drawing.Point(615, 28);
+            this.packFile.Location = new System.Drawing.Point(612, 28);
             this.packFile.Name = "packFile";
-            this.packFile.Size = new System.Drawing.Size(607, 403);
+            this.packFile.Options.Bookmarks.AllowNameResolution = false;
+            this.packFile.Size = new System.Drawing.Size(604, 397);
             this.packFile.TabIndex = 1;
             this.packFile.DoubleClick += new System.EventHandler(this.packFile_DoubleClick);
             // 
             // labelControl8
             // 
             this.labelControl8.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.labelControl8.Location = new System.Drawing.Point(615, 437);
+            this.labelControl8.Location = new System.Drawing.Point(612, 431);
             this.labelControl8.Name = "labelControl8";
             this.labelControl8.Size = new System.Drawing.Size(69, 19);
             this.labelControl8.TabIndex = 48;
@@ -287,11 +299,11 @@ namespace Steganography
             // packingImage
             // 
             this.packingImage.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.packingImage.Location = new System.Drawing.Point(615, 462);
+            this.packingImage.Location = new System.Drawing.Point(612, 456);
             this.packingImage.Name = "packingImage";
             this.packingImage.Properties.ShowMenu = false;
             this.packingImage.Properties.SizeMode = DevExpress.XtraEditors.Controls.PictureSizeMode.Zoom;
-            this.packingImage.Size = new System.Drawing.Size(607, 230);
+            this.packingImage.Size = new System.Drawing.Size(604, 226);
             this.packingImage.TabIndex = 15;
             this.packingImage.Click += new System.EventHandler(this.packImage_Click);
             // 
@@ -304,7 +316,7 @@ namespace Steganography
             this.propertyGridControlPack.Rows.AddRange(new DevExpress.XtraVerticalGrid.Rows.BaseRow[] {
             this.category1,
             this.categoryPack});
-            this.propertyGridControlPack.Size = new System.Drawing.Size(606, 403);
+            this.propertyGridControlPack.Size = new System.Drawing.Size(603, 397);
             this.propertyGridControlPack.TabIndex = 52;
             this.propertyGridControlPack.CellValueChanged += new DevExpress.XtraVerticalGrid.Events.CellValueChangedEventHandler(this.CellValueChanged);
             // 
@@ -321,8 +333,9 @@ namespace Steganography
             // MixerComboBoxItem1
             // 
             this.MixerComboBoxItem1.Height = 23;
+            this.MixerComboBoxItem1.IsChildRowsLoaded = true;
             this.MixerComboBoxItem1.Name = "MixerComboBoxItem1";
-            this.MixerComboBoxItem1.Properties.Caption = "Алгоритм перемешивания";
+            this.MixerComboBoxItem1.Properties.Caption = "Алгоритм псевдослучайной перестановки";
             this.MixerComboBoxItem1.Properties.FieldName = "MixerComboBoxItem";
             // 
             // ArchiverComboBoxItem1
@@ -334,7 +347,7 @@ namespace Steganography
             // GammaComboBoxItem1
             // 
             this.GammaComboBoxItem1.Name = "GammaComboBoxItem1";
-            this.GammaComboBoxItem1.Properties.Caption = "Алгоритм гаммы";
+            this.GammaComboBoxItem1.Properties.Caption = "Алгоритм псевдослучайного генератора";
             this.GammaComboBoxItem1.Properties.FieldName = "GammaComboBoxItem";
             // 
             // EccComboBoxItem1
@@ -342,6 +355,7 @@ namespace Steganography
             this.EccComboBoxItem1.ChildRows.AddRange(new DevExpress.XtraVerticalGrid.Rows.BaseRow[] {
             this.EccCodeSize1,
             this.EccDataSize1});
+            this.EccComboBoxItem1.Expanded = false;
             this.EccComboBoxItem1.IsChildRowsLoaded = true;
             this.EccComboBoxItem1.Name = "EccComboBoxItem1";
             this.EccComboBoxItem1.Properties.Caption = "Алгоритм коррекции ошибок";
@@ -362,27 +376,28 @@ namespace Steganography
             // categoryPack
             // 
             this.categoryPack.ChildRows.AddRange(new DevExpress.XtraVerticalGrid.Rows.BaseRow[] {
-            this.SampleAutoresize1,
+            this.AutoResize1,
             this.Key1,
             this.Alpha1,
             this.PixelFormatComboBoxItem1,
             this.MaximumGamma1,
             this.ExpandSize1,
             this.BarcodeComboBoxItem1,
-            this.PoliticComboBoxItem1});
+            this.PoliticComboBoxItem1,
+            this.AutoAlpha1});
             this.categoryPack.Name = "categoryPack";
             this.categoryPack.Properties.Caption = "Значения";
             // 
-            // SampleAutoresize1
+            // AutoResize1
             // 
-            this.SampleAutoresize1.Name = "SampleAutoresize1";
-            this.SampleAutoresize1.Properties.Caption = "Маштабировать изображение";
-            this.SampleAutoresize1.Properties.FieldName = "SampleAutoresize";
+            this.AutoResize1.Name = "AutoResize1";
+            this.AutoResize1.Properties.Caption = "Маштабировать изображение";
+            this.AutoResize1.Properties.FieldName = "AutoResize";
             // 
             // Key1
             // 
             this.Key1.Name = "Key1";
-            this.Key1.Properties.Caption = "Ключ";
+            this.Key1.Properties.Caption = "Ключ псевдослучайных генераторов";
             this.Key1.Properties.FieldName = "Key";
             // 
             // Alpha1
@@ -419,6 +434,7 @@ namespace Steganography
             // 
             this.PoliticComboBoxItem1.ChildRows.AddRange(new DevExpress.XtraVerticalGrid.Rows.BaseRow[] {
             this.PoliticText1});
+            this.PoliticComboBoxItem1.Expanded = false;
             this.PoliticComboBoxItem1.IsChildRowsLoaded = true;
             this.PoliticComboBoxItem1.Name = "PoliticComboBoxItem1";
             this.PoliticComboBoxItem1.Properties.Caption = "Политика заполения лишних пикселей";
@@ -430,12 +446,18 @@ namespace Steganography
             this.PoliticText1.Properties.Caption = "Альтернативное сообщение";
             this.PoliticText1.Properties.FieldName = "PoliticText";
             // 
+            // AutoAlpha1
+            // 
+            this.AutoAlpha1.Name = "AutoAlpha1";
+            this.AutoAlpha1.Properties.Caption = "Подбирать глубину погружения";
+            this.AutoAlpha1.Properties.FieldName = "AutoAlpha";
+            // 
             // xtraTabPage2
             // 
             this.xtraTabPage2.Controls.Add(this.tableLayoutPanel2);
             this.xtraTabPage2.Image = ((System.Drawing.Image)(resources.GetObject("xtraTabPage2.Image")));
             this.xtraTabPage2.Name = "xtraTabPage2";
-            this.xtraTabPage2.Size = new System.Drawing.Size(1225, 695);
+            this.xtraTabPage2.Size = new System.Drawing.Size(1219, 685);
             this.xtraTabPage2.Text = "Режим распаковки";
             // 
             // tableLayoutPanel2
@@ -460,13 +482,22 @@ namespace Steganography
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 35.96899F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(1225, 695);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(1219, 685);
             this.tableLayoutPanel2.TabIndex = 48;
+            // 
+            // labelControl2
+            // 
+            this.labelControl2.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.labelControl2.Location = new System.Drawing.Point(3, 3);
+            this.labelControl2.Name = "labelControl2";
+            this.labelControl2.Size = new System.Drawing.Size(82, 19);
+            this.labelControl2.TabIndex = 50;
+            this.labelControl2.Text = "Параметры";
             // 
             // labelControl17
             // 
             this.labelControl17.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.labelControl17.Location = new System.Drawing.Point(3, 441);
+            this.labelControl17.Location = new System.Drawing.Point(3, 434);
             this.labelControl17.Name = "labelControl17";
             this.labelControl17.Size = new System.Drawing.Size(69, 19);
             this.labelControl17.TabIndex = 45;
@@ -475,28 +506,28 @@ namespace Steganography
             // pictureBox1
             // 
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox1.Location = new System.Drawing.Point(615, 466);
+            this.pictureBox1.Location = new System.Drawing.Point(612, 459);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Properties.ShowMenu = false;
             this.pictureBox1.Properties.SizeMode = DevExpress.XtraEditors.Controls.PictureSizeMode.Zoom;
-            this.pictureBox1.Size = new System.Drawing.Size(607, 226);
+            this.pictureBox1.Size = new System.Drawing.Size(604, 223);
             this.pictureBox1.TabIndex = 38;
             // 
             // unpackImage
             // 
             this.unpackImage.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.unpackImage.Location = new System.Drawing.Point(3, 466);
+            this.unpackImage.Location = new System.Drawing.Point(3, 459);
             this.unpackImage.Name = "unpackImage";
             this.unpackImage.Properties.ShowMenu = false;
             this.unpackImage.Properties.SizeMode = DevExpress.XtraEditors.Controls.PictureSizeMode.Zoom;
-            this.unpackImage.Size = new System.Drawing.Size(606, 226);
+            this.unpackImage.Size = new System.Drawing.Size(603, 223);
             this.unpackImage.TabIndex = 14;
             this.unpackImage.Click += new System.EventHandler(this.unpackImage_Click);
             // 
             // labelControl18
             // 
             this.labelControl18.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.labelControl18.Location = new System.Drawing.Point(615, 3);
+            this.labelControl18.Location = new System.Drawing.Point(612, 3);
             this.labelControl18.Name = "labelControl18";
             this.labelControl18.Size = new System.Drawing.Size(84, 19);
             this.labelControl18.TabIndex = 46;
@@ -506,23 +537,24 @@ namespace Steganography
             // 
             this.unpackFile.Dock = System.Windows.Forms.DockStyle.Fill;
             this.unpackFile.EnableToolTips = true;
-            this.unpackFile.Location = new System.Drawing.Point(615, 28);
+            this.unpackFile.Location = new System.Drawing.Point(612, 28);
             this.unpackFile.Name = "unpackFile";
+            this.unpackFile.Options.Bookmarks.AllowNameResolution = false;
             this.unpackFile.ReadOnly = true;
-            this.unpackFile.Size = new System.Drawing.Size(607, 407);
+            this.unpackFile.Size = new System.Drawing.Size(604, 400);
             this.unpackFile.TabIndex = 9;
             this.unpackFile.DoubleClick += new System.EventHandler(this.unpackFile_DoubleClick);
             // 
             // propertyGridControlUnpack
             // 
-            this.propertyGridControlUnpack.Cursor = System.Windows.Forms.Cursors.SizeNS;
+            this.propertyGridControlUnpack.Cursor = System.Windows.Forms.Cursors.SizeWE;
             this.propertyGridControlUnpack.Dock = System.Windows.Forms.DockStyle.Fill;
             this.propertyGridControlUnpack.Location = new System.Drawing.Point(3, 28);
             this.propertyGridControlUnpack.Name = "propertyGridControlUnpack";
             this.propertyGridControlUnpack.Rows.AddRange(new DevExpress.XtraVerticalGrid.Rows.BaseRow[] {
             this.category2,
             this.categoryUnpack});
-            this.propertyGridControlUnpack.Size = new System.Drawing.Size(606, 407);
+            this.propertyGridControlUnpack.Size = new System.Drawing.Size(603, 400);
             this.propertyGridControlUnpack.TabIndex = 48;
             this.propertyGridControlUnpack.CellValueChanged += new DevExpress.XtraVerticalGrid.Events.CellValueChangedEventHandler(this.CellValueChanged);
             // 
@@ -539,7 +571,7 @@ namespace Steganography
             // MixerComboBoxItem2
             // 
             this.MixerComboBoxItem2.Name = "MixerComboBoxItem2";
-            this.MixerComboBoxItem2.Properties.Caption = "Алгоритм перемешивания";
+            this.MixerComboBoxItem2.Properties.Caption = "Алгоритм псевдослучайной перестановки";
             this.MixerComboBoxItem2.Properties.FieldName = "MixerComboBoxItem";
             // 
             // ArchiverComboBoxItem2
@@ -551,7 +583,7 @@ namespace Steganography
             // GammaComboBoxItem2
             // 
             this.GammaComboBoxItem2.Name = "GammaComboBoxItem2";
-            this.GammaComboBoxItem2.Properties.Caption = "Алгоритм гаммы";
+            this.GammaComboBoxItem2.Properties.Caption = "Алгоритм псевдослучайного генератора";
             this.GammaComboBoxItem2.Properties.FieldName = "GammaComboBoxItem";
             // 
             // EccComboBoxItem2
@@ -559,6 +591,8 @@ namespace Steganography
             this.EccComboBoxItem2.ChildRows.AddRange(new DevExpress.XtraVerticalGrid.Rows.BaseRow[] {
             this.EccCodeSize2,
             this.EccDataSize2});
+            this.EccComboBoxItem2.Expanded = false;
+            this.EccComboBoxItem2.Height = 23;
             this.EccComboBoxItem2.IsChildRowsLoaded = true;
             this.EccComboBoxItem2.Name = "EccComboBoxItem2";
             this.EccComboBoxItem2.Properties.Caption = "Алгоритм коррекции ошибок";
@@ -590,7 +624,7 @@ namespace Steganography
             // Key2
             // 
             this.Key2.Name = "Key2";
-            this.Key2.Properties.Caption = "Ключ";
+            this.Key2.Properties.Caption = "Ключ псевдослучайных генераторов";
             this.Key2.Properties.FieldName = "Key";
             // 
             // FilterStep2
@@ -621,7 +655,7 @@ namespace Steganography
             // labelControl1
             // 
             this.labelControl1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.labelControl1.Location = new System.Drawing.Point(615, 441);
+            this.labelControl1.Location = new System.Drawing.Point(612, 434);
             this.labelControl1.Name = "labelControl1";
             this.labelControl1.Size = new System.Drawing.Size(61, 19);
             this.labelControl1.TabIndex = 49;
@@ -632,7 +666,7 @@ namespace Steganography
             this.xtraTabPageOptions.Controls.Add(this.propertyGridControlOptions);
             this.xtraTabPageOptions.Image = ((System.Drawing.Image)(resources.GetObject("xtraTabPageOptions.Image")));
             this.xtraTabPageOptions.Name = "xtraTabPageOptions";
-            this.xtraTabPageOptions.Size = new System.Drawing.Size(1225, 695);
+            this.xtraTabPageOptions.Size = new System.Drawing.Size(1219, 685);
             this.xtraTabPageOptions.Text = "Режим параметров";
             // 
             // propertyGridControlOptions
@@ -660,7 +694,7 @@ namespace Steganography
             this.propertyGridControlOptions.Rows.AddRange(new DevExpress.XtraVerticalGrid.Rows.BaseRow[] {
             this.category,
             this.categoryPackUnpack});
-            this.propertyGridControlOptions.Size = new System.Drawing.Size(1225, 695);
+            this.propertyGridControlOptions.Size = new System.Drawing.Size(1219, 685);
             this.propertyGridControlOptions.TabIndex = 0;
             this.propertyGridControlOptions.CellValueChanged += new DevExpress.XtraVerticalGrid.Events.CellValueChangedEventHandler(this.CellValueChanged);
             // 
@@ -772,7 +806,7 @@ namespace Steganography
             // MixerComboBoxItem
             // 
             this.MixerComboBoxItem.Name = "MixerComboBoxItem";
-            this.MixerComboBoxItem.Properties.Caption = "Алгоритм перемешивания";
+            this.MixerComboBoxItem.Properties.Caption = "Алгоритм псевдослучайной перестановки";
             this.MixerComboBoxItem.Properties.FieldName = "MixerComboBoxItem";
             this.MixerComboBoxItem.Properties.RowEdit = this.repositoryItemComboBoxMixer;
             // 
@@ -787,7 +821,7 @@ namespace Steganography
             // 
             this.GammaComboBoxItem.Expanded = false;
             this.GammaComboBoxItem.Name = "GammaComboBoxItem";
-            this.GammaComboBoxItem.Properties.Caption = "Алгоритм гаммы";
+            this.GammaComboBoxItem.Properties.Caption = "Алгоритм псевдослучайного генератора";
             this.GammaComboBoxItem.Properties.FieldName = "GammaComboBoxItem";
             this.GammaComboBoxItem.Properties.RowEdit = this.repositoryItemComboBoxGamma;
             // 
@@ -796,6 +830,7 @@ namespace Steganography
             this.EccComboBoxItem.ChildRows.AddRange(new DevExpress.XtraVerticalGrid.Rows.BaseRow[] {
             this.EccCodeSize,
             this.EccDataSize});
+            this.EccComboBoxItem.Expanded = false;
             this.EccComboBoxItem.IsChildRowsLoaded = true;
             this.EccComboBoxItem.Name = "EccComboBoxItem";
             this.EccComboBoxItem.Properties.Caption = "Алгоритм коррекции ошибок";
@@ -819,7 +854,7 @@ namespace Steganography
             // categoryPackUnpack
             // 
             this.categoryPackUnpack.ChildRows.AddRange(new DevExpress.XtraVerticalGrid.Rows.BaseRow[] {
-            this.SampleAutoresize,
+            this.AutoResize,
             this.Key,
             this.FilterStep,
             this.Alpha,
@@ -828,22 +863,23 @@ namespace Steganography
             this.ExpandSize,
             this.BarcodeComboBoxItem,
             this.ExtractBarcode,
-            this.PoliticComboBoxItem});
+            this.PoliticComboBoxItem,
+            this.AutoAlpha});
             this.categoryPackUnpack.Height = 23;
             this.categoryPackUnpack.Name = "categoryPackUnpack";
             this.categoryPackUnpack.Properties.Caption = "Значения";
             // 
-            // SampleAutoresize
+            // AutoResize
             // 
-            this.SampleAutoresize.Name = "SampleAutoresize";
-            this.SampleAutoresize.Properties.Caption = "Маштабировать изображение";
-            this.SampleAutoresize.Properties.FieldName = "SampleAutoresize";
-            this.SampleAutoresize.Properties.RowEdit = this.repositoryItemCheckEditBoolean;
+            this.AutoResize.Name = "AutoResize";
+            this.AutoResize.Properties.Caption = "Маштабировать изображение";
+            this.AutoResize.Properties.FieldName = "AutoResize";
+            this.AutoResize.Properties.RowEdit = this.repositoryItemCheckEditBoolean;
             // 
             // Key
             // 
             this.Key.Name = "Key";
-            this.Key.Properties.Caption = "Ключ";
+            this.Key.Properties.Caption = "Ключ псевдослучайных генераторов";
             this.Key.Properties.FieldName = "Key";
             // 
             // FilterStep
@@ -912,6 +948,13 @@ namespace Steganography
             this.PoliticText.Properties.FieldName = "PoliticText";
             this.PoliticText.Properties.RowEdit = this.repositoryItemMemoEditPoliticText;
             // 
+            // AutoAlpha
+            // 
+            this.AutoAlpha.Name = "AutoAlpha";
+            this.AutoAlpha.Properties.Caption = "Подбирать глубину погружения";
+            this.AutoAlpha.Properties.FieldName = "AutoAlpha";
+            this.AutoAlpha.Properties.RowEdit = this.repositoryItemCheckEditBoolean;
+            // 
             // PixelFormatIndex
             // 
             this.PixelFormatIndex.Name = "PixelFormatIndex";
@@ -921,24 +964,6 @@ namespace Steganography
             // openFileDialog
             // 
             this.openFileDialog.FileName = "openFileDialog1";
-            // 
-            // labelControl2
-            // 
-            this.labelControl2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.labelControl2.Location = new System.Drawing.Point(3, 3);
-            this.labelControl2.Name = "labelControl2";
-            this.labelControl2.Size = new System.Drawing.Size(82, 19);
-            this.labelControl2.TabIndex = 50;
-            this.labelControl2.Text = "Параметры";
-            // 
-            // labelControl3
-            // 
-            this.labelControl3.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.labelControl3.Location = new System.Drawing.Point(3, 3);
-            this.labelControl3.Name = "labelControl3";
-            this.labelControl3.Size = new System.Drawing.Size(82, 19);
-            this.labelControl3.TabIndex = 53;
-            this.labelControl3.Text = "Параметры";
             // 
             // BbsControl
             // 
@@ -999,7 +1024,7 @@ namespace Steganography
         private DevExpress.XtraVerticalGrid.Rows.PGridEditorRow PoliticText;
         private DevExpress.XtraVerticalGrid.Rows.CategoryRow category;
         private DevExpress.XtraVerticalGrid.Rows.CategoryRow categoryPackUnpack;
-        private DevExpress.XtraVerticalGrid.Rows.PGridEditorRow SampleAutoresize;
+        private DevExpress.XtraVerticalGrid.Rows.PGridEditorRow AutoResize;
         private DevExpress.XtraVerticalGrid.Rows.PGridEditorRow Key;
         private DevExpress.XtraVerticalGrid.Rows.PGridEditorRow EccCodeSize;
         private DevExpress.XtraVerticalGrid.Rows.PGridEditorRow FilterStep;
@@ -1036,7 +1061,7 @@ namespace Steganography
         private DevExpress.XtraVerticalGrid.Rows.PGridEditorRow ArchiverComboBoxItem1;
         private DevExpress.XtraVerticalGrid.Rows.PGridEditorRow GammaComboBoxItem1;
         private DevExpress.XtraVerticalGrid.Rows.CategoryRow categoryPack;
-        private DevExpress.XtraVerticalGrid.Rows.PGridEditorRow SampleAutoresize1;
+        private DevExpress.XtraVerticalGrid.Rows.PGridEditorRow AutoResize1;
         private DevExpress.XtraVerticalGrid.Rows.PGridEditorRow Key1;
         private DevExpress.XtraVerticalGrid.Rows.PGridEditorRow EccCodeSize1;
         private DevExpress.XtraVerticalGrid.Rows.PGridEditorRow Alpha1;
@@ -1075,5 +1100,7 @@ namespace Steganography
         private DevExpress.XtraVerticalGrid.Rows.PGridEditorRow ExtractBarcode2;
         private DevExpress.XtraEditors.LabelControl labelControl3;
         private DevExpress.XtraEditors.LabelControl labelControl2;
+        private DevExpress.XtraVerticalGrid.Rows.PGridEditorRow AutoAlpha;
+        private DevExpress.XtraVerticalGrid.Rows.PGridEditorRow AutoAlpha1;
     }
 }

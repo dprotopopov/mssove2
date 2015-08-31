@@ -3,14 +3,17 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
+using BBSLib;
+using BBSLib.Options;
 using DevExpress.Utils;
 using DevExpress.XtraEditors;
 using DevExpress.XtraEditors.Repository;
 using DevExpress.XtraTab;
 using DevExpress.XtraVerticalGrid.Events;
 using DevExpress.XtraVerticalGrid.Rows;
+using Emgu.CV;
+using Emgu.CV.Structure;
 using Emgu.CV.UI;
-using Steganography.Options;
 
 namespace Steganography
 {
@@ -29,6 +32,8 @@ namespace Steganography
             Unpack = 1,
             Options = 2
         }
+
+        private const string DefaultOptionsFileName = "default.options";
 
         private readonly BbsBuilder _bbsBuilder = new BbsBuilder();
         private BbsOptions _bbsOptions = new BbsOptions();
@@ -49,29 +54,34 @@ namespace Steganography
             repositoryItemComboBoxBarcode.Items.AddRange(Barcode.ComboBoxItems);
             try
             {
-                Stream stream = File.Open("default.options", FileMode.Open);
                 Debug.WriteLine("Reading Default Options Information");
-                _bbsOptions = (BbsOptions) new BinaryFormatter().Deserialize(stream);
-                stream.Close();
+                using (Stream stream = File.Open(DefaultOptionsFileName, FileMode.Open))
+                    _bbsOptions = (BbsOptions) new BinaryFormatter().Deserialize(stream);
             }
             catch (Exception)
             {
                 _bbsOptions.PixelFormatIndex = 0;
+                _bbsOptions.PoliticIndex = 0;
                 _bbsOptions.EccIndex = 1;
                 _bbsOptions.GammaIndex = 1;
                 _bbsOptions.MixerIndex = 1;
                 _bbsOptions.ArchiverIndex = 1;
-                _bbsOptions.ExpandSize = 15;
-                _bbsOptions.EccCodeSize = 255;
-                _bbsOptions.EccDataSize = 127;
-                _bbsOptions.Alpha = 10;
-                _bbsOptions.SampleAutoresize = true;
-                _bbsOptions.PoliticIndex = 0;
+                _bbsOptions.BarcodeIndex = 1;
+
+                _bbsOptions.EccCodeSize = 127;
+                _bbsOptions.EccDataSize = 63;
+                _bbsOptions.ExpandSize = 31;
+                _bbsOptions.Alpha = 15;
+                _bbsOptions.FilterStep = 7;
+
+                _bbsOptions.AutoResize = true;
+                _bbsOptions.AutoAlpha = true;
+                _bbsOptions.ExtractBarcode = true;
+                _bbsOptions.MaximumGamma = true;
+
                 _bbsOptions.PoliticText = "FAKE";
                 _bbsOptions.Key = "WELCOME";
-                _bbsOptions.FilterStep = 3;
-                _bbsOptions.BarcodeIndex = 0;
-                _bbsOptions.ExtractBarcode = true;
+
                 _bbsOptions.IndexToObject();
             }
 
@@ -87,15 +97,16 @@ namespace Steganography
                 new DefaultEditor(typeof (int), repositoryItemSpinEditNumber),
                 new DefaultEditor(typeof (string), repositoryItemTextEditString)
             });
+
             propertyGridControlPack.RepositoryItems.AddRange(new RepositoryItem[]
             {
+                repositoryItemComboBoxBarcode,
                 repositoryItemComboBoxMixer,
                 repositoryItemComboBoxGamma,
                 repositoryItemComboBoxEcc,
                 repositoryItemComboBoxArchiver,
                 repositoryItemComboBoxPolitic,
                 repositoryItemComboBoxPixelFormat,
-                repositoryItemComboBoxBarcode,
                 repositoryItemMemoEditPoliticText,
                 repositoryItemCheckEditBoolean,
                 repositoryItemSpinEditNumber,
@@ -109,6 +120,7 @@ namespace Steganography
             });
             propertyGridControlUnpack.RepositoryItems.AddRange(new RepositoryItem[]
             {
+                repositoryItemComboBoxBarcode,
                 repositoryItemComboBoxMixer,
                 repositoryItemComboBoxGamma,
                 repositoryItemComboBoxEcc,
@@ -164,10 +176,9 @@ namespace Steganography
             set { xtraTabControl1.ShowTabHeader = (value || DesignMode) ? DefaultBoolean.True : DefaultBoolean.False; }
         }
 
-
         public event SelectedModeChangedEventHandler SelectedModeChanged;
 
-        public void Execute()
+        public bool Execute()
         {
             switch (SelectedMode)
             {
@@ -175,43 +186,44 @@ namespace Steganography
                     try
                     {
                         if (packingSample.Image == null) throw new Exception("Нет изображения");
-                        _bbsOptions.IndexToObject();
+                        _bbsOptions.ObjectToIndex();
                         _bbsOptions.RtfText = packFile.RtfText;
                         _bbsOptions.SampleBitmap = _sampleBitmap;
-                        _bbsBuilder.Pack(_bbsOptions);
-                        _outputBitmap = _bbsOptions.OutputBitmap;
+                        _outputBitmap = _bbsBuilder.Pack(_bbsOptions);
                         packingImage.Image = _outputBitmap.GetBitmap();
+                        return true;
                     }
                     catch (Exception exception)
                     {
                         XtraMessageBox.Show(exception.Message);
+                        return false;
                     }
-                    break;
                 case Mode.Unpack:
                     try
                     {
                         if (unpackImage.Image == null) throw new Exception("Нет изображения");
-
-                        _bbsOptions.IndexToObject();
+                        _bbsOptions.ObjectToIndex();
                         _bbsOptions.InputBitmap = _inputBitmap;
-                        _bbsBuilder.Unpack(_bbsOptions);
-                        _outputBitmap = _bbsOptions.OutputBitmap;
+                        unpackFile.RtfText = _bbsBuilder.Unpack(_bbsOptions);
                         _medianBitmap = _bbsOptions.MedianBitmap;
-                        unpackFile.RtfText = _bbsOptions.RtfText;
                         pictureBox1.Image = _medianBitmap.GetBitmap();
+                        return true;
                     }
                     catch (Exception exception)
                     {
                         XtraMessageBox.Show(exception.Message);
+                        return false;
                     }
-                    break;
             }
+            throw new NotImplementedException();
         }
 
-        public void ViewSequence()
+        public bool ViewSequence()
         {
-            new GammaForm(_bbsOptions.Key, _bbsOptions.EccCodeSize, _bbsOptions.GammaIndex)
-                .ShowDialog();
+            _bbsOptions.ObjectToIndex();
+            using (var form = new GammaForm(_bbsOptions.Key, _bbsOptions.EccCodeSize, _bbsOptions.GammaIndex))
+                form.ShowDialog();
+            return true;
         }
 
         private void packSample_Click(object sender, EventArgs e)
@@ -219,18 +231,22 @@ namespace Steganography
             PackOpenImage();
         }
 
-        public void PackOpenImage()
+        public bool PackOpenImage()
         {
             try
             {
-                if (openSampleDialog.ShowDialog() != DialogResult.OK) return;
-                _sampleBitmap = new CvBitmap(openSampleDialog.FileName);
-                packingSample.Image = _sampleBitmap.GetBitmap();
+                if (openSampleDialog.ShowDialog() == DialogResult.OK)
+                {
+                    _sampleBitmap = new CvBitmap(openSampleDialog.FileName);
+                    packingSample.Image = _sampleBitmap.GetBitmap();
+                    return true;
+                }
             }
             catch (Exception exception)
             {
                 XtraMessageBox.Show(exception.Message);
             }
+            return false;
         }
 
         private void packImage_Click(object sender, EventArgs e)
@@ -238,19 +254,23 @@ namespace Steganography
             PackSaveImage();
         }
 
-        public void PackSaveImage()
+        public bool PackSaveImage()
         {
             try
             {
                 if (_outputBitmap == null) throw new Exception("Нет изображения");
-                if (saveImageDialog.ShowDialog() != DialogResult.OK) return;
-                _outputBitmap.Save(saveImageDialog.FileName);
-                Debug.WriteLine(_outputBitmap.Length);
+                if (saveImageDialog.ShowDialog() == DialogResult.OK)
+                {
+                    _outputBitmap.Save(saveImageDialog.FileName);
+                    Debug.WriteLine(_outputBitmap.ToString());
+                    return true;
+                }
             }
             catch (Exception exception)
             {
                 XtraMessageBox.Show(exception.Message);
             }
+            return false;
         }
 
         private void unpackImage_Click(object sender, EventArgs e)
@@ -258,67 +278,83 @@ namespace Steganography
             UnpackOpenImage();
         }
 
-        public void UnpackOpenImage()
+        public bool UnpackOpenImage()
         {
             try
             {
-                if (openImageDialog.ShowDialog() != DialogResult.OK) return;
-                _inputBitmap = new CvBitmap(openImageDialog.FileName);
-                unpackImage.Image = _inputBitmap.GetBitmap();
+                if (openImageDialog.ShowDialog() == DialogResult.OK)
+                {
+                    _inputBitmap = new CvBitmap(openImageDialog.FileName);
+                    unpackImage.Image = _inputBitmap.GetBitmap();
+                    return true;
+                }
             }
             catch (Exception exception)
             {
                 XtraMessageBox.Show(exception.Message);
             }
+            return false;
         }
 
 
-        public void UnpackSaveFile()
+        public bool UnpackSaveFile()
         {
             try
             {
-                if (saveFileDialog.ShowDialog() != DialogResult.OK) return;
-                using (StreamWriter writer = File.CreateText(saveFileDialog.FileName))
-                    writer.Write(unpackFile.RtfText);
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    using (StreamWriter writer = File.CreateText(saveFileDialog.FileName))
+                        writer.Write(unpackFile.RtfText);
+                    return true;
+                }
             }
             catch (Exception exception)
             {
                 XtraMessageBox.Show(exception.Message);
             }
+            return false;
         }
 
-        public void PackOpenFile()
+        public bool PackOpenFile()
         {
             try
             {
-                if (openFileDialog.ShowDialog() != DialogResult.OK) return;
-                using (StreamReader reader = File.OpenText(openFileDialog.FileName))
-                    packFile.RtfText = reader.ReadToEnd();
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    using (StreamReader reader = File.OpenText(openFileDialog.FileName))
+                        packFile.RtfText = reader.ReadToEnd();
+                    return true;
+                }
             }
             catch (Exception exception)
             {
                 XtraMessageBox.Show(exception.Message);
             }
+            return false;
         }
 
-        public void OptionsSave()
+        public bool OptionsSave()
         {
-            if (saveOptionsDialog.ShowDialog() != DialogResult.OK) return;
+            if (saveOptionsDialog.ShowDialog() != DialogResult.OK) return false;
             if (SelectedMode == Mode.Options) propertyGridControlOptions.UpdateFocusedRecord();
             if (SelectedMode == Mode.Pack) propertyGridControlPack.UpdateFocusedRecord();
             if (SelectedMode == Mode.Unpack) propertyGridControlUnpack.UpdateFocusedRecord();
+            _bbsOptions.ObjectToIndex();
             using (Stream stream = File.Open(saveOptionsDialog.FileName, FileMode.Create))
                 new BinaryFormatter().Serialize(stream, _bbsOptions);
+            return true;
         }
 
-        public void OptionsLoad()
+        public bool OptionsLoad()
         {
-            if (openOptionsDialog.ShowDialog() != DialogResult.OK) return;
+            if (openOptionsDialog.ShowDialog() != DialogResult.OK) return false;
             using (Stream stream = File.Open(openOptionsDialog.FileName, FileMode.Open))
                 _bbsOptions = (BbsOptions) new BinaryFormatter().Deserialize(stream);
-            propertyGridControlOptions.Refresh();
-            propertyGridControlPack.Refresh();
-            propertyGridControlUnpack.Refresh();
+            _bbsOptions.IndexToObject();
+            propertyGridControlOptions.SelectedObject = _bbsOptions;
+            propertyGridControlPack.SelectedObject = _bbsOptions;
+            propertyGridControlUnpack.SelectedObject = _bbsOptions;
+            return true;
         }
 
         private void SelectedPageChanged(object sender, TabPageChangedEventArgs e)
@@ -335,7 +371,6 @@ namespace Steganography
             if (SelectedMode == Mode.Options) propertyGridControlOptions.UpdateFocusedRecord();
             if (SelectedMode == Mode.Pack) propertyGridControlPack.UpdateFocusedRecord();
             if (SelectedMode == Mode.Unpack) propertyGridControlUnpack.UpdateFocusedRecord();
-            _bbsOptions.ObjectToIndex();
         }
 
         private void unpackFile_DoubleClick(object sender, EventArgs e)
@@ -348,31 +383,66 @@ namespace Steganography
             PackOpenFile();
         }
 
-        public void ShowCipherImage()
+        public bool ShowCipherImage()
         {
             try
             {
                 using (var imageViewer = new ImageViewer(_outputBitmap.Image, "Cipher Image"))
                     imageViewer.ShowDialog();
+                return true;
             }
             catch (Exception exception)
             {
                 XtraMessageBox.Show(exception.Message);
             }
+            return false;
         }
 
-        public void UnpackFileShow()
+        public bool ShowBarcodeImage()
         {
             try
             {
-                var richEditForm = new RichTextEditor {RtfText = unpackFile.RtfText};
-                if (richEditForm.ShowDialog() != DialogResult.OK) return;
-                unpackFile.RtfText = richEditForm.RtfText;
+                _bbsOptions.ObjectToIndex();
+                using (var barcode = new Barcode(_bbsOptions.BarcodeIndex)
+                {
+                    ArchiverIndex = _bbsOptions.ArchiverIndex,
+                    EccIndex = _bbsOptions.EccIndex,
+                    MixerIndex = _bbsOptions.MixerIndex,
+                    GammaIndex = _bbsOptions.GammaIndex,
+                    ExpandSize = _bbsOptions.ExpandSize,
+                    EccCodeSize = _bbsOptions.EccCodeSize,
+                    EccDataSize = _bbsOptions.EccDataSize,
+                    MaximumGamma = _bbsOptions.MaximumGamma,
+                    Key = _bbsOptions.Key,
+                })
+                using (var image = new Image<Gray, Byte>(barcode.Encode()))
+                using (var imageViewer = new ImageViewer(image, "Barcode Image"))
+                    imageViewer.ShowDialog();
+                return true;
             }
             catch (Exception exception)
             {
                 XtraMessageBox.Show(exception.Message);
             }
+            return false;
+        }
+
+        public bool UnpackFileShow()
+        {
+            try
+            {
+                using (var richEditForm = new RichTextEditor {RtfText = unpackFile.RtfText})
+                    if (richEditForm.ShowDialog() == DialogResult.OK)
+                    {
+                        unpackFile.RtfText = richEditForm.RtfText;
+                        return true;
+                    }
+            }
+            catch (Exception exception)
+            {
+                XtraMessageBox.Show(exception.Message);
+            }
+            return false;
         }
 
         private void CellValueChanged(object sender, CellValueChangedEventArgs e)
@@ -380,60 +450,84 @@ namespace Steganography
             if (SelectedMode == Mode.Options) propertyGridControlOptions.UpdateFocusedRecord();
             if (SelectedMode == Mode.Pack) propertyGridControlPack.UpdateFocusedRecord();
             if (SelectedMode == Mode.Unpack) propertyGridControlUnpack.UpdateFocusedRecord();
-            _bbsOptions.ObjectToIndex();
         }
 
-        public void ShowSampleImage()
+        public bool ShowSampleImage()
         {
             try
             {
                 using (var imageViewer = new ImageViewer(_sampleBitmap.Image, "Sample Image"))
                     imageViewer.ShowDialog();
+                return true;
             }
             catch (Exception exception)
             {
                 XtraMessageBox.Show(exception.Message);
             }
+            return false;
         }
 
-        public void PackFileShow()
+        public bool PackFileShow()
         {
             try
             {
-                var richEditForm = new RichTextEditor {RtfText = packFile.RtfText};
-                if (richEditForm.ShowDialog() != DialogResult.OK) return;
-                packFile.RtfText = richEditForm.RtfText;
+                using (var richEditForm = new RichTextEditor {RtfText = packFile.RtfText})
+                    if (richEditForm.ShowDialog() == DialogResult.OK)
+                    {
+                        packFile.RtfText = richEditForm.RtfText;
+                        return true;
+                    }
             }
             catch (Exception exception)
             {
                 XtraMessageBox.Show(exception.Message);
             }
+            return false;
         }
 
-        public void ShowInputImage()
+        public bool ShowInputImage()
         {
             try
             {
                 using (var imageViewer = new ImageViewer(_inputBitmap.Image, "Input Image"))
                     imageViewer.ShowDialog();
+                return true;
             }
             catch (Exception exception)
             {
                 XtraMessageBox.Show(exception.Message);
             }
+            return false;
         }
 
-        public void ShowMedianImage()
+        public bool ShowMedianImage()
         {
             try
             {
                 using (var imageViewer = new ImageViewer(_medianBitmap.Image, "Median Image"))
                     imageViewer.ShowDialog();
+                return true;
             }
             catch (Exception exception)
             {
                 XtraMessageBox.Show(exception.Message);
             }
+            return false;
+        }
+
+        public bool ShowBarcodeText()
+        {
+            try
+            {
+                using (var barcode = new Barcode(_inputBitmap.Image.Bitmap))
+                    XtraMessageBox.Show(barcode.Decode());
+                return true;
+            }
+            catch (Exception exception)
+            {
+                XtraMessageBox.Show(exception.Message);
+            }
+            return false;
         }
     }
 }

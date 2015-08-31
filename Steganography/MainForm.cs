@@ -58,7 +58,20 @@ namespace Steganography
 
         private void Execute_ItemClick(object sender, ItemClickEventArgs e)
         {
-            mainControl.Execute();
+            switch (mainControl.SelectedMode)
+            {
+                case BbsControl.Mode.Pack:
+                    mainControl.PackFileShow();
+                    mainControl.PackOpenImage();
+                    mainControl.Execute();
+                    mainControl.ShowCipherImage();
+                    break;
+                case BbsControl.Mode.Unpack:
+                    mainControl.UnpackOpenImage();
+                    mainControl.Execute();
+                    mainControl.UnpackFileShow();
+                    break;
+            }
         }
 
         private void Pack_LinkClicked(object sender, NavBarLinkEventArgs e)
@@ -177,6 +190,19 @@ namespace Steganography
         private void ShowMedianImage_ItemClick(object sender, ItemClickEventArgs e)
         {
             mainControl.ShowMedianImage();
+        }
+
+        private void Barcode_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            switch (mainControl.SelectedMode)
+            {
+                case BbsControl.Mode.Pack:
+                    mainControl.ShowBarcodeImage();
+                    break;
+                case BbsControl.Mode.Unpack:
+                    mainControl.ShowBarcodeText();
+                    break;
+            }
         }
     }
 }

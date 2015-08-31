@@ -5,6 +5,9 @@ using DevExpress.XtraEditors;
 
 namespace Steganography
 {
+    /// <summary>
+    /// Форма с информацией о программе
+    /// </summary>
     partial class AboutBox : XtraForm
     {
         public AboutBox()

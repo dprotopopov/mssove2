@@ -2,14 +2,14 @@
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using BBSLib.Options;
 using DevExpress.XtraEditors;
-using Steganography.Options;
 
 namespace Steganography
 {
     public partial class GammaForm : XtraForm
     {
-        private const int BitsPerByte = 8;
+        private const int BitsPerByte = 8; // Количество битов в байте
         // ReSharper disable NotAccessedField.Local
         private readonly int _expandSize;
 // ReSharper restore NotAccessedField.Local
