@@ -61,15 +61,15 @@ namespace Steganography
             switch (mainControl.SelectedMode)
             {
                 case BbsControl.Mode.Pack:
-                    mainControl.PackFileShow();
-                    mainControl.PackOpenImage();
-                    mainControl.Execute();
-                    mainControl.ShowCipherImage();
+                    bool b = mainControl.PackFileShow() &&
+                             mainControl.PackOpenImage() &&
+                             mainControl.Execute() &&
+                             mainControl.ShowCipherImage();
                     break;
                 case BbsControl.Mode.Unpack:
-                    mainControl.UnpackOpenImage();
-                    mainControl.Execute();
-                    mainControl.UnpackFileShow();
+                    bool b1 = mainControl.UnpackOpenImage() &&
+                              mainControl.Execute() &&
+                              mainControl.UnpackFileShow();
                     break;
             }
         }
@@ -203,6 +203,26 @@ namespace Steganography
                     mainControl.ShowBarcodeText();
                     break;
             }
+        }
+
+        private void Erase_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            mainControl.Erase();
+        }
+
+        private void PackingSendImage_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            mainControl.PackSendImage();
+        }
+
+        private void UnpackingSendFile_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            mainControl.UnpackSendFile();
+        }
+
+        private void Check_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            mainControl.Check();
         }
     }
 }

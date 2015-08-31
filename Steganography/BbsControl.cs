@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Net;
+using System.Net.Mail;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
 using BBSLib;
@@ -14,6 +16,7 @@ using DevExpress.XtraVerticalGrid.Rows;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.CV.UI;
+using Steganography.SendFileTo;
 
 namespace Steganography
 {
@@ -79,8 +82,13 @@ namespace Steganography
                 _bbsOptions.ExtractBarcode = true;
                 _bbsOptions.MaximumGamma = true;
 
-                _bbsOptions.PoliticText = "FAKE";
                 _bbsOptions.Key = "WELCOME";
+                _bbsOptions.PoliticText =
+                    "Lorem ipsum dolor sit amet, his ea quod tation, ne sit mazim concludaturque, graece tincidunt pro ei. Vero diceret iracundia pro ea, ne eripuit mandamus mea, an usu nisl liber theophrastus. Partem mollis nostrud eam no. Duis partiendo no pro. Cu eum quot luptatum probatus. Ex per labitur incorrupte inciderint, sit sint nonumy melius ea.\n" +
+                    "Tollit soleat torquatos qui eu. Cu mutat debitis legendos per. Nemore partiendo ne mei. At ridens eruditi efficiantur his.\n" +
+                    "Petentium abhorreant definitiones mea ex. Dolore necessitatibus ad vim. No agam ubique efficiendi qui, has at dico dissentiet. Cu sed dicam omnesque, oratio ridens eum ne. Ea adolescens definiebas mel, cum eu debitis veritus. Mei purto essent cu.\n" +
+                    "Perfecto complectitur no vel, ex oblique offendit quo. Ad eos viris scripta postulant. Dolorem volumus eam id. Dicant consectetuer consequuntur et vim, ad sed saepe impedit. Vim ei error tibique. Vitae admodum est eu, mundi eligendi evertitur an vix. Pri doming dicunt repudiandae an, debitis inimicus has no.\n" +
+                    "Vidisse torquatos ius te, his ei nibh ornatus moderatius. Eu qui aperiam omittam albucius, at pro vivendo scriptorem. Has natum volumus suavitate eu, mazim consulatu imperdiet an nam. Id mei idque aliquid, ad cetero suavitate quo. Vel soluta ridens invenire id.";
 
                 _bbsOptions.IndexToObject();
             }
@@ -206,7 +214,7 @@ namespace Steganography
                         _bbsOptions.InputBitmap = _inputBitmap;
                         unpackFile.RtfText = _bbsBuilder.Unpack(_bbsOptions);
                         _medianBitmap = _bbsOptions.MedianBitmap;
-                        pictureBox1.Image = _medianBitmap.GetBitmap();
+                        unpackMedian.Image = _medianBitmap.GetBitmap();
                         return true;
                     }
                     catch (Exception exception)
@@ -221,7 +229,7 @@ namespace Steganography
         public bool ViewSequence()
         {
             _bbsOptions.ObjectToIndex();
-            using (var form = new GammaForm(_bbsOptions.Key, _bbsOptions.EccCodeSize, _bbsOptions.GammaIndex))
+            using (var form = new GammaForm(_bbsOptions.Key, _bbsOptions.ExpandSize, _bbsOptions.GammaIndex))
                 form.ShowDialog();
             return true;
         }
@@ -301,6 +309,7 @@ namespace Steganography
         {
             try
             {
+                if (string.IsNullOrWhiteSpace(unpackFile.RtfText)) throw new Exception("Нет текста");
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     using (StreamWriter writer = File.CreateText(saveFileDialog.FileName))
@@ -387,7 +396,8 @@ namespace Steganography
         {
             try
             {
-                using (var imageViewer = new ImageViewer(_outputBitmap.Image, "Cipher Image"))
+                if (_outputBitmap == null) throw new Exception("Нет изображения");
+                using (var imageViewer = new ImageViewer(_outputBitmap.Image, "Отправляемое изображение"))
                     imageViewer.ShowDialog();
                 return true;
             }
@@ -416,7 +426,7 @@ namespace Steganography
                     Key = _bbsOptions.Key,
                 })
                 using (var image = new Image<Gray, Byte>(barcode.Encode()))
-                using (var imageViewer = new ImageViewer(image, "Barcode Image"))
+                using (var imageViewer = new ImageViewer(image, "Баркод"))
                     imageViewer.ShowDialog();
                 return true;
             }
@@ -431,7 +441,11 @@ namespace Steganography
         {
             try
             {
-                using (var richEditForm = new RichTextEditor {RtfText = unpackFile.RtfText})
+                using (var richEditForm = new RichTextEditor
+                {
+                    RtfText = unpackFile.RtfText,
+                    Text = @"Полученное сообщение"
+                })
                     if (richEditForm.ShowDialog() == DialogResult.OK)
                     {
                         unpackFile.RtfText = richEditForm.RtfText;
@@ -456,7 +470,8 @@ namespace Steganography
         {
             try
             {
-                using (var imageViewer = new ImageViewer(_sampleBitmap.Image, "Sample Image"))
+                if (_sampleBitmap == null) throw new Exception("Нет изображения");
+                using (var imageViewer = new ImageViewer(_sampleBitmap.Image, "Исходное изображение"))
                     imageViewer.ShowDialog();
                 return true;
             }
@@ -471,7 +486,11 @@ namespace Steganography
         {
             try
             {
-                using (var richEditForm = new RichTextEditor {RtfText = packFile.RtfText})
+                using (var richEditForm = new RichTextEditor
+                {
+                    RtfText = packFile.RtfText,
+                    Text = @"Отправляемое сообщение"
+                })
                     if (richEditForm.ShowDialog() == DialogResult.OK)
                     {
                         packFile.RtfText = richEditForm.RtfText;
@@ -489,7 +508,8 @@ namespace Steganography
         {
             try
             {
-                using (var imageViewer = new ImageViewer(_inputBitmap.Image, "Input Image"))
+                if (_inputBitmap == null) throw new Exception("Нет изображения");
+                using (var imageViewer = new ImageViewer(_inputBitmap.Image, "Полученное изображение"))
                     imageViewer.ShowDialog();
                 return true;
             }
@@ -504,7 +524,8 @@ namespace Steganography
         {
             try
             {
-                using (var imageViewer = new ImageViewer(_medianBitmap.Image, "Median Image"))
+                if (_medianBitmap == null) throw new Exception("Нет изображения");
+                using (var imageViewer = new ImageViewer(_medianBitmap.Image, "Размытое изображение"))
                     imageViewer.ShowDialog();
                 return true;
             }
@@ -522,6 +543,149 @@ namespace Steganography
                 using (var barcode = new Barcode(_inputBitmap.Image.Bitmap))
                     XtraMessageBox.Show(barcode.Decode());
                 return true;
+            }
+            catch (Exception exception)
+            {
+                XtraMessageBox.Show(exception.Message);
+            }
+            return false;
+        }
+
+        public bool Erase()
+        {
+            try
+            {
+                switch (SelectedMode)
+                {
+                    case Mode.Pack:
+                        packFile.RtfText = string.Empty;
+                        packingSample.Image = null;
+                        packingImage.Image = null;
+                        _sampleBitmap = null;
+                        _outputBitmap = null;
+                        return true;
+                    case Mode.Unpack:
+                        unpackFile.RtfText = string.Empty;
+                        unpackImage.Image = null;
+                        unpackMedian.Image = null;
+                        _inputBitmap = null;
+                        _medianBitmap = null;
+                        return true;
+                }
+            }
+            catch (Exception exception)
+            {
+                XtraMessageBox.Show(exception.Message);
+            }
+            return false;
+        }
+
+        public bool PackSendImage()
+        {
+            try
+            {
+                if (_outputBitmap == null) throw new Exception("Нет изображения");
+                string fileName = Path.GetTempPath() + Guid.NewGuid() + ".bmp";
+                _outputBitmap.Save(fileName);
+                var mapi = new Mapi();
+                mapi.AddAttachment(fileName);
+                mapi.SendMailPopup("", "");
+                File.Delete(fileName);
+                return true;
+            }
+            catch (Exception exception)
+            {
+                XtraMessageBox.Show(exception.Message);
+            }
+            return false;
+        }
+
+        public bool UnpackSendFile()
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(unpackFile.RtfText)) throw new Exception("Нет текста");
+                string fileName = Path.GetTempPath() + Guid.NewGuid() + ".rtf";
+                using (StreamWriter writer = File.CreateText(fileName))
+                    writer.Write(unpackFile.RtfText);
+                var mapi = new Mapi();
+                mapi.AddAttachment(fileName);
+                mapi.SendMailPopup("", "");
+                File.Delete(fileName);
+                return true;
+            }
+            catch (Exception exception)
+            {
+                XtraMessageBox.Show(exception.Message);
+            }
+            return false;
+        }
+
+        /// <summary>
+        ///     Отправка письма на почтовый ящик C# mail send
+        /// </summary>
+        /// <param name="smtpServer">Имя SMTP-сервера</param>
+        /// <param name="from">Адрес отправителя</param>
+        /// <param name="password">пароль к почтовому ящику отправителя</param>
+        /// <param name="mailto">Адрес получателя</param>
+        /// <param name="caption">Тема письма</param>
+        /// <param name="message">Сообщение</param>
+        /// <param name="attachFile">Присоединенный файл</param>
+        public static void SendMail(string smtpServer, string from, string password,
+            string mailto, string caption, string message, string attachFile = null)
+        {
+            try
+            {
+                using (var mail = new MailMessage())
+                {
+                    mail.From = new MailAddress(from);
+                    mail.To.Add(new MailAddress(mailto));
+                    mail.Subject = caption;
+                    mail.Body = message;
+                    if (!string.IsNullOrEmpty(attachFile))
+                        mail.Attachments.Add(new Attachment(attachFile));
+                    using (var client = new SmtpClient())
+                    {
+                        client.Host = smtpServer;
+                        client.Port = 587;
+                        client.EnableSsl = true;
+                        client.Credentials = new NetworkCredential(from.Split('@')[0], password);
+                        client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                        client.Send(mail);
+                    }
+                }
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
+
+        public bool Check()
+        {
+            try
+            {
+                switch (SelectedMode)
+                {
+                    case Mode.Pack:
+                        SelectedMode = Mode.Unpack;
+                        _bbsOptions.ObjectToIndex();
+                        unpackFile.RtfText = string.Empty;
+                        unpackImage.Image = null;
+                        unpackMedian.Image = null;
+                        _inputBitmap = null;
+                        _medianBitmap = null;
+                        _bbsOptions.InputBitmap = _inputBitmap = _outputBitmap;
+                        unpackImage.Image = _inputBitmap.GetBitmap();
+                        unpackFile.RtfText = _bbsBuilder.Unpack(_bbsOptions);
+                        _medianBitmap = _bbsOptions.MedianBitmap;
+                        unpackMedian.Image = _medianBitmap.GetBitmap();
+                        bool check = String.Compare(unpackFile.RtfText, packFile.RtfText, StringComparison.Ordinal) == 0;
+                        XtraMessageBox.Show(check
+                            ? "Проверка пройдена"
+                            : "Проверка не пройдена");
+                        return check;
+                }
             }
             catch (Exception exception)
             {

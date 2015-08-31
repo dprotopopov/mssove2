@@ -116,6 +116,10 @@
     <Compile Include="AboutBox.Designer.cs">
       <DependentUpon>AboutBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="SendFileTo\MapiRecipDesc.cs" />
+    <Compile Include="SendFileTo\Mapi.cs" />
+    <Compile Include="SendFileTo\MapiFileDesc.cs" />
+    <Compile Include="SendFileTo\MapiMessage.cs" />
     <Compile Include="RichTextEditor.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -71,7 +71,7 @@ namespace Steganography
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl17 = new DevExpress.XtraEditors.LabelControl();
-            this.pictureBox1 = new DevExpress.XtraEditors.PictureEdit();
+            this.unpackMedian = new DevExpress.XtraEditors.PictureEdit();
             this.unpackImage = new DevExpress.XtraEditors.PictureEdit();
             this.labelControl18 = new DevExpress.XtraEditors.LabelControl();
             this.unpackFile = new DevExpress.XtraRichEdit.RichEditControl();
@@ -138,7 +138,7 @@ namespace Steganography
             ((System.ComponentModel.ISupportInitialize)(this.propertyGridControlPack)).BeginInit();
             this.xtraTabPage2.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.unpackMedian.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.unpackImage.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.propertyGridControlUnpack)).BeginInit();
             this.xtraTabPageOptions.SuspendLayout();
@@ -467,7 +467,7 @@ namespace Steganography
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.00002F));
             this.tableLayoutPanel2.Controls.Add(this.labelControl2, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.labelControl17, 0, 2);
-            this.tableLayoutPanel2.Controls.Add(this.pictureBox1, 1, 3);
+            this.tableLayoutPanel2.Controls.Add(this.unpackMedian, 1, 3);
             this.tableLayoutPanel2.Controls.Add(this.unpackImage, 0, 3);
             this.tableLayoutPanel2.Controls.Add(this.labelControl18, 1, 0);
             this.tableLayoutPanel2.Controls.Add(this.unpackFile, 1, 1);
@@ -503,15 +503,15 @@ namespace Steganography
             this.labelControl17.TabIndex = 45;
             this.labelControl17.Text = "Картинка";
             // 
-            // pictureBox1
+            // unpackMedian
             // 
-            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox1.Location = new System.Drawing.Point(612, 459);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Properties.ShowMenu = false;
-            this.pictureBox1.Properties.SizeMode = DevExpress.XtraEditors.Controls.PictureSizeMode.Zoom;
-            this.pictureBox1.Size = new System.Drawing.Size(604, 223);
-            this.pictureBox1.TabIndex = 38;
+            this.unpackMedian.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.unpackMedian.Location = new System.Drawing.Point(612, 459);
+            this.unpackMedian.Name = "unpackMedian";
+            this.unpackMedian.Properties.ShowMenu = false;
+            this.unpackMedian.Properties.SizeMode = DevExpress.XtraEditors.Controls.PictureSizeMode.Zoom;
+            this.unpackMedian.Size = new System.Drawing.Size(604, 223);
+            this.unpackMedian.TabIndex = 38;
             // 
             // unpackImage
             // 
@@ -985,7 +985,7 @@ namespace Steganography
             this.xtraTabPage2.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.unpackMedian.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.unpackImage.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.propertyGridControlUnpack)).EndInit();
             this.xtraTabPageOptions.ResumeLayout(false);
@@ -1040,7 +1040,7 @@ namespace Steganography
         private DevExpress.XtraVerticalGrid.Rows.PGridEditorRow ArchiverComboBoxItem;
         private DevExpress.XtraVerticalGrid.Rows.PGridEditorRow GammaComboBoxItem;
         private DevExpress.XtraEditors.LabelControl labelControl17;
-        private DevExpress.XtraEditors.PictureEdit pictureBox1;
+        private DevExpress.XtraEditors.PictureEdit unpackMedian;
         private DevExpress.XtraEditors.PictureEdit unpackImage;
         private DevExpress.XtraEditors.LabelControl labelControl18;
         private RichEditControl unpackFile;
