@@ -39,8 +39,8 @@ namespace BBSLib
         /// <param name="data">Массив помещаемых в контейнер данных</param>
         /// <param name="gamma">Массив значений гаммы</param>
         /// <param name="alpha">Значение изменения яркости</param>
-        /// <returns>Массив с изменёными яркостями пикселелей</returns>
-        public byte[] Combine(byte[] colors, byte[] data, byte[] gamma, byte alpha)
+        /// <param name="cw">Массив с изменёными яркостями пикселелей</param>
+        public void Combine(byte[] colors, byte[] data, byte[] gamma, byte alpha, byte[] cw)
         {
             Debug.Assert(colors.Length >= data.Length*BitsPerByte*_expandSize);
             Debug.Assert(gamma.Length*BitsPerByte >= _expandSize);
@@ -49,7 +49,7 @@ namespace BBSLib
             {
                 using (var y = new MemoryStream(colors))
                 {
-                    using (var z = new MemoryStream())
+                    using (var z = new MemoryStream(cw))
                     {
                         int delta = alpha;
                         var buffer = new byte[_expandSize];
@@ -81,8 +81,6 @@ namespace BBSLib
                             }
                         }
                         y.CopyTo(z);
-                        z.Seek(0, SeekOrigin.Begin);
-                        return z.ToArray();
                     }
                 }
             }
@@ -95,8 +93,8 @@ namespace BBSLib
         /// <param name="colors">Массив яркостей пикселей</param>
         /// <param name="median">Массив средних яркостей вокруг пикселя полученных из размытого изображения</param>
         /// <param name="gamma">Массив значений гаммы</param>
-        /// <returns>Массив выделенных из контейнера данных</returns>
-        public byte[] Extract(byte[] colors, byte[] median, byte[] gamma)
+        /// <param name="data">Массив выделенных из контейнера данных</param>
+        public void Extract(byte[] colors, byte[] median, byte[] gamma, byte[] data)
         {
             Debug.Assert(gamma.Length*BitsPerByte >= _expandSize);
 
@@ -104,7 +102,7 @@ namespace BBSLib
             {
                 using (var y = new MemoryStream(median))
                 {
-                    using (var z = new MemoryStream())
+                    using (var z = new MemoryStream(data))
                     {
                         int count = colors.Length/BitsPerByte/_expandSize; // Длина строки в байтах
                         var votes = new long[BitsPerByte];
@@ -133,8 +131,6 @@ namespace BBSLib
                             int ch = votes.Select((vote, j) => (vote < 0) ? (1 << j) : 0).Sum();
                             z.WriteByte((byte) ch);
                         }
-                        z.Seek(0, SeekOrigin.Begin);
-                        return z.ToArray();
                     }
                 }
             }

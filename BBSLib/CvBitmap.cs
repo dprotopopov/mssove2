@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Text;
 using Emgu.CV;
@@ -45,28 +46,28 @@ namespace BBSLib
             switch (input.NumberOfChannels)
             {
                 case 1:
-                    temp = ((Image<Gray, Byte>) input.Image).Convert<Bgr, Byte>();
+                    temp = ((Image<Gray, Byte>)input.Image).Convert<Bgr, Byte>();
                     break;
                 case 3:
                 case 4:
-                    temp = ((Image<Bgr, Byte>) input.Image).Convert<Bgr, Byte>();
+                    temp = ((Image<Bgr, Byte>)input.Image).Convert<Bgr, Byte>();
                     break;
                 default:
                     throw new NotImplementedException();
             }
 
-            int numberOfChannels = ((ComboBoxItem) ComboBoxItems[itemIndex]).HiddenValue;
+            int numberOfChannels = ((ComboBoxItem)ComboBoxItems[itemIndex]).HiddenValue;
             if (numberOfChannels == 0) numberOfChannels = temp.NumberOfChannels;
             NumberOfChannels = numberOfChannels;
 
             if (autoResize)
             {
                 Size size = temp.Size;
-                double ratio = Math.Max(Math.Max(Math.Sqrt((double) requiredLength/(size.Height*size.Width*numberOfChannels)),
+                double ratio = Math.Max(Math.Max(Math.Sqrt((double)requiredLength / (size.Height * size.Width * numberOfChannels)),
                     (double)minSize.Width / size.Width),
                     (double)minSize.Height / size.Height);
-                var imageSize = new Size((int) Math.Ceiling(ratio*size.Width),
-                    (int) Math.Ceiling(ratio*size.Height));
+                var imageSize = new Size((int)Math.Ceiling(ratio * size.Width),
+                    (int)Math.Ceiling(ratio * size.Height));
 
                 //     Resize bitmap with the Fastest Fourier Transform
                 using (var builder = new StretchBuilder(imageSize))
@@ -92,18 +93,18 @@ namespace BBSLib
         /// </summary>
         public CvBitmap(CvBitmap input, BlurBuilder builder)
         {
-                switch (NumberOfChannels = input.NumberOfChannels)
-                {
-                    case 1:
-                        Image = builder.Blur(input.Image as Image<Gray, Byte>);
-                        break;
-                    case 3:
-                    case 4:
-                        Image = builder.Blur(input.Image as Image<Bgr, Byte>);
-                        break;
-                    default:
-                        throw new NotImplementedException();
-                }
+            switch (NumberOfChannels = input.NumberOfChannels)
+            {
+                case 1:
+                    Image = builder.Blur(input.Image as Image<Gray, Byte>);
+                    break;
+                case 3:
+                case 4:
+                    Image = builder.Blur(input.Image as Image<Bgr, Byte>);
+                    break;
+                default:
+                    throw new NotImplementedException();
+            }
         }
 
         public CvBitmap(Bitmap bitmap)
@@ -142,41 +143,39 @@ namespace BBSLib
                     throw new NotImplementedException();
             }
             byte[, ,] data = Data;
-            Debug.Assert(index.Length <= colors.Length);
-            Debug.Assert(index.Length <= data.Length);
-
             var array = new byte[data.Length];
             Buffer.BlockCopy(data, 0, array, 0, data.Length);
-            for (int i = 0; i < index.Length; i++)
-                array[index[i]] = colors[i];
+            using (var stream = new MemoryStream(colors))
+                foreach (int i in index)
+                    array[i] = (byte)stream.ReadByte();
             Buffer.BlockCopy(array, 0, data, 0, data.Length);
         }
 
-// ReSharper disable MemberCanBePrivate.Global
+        // ReSharper disable MemberCanBePrivate.Global
         public IImage Image { get; set; }
-// ReSharper restore MemberCanBePrivate.Global
-// ReSharper disable MemberCanBePrivate.Global
+        // ReSharper restore MemberCanBePrivate.Global
+        // ReSharper disable MemberCanBePrivate.Global
         public int NumberOfChannels { get; set; }
-// ReSharper restore MemberCanBePrivate.Global
+        // ReSharper restore MemberCanBePrivate.Global
 
         public int Length
         {
             get { return Data.Length; }
         }
 
-// ReSharper disable MemberCanBePrivate.Global
-        public byte[,,] Data
-// ReSharper restore MemberCanBePrivate.Global
+        // ReSharper disable MemberCanBePrivate.Global
+        public byte[, ,] Data
+        // ReSharper restore MemberCanBePrivate.Global
         {
             get
             {
                 switch (NumberOfChannels)
                 {
                     case 1:
-                        return ((Image<Gray, Byte>) Image).Data;
+                        return ((Image<Gray, Byte>)Image).Data;
                     case 3:
                     case 4:
-                        return ((Image<Bgr, Byte>) Image).Data;
+                        return ((Image<Bgr, Byte>)Image).Data;
                     default:
                         throw new NotImplementedException();
                 }
@@ -213,13 +212,17 @@ namespace BBSLib
             }
         }
 
-        public byte[] Select(int[] index)
+        public void Select(int[] index, byte[] colors)
         {
-            byte[,,] data = Data;
+            Debug.Assert(index.Length == colors.Length);
+            int length = Math.Min(index.Length, colors.Length);
+            byte[, ,] data = Data;
             Debug.Assert(index.Length <= data.Length);
             var array = new byte[data.Length];
             Buffer.BlockCopy(data, 0, array, 0, data.Length);
-            return index.Select(i => array[i]).ToArray();
+            using (var stream = new MemoryStream(colors))
+                foreach (int i in index)
+                    stream.WriteByte(array[i]);
         }
 
         public void Save(string fileName)
@@ -240,7 +243,7 @@ namespace BBSLib
             using (Graphics gfx = Graphics.FromImage(bitmap))
             {
                 Size size = barcodeImage.Size;
-                var pt = new Point(image.Size - new Size(size.Width*3/2,size.Height*3/2));
+                var pt = new Point(image.Size - new Size(size.Width * 3 / 2, size.Height * 3 / 2));
                 gfx.DrawImage(barcodeImage.Bitmap, pt.X, pt.Y, size.Width, size.Height);
                 switch (NumberOfChannels)
                 {
@@ -272,11 +275,11 @@ namespace BBSLib
 
         public void AverageAndDelta(out double average, out double delta)
         {
-            byte[,,] data = Data;
+            byte[, ,] data = Data;
             int length = data.Length;
             var bytes = new byte[length];
             Buffer.BlockCopy(data, 0, bytes, 0, length);
-            average = bytes.Average(x=>(double)x);
+            average = bytes.Average(x => (double)x);
             delta = Math.Sqrt(bytes.Average(x => (double)x * x) - average * average);
         }
 

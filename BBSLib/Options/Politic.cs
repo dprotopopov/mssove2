@@ -15,7 +15,7 @@ namespace BBSLib.Options
         /// <summary>
         ///     Идентификаторы политик
         /// </summary>
-        public enum PoliticId
+        private enum PoliticId
         {
             None,
             Zeros,

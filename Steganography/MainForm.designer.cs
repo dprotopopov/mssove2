@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             DevExpress.XtraSplashScreen.SplashScreenManager splashScreenManager1 = new DevExpress.XtraSplashScreen.SplashScreenManager(this, typeof(global::Steganography.SplashScreen1), true, true);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             DevExpress.Utils.Animation.PushTransition pushTransition1 = new DevExpress.Utils.Animation.PushTransition();
@@ -36,7 +35,7 @@
             this.ribbonStatusBar1 = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
             this.ribbonStatusBar2 = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
             this.ribbonControl = new DevExpress.XtraBars.Ribbon.RibbonControl();
-            this.applicationMenu2 = new DevExpress.XtraBars.Ribbon.ApplicationMenu(this.components);
+            this.applicationMenu2 = new DevExpress.XtraBars.Ribbon.ApplicationMenu();
             this.barButtonItemExit = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItemAbout = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItemUnpack = new DevExpress.XtraBars.BarButtonItem();
@@ -53,22 +52,23 @@
             this.barButtonItem5 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem6 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem7 = new DevExpress.XtraBars.BarButtonItem();
-            this.barButtonItem8 = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItemGamma = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem9 = new DevExpress.XtraBars.BarButtonItem();
-            this.barButtonItem10 = new DevExpress.XtraBars.BarButtonItem();
-            this.barButtonItem11 = new DevExpress.XtraBars.BarButtonItem();
-            this.barButtonItem12 = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItemWeb = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItemGroups = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItemForum = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem13 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem14 = new DevExpress.XtraBars.BarButtonItem();
-            this.barButtonItem15 = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItemShowSampleImage = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem16 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem17 = new DevExpress.XtraBars.BarButtonItem();
-            this.barButtonItem18 = new DevExpress.XtraBars.BarButtonItem();
-            this.barButtonItem20 = new DevExpress.XtraBars.BarButtonItem();
-            this.barButtonItem21 = new DevExpress.XtraBars.BarButtonItem();
-            this.barButtonItem22 = new DevExpress.XtraBars.BarButtonItem();
-            this.barButtonItem23 = new DevExpress.XtraBars.BarButtonItem();
-            this.ribbonMiniToolbar1 = new DevExpress.XtraBars.Ribbon.RibbonMiniToolbar(this.components);
+            this.barButtonItemShowMedianImage = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItemError = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItemBarcode = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItemErase = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItemCheck = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItemChecksum = new DevExpress.XtraBars.BarButtonItem();
+            this.ribbonMiniToolbar1 = new DevExpress.XtraBars.Ribbon.RibbonMiniToolbar();
             this.ribbonPageCategoryPack = new DevExpress.XtraBars.Ribbon.RibbonPageCategory();
             this.ribbonPagePack = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.ribbonPageGroup7 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
@@ -113,7 +113,7 @@
             this.ribbonPageGroup3 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonPageGroup24 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonPageGroup23 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
-            this.defaultLookAndFeel1 = new DevExpress.LookAndFeel.DefaultLookAndFeel(this.components);
+            this.defaultLookAndFeel1 = new DevExpress.LookAndFeel.DefaultLookAndFeel();
             this.workspaceManager1 = new DevExpress.Utils.WorkspaceManager();
             this.splitContainerControl1 = new DevExpress.XtraEditors.SplitContainerControl();
             this.navBarControl1 = new DevExpress.XtraNavBar.NavBarControl();
@@ -140,10 +140,10 @@
             // 
             // ribbonStatusBar2
             // 
-            this.ribbonStatusBar2.Location = new System.Drawing.Point(0, 827);
+            this.ribbonStatusBar2.Location = new System.Drawing.Point(0, 815);
             this.ribbonStatusBar2.Name = "ribbonStatusBar2";
             this.ribbonStatusBar2.Ribbon = this.ribbonControl;
-            this.ribbonStatusBar2.Size = new System.Drawing.Size(1251, 43);
+            this.ribbonStatusBar2.Size = new System.Drawing.Size(1215, 55);
             // 
             // ribbonControl
             // 
@@ -167,23 +167,24 @@
             this.barButtonItem5,
             this.barButtonItem6,
             this.barButtonItem7,
-            this.barButtonItem8,
+            this.barButtonItemGamma,
             this.barButtonItem9,
-            this.barButtonItem10,
-            this.barButtonItem11,
-            this.barButtonItem12,
+            this.barButtonItemWeb,
+            this.barButtonItemGroups,
+            this.barButtonItemForum,
             this.barButtonItem13,
             this.barButtonItem14,
-            this.barButtonItem15,
+            this.barButtonItemShowSampleImage,
             this.barButtonItem16,
             this.barButtonItem17,
-            this.barButtonItem18,
-            this.barButtonItem20,
-            this.barButtonItem21,
-            this.barButtonItem22,
-            this.barButtonItem23});
+            this.barButtonItemShowMedianImage,
+            this.barButtonItemError,
+            this.barButtonItemBarcode,
+            this.barButtonItemErase,
+            this.barButtonItemCheck,
+            this.barButtonItemChecksum});
             this.ribbonControl.Location = new System.Drawing.Point(0, 0);
-            this.ribbonControl.MaxItemId = 1;
+            this.ribbonControl.MaxItemId = 2;
             this.ribbonControl.MiniToolbars.Add(this.ribbonMiniToolbar1);
             this.ribbonControl.Name = "ribbonControl";
             this.ribbonControl.PageCategories.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageCategory[] {
@@ -194,7 +195,7 @@
             this.ribbonControl.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] {
             this.ribbonPage1,
             this.ribbonPage3});
-            this.ribbonControl.Size = new System.Drawing.Size(1251, 215);
+            this.ribbonControl.Size = new System.Drawing.Size(1215, 249);
             this.ribbonControl.StatusBar = this.ribbonStatusBar2;
             this.ribbonControl.Toolbar.ItemLinks.Add(this.barButtonItemPack);
             this.ribbonControl.Toolbar.ItemLinks.Add(this.barButtonItemUnpack);
@@ -349,14 +350,14 @@
             this.barButtonItem7.Name = "barButtonItem7";
             this.barButtonItem7.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.UnpackingSaveFile_ItemClick);
             // 
-            // barButtonItem8
+            // barButtonItemGamma
             // 
-            this.barButtonItem8.Caption = "Гамма";
-            this.barButtonItem8.Glyph = ((System.Drawing.Image)(resources.GetObject("barButtonItem8.Glyph")));
-            this.barButtonItem8.Id = 12;
-            this.barButtonItem8.LargeGlyph = ((System.Drawing.Image)(resources.GetObject("barButtonItem8.LargeGlyph")));
-            this.barButtonItem8.Name = "barButtonItem8";
-            this.barButtonItem8.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.ViewSequence_ItemClick);
+            this.barButtonItemGamma.Caption = "Гамма";
+            this.barButtonItemGamma.Glyph = ((System.Drawing.Image)(resources.GetObject("barButtonItemGamma.Glyph")));
+            this.barButtonItemGamma.Id = 12;
+            this.barButtonItemGamma.LargeGlyph = ((System.Drawing.Image)(resources.GetObject("barButtonItemGamma.LargeGlyph")));
+            this.barButtonItemGamma.Name = "barButtonItemGamma";
+            this.barButtonItemGamma.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.ViewSequence_ItemClick);
             // 
             // barButtonItem9
             // 
@@ -367,30 +368,30 @@
             this.barButtonItem9.Name = "barButtonItem9";
             this.barButtonItem9.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.UnpackingSendFile_ItemClick);
             // 
-            // barButtonItem10
+            // barButtonItemWeb
             // 
-            this.barButtonItem10.Caption = "Интернет";
-            this.barButtonItem10.Glyph = ((System.Drawing.Image)(resources.GetObject("barButtonItem10.Glyph")));
-            this.barButtonItem10.Id = 14;
-            this.barButtonItem10.LargeGlyph = ((System.Drawing.Image)(resources.GetObject("barButtonItem10.LargeGlyph")));
-            this.barButtonItem10.Name = "barButtonItem10";
-            this.barButtonItem10.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.Internet_ItemClick);
+            this.barButtonItemWeb.Caption = "Интернет";
+            this.barButtonItemWeb.Glyph = ((System.Drawing.Image)(resources.GetObject("barButtonItemWeb.Glyph")));
+            this.barButtonItemWeb.Id = 14;
+            this.barButtonItemWeb.LargeGlyph = ((System.Drawing.Image)(resources.GetObject("barButtonItemWeb.LargeGlyph")));
+            this.barButtonItemWeb.Name = "barButtonItemWeb";
+            this.barButtonItemWeb.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.Internet_ItemClick);
             // 
-            // barButtonItem11
+            // barButtonItemGroups
             // 
-            this.barButtonItem11.Caption = "Группы";
-            this.barButtonItem11.Glyph = ((System.Drawing.Image)(resources.GetObject("barButtonItem11.Glyph")));
-            this.barButtonItem11.Id = 15;
-            this.barButtonItem11.LargeGlyph = ((System.Drawing.Image)(resources.GetObject("barButtonItem11.LargeGlyph")));
-            this.barButtonItem11.Name = "barButtonItem11";
+            this.barButtonItemGroups.Caption = "Группы";
+            this.barButtonItemGroups.Glyph = ((System.Drawing.Image)(resources.GetObject("barButtonItemGroups.Glyph")));
+            this.barButtonItemGroups.Id = 15;
+            this.barButtonItemGroups.LargeGlyph = ((System.Drawing.Image)(resources.GetObject("barButtonItemGroups.LargeGlyph")));
+            this.barButtonItemGroups.Name = "barButtonItemGroups";
             // 
-            // barButtonItem12
+            // barButtonItemForum
             // 
-            this.barButtonItem12.Caption = "Форумы";
-            this.barButtonItem12.Glyph = ((System.Drawing.Image)(resources.GetObject("barButtonItem12.Glyph")));
-            this.barButtonItem12.Id = 16;
-            this.barButtonItem12.LargeGlyph = ((System.Drawing.Image)(resources.GetObject("barButtonItem12.LargeGlyph")));
-            this.barButtonItem12.Name = "barButtonItem12";
+            this.barButtonItemForum.Caption = "Форумы";
+            this.barButtonItemForum.Glyph = ((System.Drawing.Image)(resources.GetObject("barButtonItemForum.Glyph")));
+            this.barButtonItemForum.Id = 16;
+            this.barButtonItemForum.LargeGlyph = ((System.Drawing.Image)(resources.GetObject("barButtonItemForum.LargeGlyph")));
+            this.barButtonItemForum.Name = "barButtonItemForum";
             // 
             // barButtonItem13
             // 
@@ -410,14 +411,14 @@
             this.barButtonItem14.Name = "barButtonItem14";
             this.barButtonItem14.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.UnpackFileShow_ItemClick);
             // 
-            // barButtonItem15
+            // barButtonItemShowSampleImage
             // 
-            this.barButtonItem15.Caption = "Образец";
-            this.barButtonItem15.Glyph = ((System.Drawing.Image)(resources.GetObject("barButtonItem15.Glyph")));
-            this.barButtonItem15.Id = 20;
-            this.barButtonItem15.LargeGlyph = ((System.Drawing.Image)(resources.GetObject("barButtonItem15.LargeGlyph")));
-            this.barButtonItem15.Name = "barButtonItem15";
-            this.barButtonItem15.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.ShowSampleImage_ItemClick);
+            this.barButtonItemShowSampleImage.Caption = "Образец";
+            this.barButtonItemShowSampleImage.Glyph = ((System.Drawing.Image)(resources.GetObject("barButtonItemShowSampleImage.Glyph")));
+            this.barButtonItemShowSampleImage.Id = 20;
+            this.barButtonItemShowSampleImage.LargeGlyph = ((System.Drawing.Image)(resources.GetObject("barButtonItemShowSampleImage.LargeGlyph")));
+            this.barButtonItemShowSampleImage.Name = "barButtonItemShowSampleImage";
+            this.barButtonItemShowSampleImage.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.ShowSampleImage_ItemClick);
             // 
             // barButtonItem16
             // 
@@ -437,49 +438,58 @@
             this.barButtonItem17.Name = "barButtonItem17";
             this.barButtonItem17.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.ShowInputImage_ItemClick);
             // 
-            // barButtonItem18
+            // barButtonItemShowMedianImage
             // 
-            this.barButtonItem18.Caption = "Среднее";
-            this.barButtonItem18.Glyph = ((System.Drawing.Image)(resources.GetObject("barButtonItem18.Glyph")));
-            this.barButtonItem18.Id = 23;
-            this.barButtonItem18.LargeGlyph = ((System.Drawing.Image)(resources.GetObject("barButtonItem18.LargeGlyph")));
-            this.barButtonItem18.Name = "barButtonItem18";
-            this.barButtonItem18.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.ShowMedianImage_ItemClick);
+            this.barButtonItemShowMedianImage.Caption = "Среднее";
+            this.barButtonItemShowMedianImage.Glyph = ((System.Drawing.Image)(resources.GetObject("barButtonItemShowMedianImage.Glyph")));
+            this.barButtonItemShowMedianImage.Id = 23;
+            this.barButtonItemShowMedianImage.LargeGlyph = ((System.Drawing.Image)(resources.GetObject("barButtonItemShowMedianImage.LargeGlyph")));
+            this.barButtonItemShowMedianImage.Name = "barButtonItemShowMedianImage";
+            this.barButtonItemShowMedianImage.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.ShowMedianImage_ItemClick);
             // 
-            // barButtonItem20
+            // barButtonItemError
             // 
-            this.barButtonItem20.Caption = "Ошибки";
-            this.barButtonItem20.Glyph = ((System.Drawing.Image)(resources.GetObject("barButtonItem20.Glyph")));
-            this.barButtonItem20.Id = 25;
-            this.barButtonItem20.LargeGlyph = ((System.Drawing.Image)(resources.GetObject("barButtonItem20.LargeGlyph")));
-            this.barButtonItem20.Name = "barButtonItem20";
+            this.barButtonItemError.Caption = "Ошибки";
+            this.barButtonItemError.Glyph = ((System.Drawing.Image)(resources.GetObject("barButtonItemError.Glyph")));
+            this.barButtonItemError.Id = 25;
+            this.barButtonItemError.LargeGlyph = ((System.Drawing.Image)(resources.GetObject("barButtonItemError.LargeGlyph")));
+            this.barButtonItemError.Name = "barButtonItemError";
             // 
-            // barButtonItem21
+            // barButtonItemBarcode
             // 
-            this.barButtonItem21.Caption = "Баркод";
-            this.barButtonItem21.Glyph = ((System.Drawing.Image)(resources.GetObject("barButtonItem21.Glyph")));
-            this.barButtonItem21.Id = 1;
-            this.barButtonItem21.LargeGlyph = ((System.Drawing.Image)(resources.GetObject("barButtonItem21.LargeGlyph")));
-            this.barButtonItem21.Name = "barButtonItem21";
-            this.barButtonItem21.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.Barcode_ItemClick);
+            this.barButtonItemBarcode.Caption = "Баркод";
+            this.barButtonItemBarcode.Glyph = ((System.Drawing.Image)(resources.GetObject("barButtonItemBarcode.Glyph")));
+            this.barButtonItemBarcode.Id = 1;
+            this.barButtonItemBarcode.LargeGlyph = ((System.Drawing.Image)(resources.GetObject("barButtonItemBarcode.LargeGlyph")));
+            this.barButtonItemBarcode.Name = "barButtonItemBarcode";
+            this.barButtonItemBarcode.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.Barcode_ItemClick);
             // 
-            // barButtonItem22
+            // barButtonItemErase
             // 
-            this.barButtonItem22.Caption = "Очистить";
-            this.barButtonItem22.Glyph = ((System.Drawing.Image)(resources.GetObject("barButtonItem22.Glyph")));
-            this.barButtonItem22.Id = 2;
-            this.barButtonItem22.LargeGlyph = ((System.Drawing.Image)(resources.GetObject("barButtonItem22.LargeGlyph")));
-            this.barButtonItem22.Name = "barButtonItem22";
-            this.barButtonItem22.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.Erase_ItemClick);
+            this.barButtonItemErase.Caption = "Очистить";
+            this.barButtonItemErase.Glyph = ((System.Drawing.Image)(resources.GetObject("barButtonItemErase.Glyph")));
+            this.barButtonItemErase.Id = 2;
+            this.barButtonItemErase.LargeGlyph = ((System.Drawing.Image)(resources.GetObject("barButtonItemErase.LargeGlyph")));
+            this.barButtonItemErase.Name = "barButtonItemErase";
+            this.barButtonItemErase.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.Erase_ItemClick);
             // 
-            // barButtonItem23
+            // barButtonItemCheck
             // 
-            this.barButtonItem23.Caption = "Проверить";
-            this.barButtonItem23.Glyph = ((System.Drawing.Image)(resources.GetObject("barButtonItem23.Glyph")));
-            this.barButtonItem23.Id = 3;
-            this.barButtonItem23.LargeGlyph = ((System.Drawing.Image)(resources.GetObject("barButtonItem23.LargeGlyph")));
-            this.barButtonItem23.Name = "barButtonItem23";
-            this.barButtonItem23.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.Check_ItemClick);
+            this.barButtonItemCheck.Caption = "Проверить";
+            this.barButtonItemCheck.Glyph = ((System.Drawing.Image)(resources.GetObject("barButtonItemCheck.Glyph")));
+            this.barButtonItemCheck.Id = 3;
+            this.barButtonItemCheck.LargeGlyph = ((System.Drawing.Image)(resources.GetObject("barButtonItemCheck.LargeGlyph")));
+            this.barButtonItemCheck.Name = "barButtonItemCheck";
+            this.barButtonItemCheck.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.Check_ItemClick);
+            // 
+            // barButtonItemChecksum
+            // 
+            this.barButtonItemChecksum.Caption = "Контрольная сумма";
+            this.barButtonItemChecksum.Glyph = ((System.Drawing.Image)(resources.GetObject("barButtonItemChecksum.Glyph")));
+            this.barButtonItemChecksum.Id = 1;
+            this.barButtonItemChecksum.LargeGlyph = ((System.Drawing.Image)(resources.GetObject("barButtonItemChecksum.LargeGlyph")));
+            this.barButtonItemChecksum.Name = "barButtonItemChecksum";
+            this.barButtonItemChecksum.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItemChecksum_ItemClick);
             // 
             // ribbonMiniToolbar1
             // 
@@ -489,7 +499,7 @@
             // 
             // ribbonPageCategoryPack
             // 
-            this.ribbonPageCategoryPack.Color = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.ribbonPageCategoryPack.Color = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.ribbonPageCategoryPack.Name = "ribbonPageCategoryPack";
             this.ribbonPageCategoryPack.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] {
             this.ribbonPagePack,
@@ -512,8 +522,8 @@
             // ribbonPageGroup7
             // 
             this.ribbonPageGroup7.ItemLinks.Add(this.barButtonItemExecute);
-            this.ribbonPageGroup7.ItemLinks.Add(this.barButtonItem22);
-            this.ribbonPageGroup7.ItemLinks.Add(this.barButtonItem23);
+            this.ribbonPageGroup7.ItemLinks.Add(this.barButtonItemErase);
+            this.ribbonPageGroup7.ItemLinks.Add(this.barButtonItemCheck);
             this.ribbonPageGroup7.Name = "ribbonPageGroup7";
             this.ribbonPageGroup7.Text = "Задачи";
             // 
@@ -528,7 +538,7 @@
             // 
             // ribbonPageGroup31
             // 
-            this.ribbonPageGroup31.ItemLinks.Add(this.barButtonItem15);
+            this.ribbonPageGroup31.ItemLinks.Add(this.barButtonItemShowSampleImage);
             this.ribbonPageGroup31.ItemLinks.Add(this.barButtonItem16);
             this.ribbonPageGroup31.ItemLinks.Add(this.barButtonItem13);
             this.ribbonPageGroup31.Name = "ribbonPageGroup31";
@@ -565,8 +575,9 @@
             // 
             // ribbonPageGroup33
             // 
-            this.ribbonPageGroup33.ItemLinks.Add(this.barButtonItem8);
-            this.ribbonPageGroup33.ItemLinks.Add(this.barButtonItem21);
+            this.ribbonPageGroup33.ItemLinks.Add(this.barButtonItemGamma);
+            this.ribbonPageGroup33.ItemLinks.Add(this.barButtonItemBarcode);
+            this.ribbonPageGroup33.ItemLinks.Add(this.barButtonItemChecksum);
             this.ribbonPageGroup33.Name = "ribbonPageGroup33";
             this.ribbonPageGroup33.Text = "Анализ";
             // 
@@ -579,7 +590,7 @@
             // 
             // ribbonPageCategoryUnpack
             // 
-            this.ribbonPageCategoryUnpack.Color = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.ribbonPageCategoryUnpack.Color = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.ribbonPageCategoryUnpack.Name = "ribbonPageCategoryUnpack";
             this.ribbonPageCategoryUnpack.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] {
             this.ribbonPageUnpack,
@@ -602,7 +613,7 @@
             // ribbonPageGroup8
             // 
             this.ribbonPageGroup8.ItemLinks.Add(this.barButtonItemExecute);
-            this.ribbonPageGroup8.ItemLinks.Add(this.barButtonItem22);
+            this.ribbonPageGroup8.ItemLinks.Add(this.barButtonItemErase);
             this.ribbonPageGroup8.Name = "ribbonPageGroup8";
             this.ribbonPageGroup8.Text = "Задачи";
             // 
@@ -617,7 +628,7 @@
             // ribbonPageGroup32
             // 
             this.ribbonPageGroup32.ItemLinks.Add(this.barButtonItem17);
-            this.ribbonPageGroup32.ItemLinks.Add(this.barButtonItem18);
+            this.ribbonPageGroup32.ItemLinks.Add(this.barButtonItemShowMedianImage);
             this.ribbonPageGroup32.ItemLinks.Add(this.barButtonItem14);
             this.ribbonPageGroup32.Name = "ribbonPageGroup32";
             this.ribbonPageGroup32.Text = "Просмотр";
@@ -653,8 +664,9 @@
             // 
             // ribbonPageGroup35
             // 
-            this.ribbonPageGroup35.ItemLinks.Add(this.barButtonItem8);
-            this.ribbonPageGroup35.ItemLinks.Add(this.barButtonItem21);
+            this.ribbonPageGroup35.ItemLinks.Add(this.barButtonItemGamma);
+            this.ribbonPageGroup35.ItemLinks.Add(this.barButtonItemBarcode);
+            this.ribbonPageGroup35.ItemLinks.Add(this.barButtonItemChecksum);
             this.ribbonPageGroup35.Name = "ribbonPageGroup35";
             this.ribbonPageGroup35.Text = "Анализ";
             // 
@@ -667,7 +679,7 @@
             // 
             // ribbonPageCategoryOptions
             // 
-            this.ribbonPageCategoryOptions.Color = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.ribbonPageCategoryOptions.Color = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
             this.ribbonPageCategoryOptions.Name = "ribbonPageCategoryOptions";
             this.ribbonPageCategoryOptions.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] {
             this.ribbonPageOptions});
@@ -693,7 +705,7 @@
             // 
             // ribbonPageGroup29
             // 
-            this.ribbonPageGroup29.ItemLinks.Add(this.barButtonItem8);
+            this.ribbonPageGroup29.ItemLinks.Add(this.barButtonItemGamma);
             this.ribbonPageGroup29.Name = "ribbonPageGroup29";
             this.ribbonPageGroup29.Text = "Анализ";
             // 
@@ -712,7 +724,7 @@
             // 
             // ribbonPageCategory1
             // 
-            this.ribbonPageCategory1.Color = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.ribbonPageCategory1.Color = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.ribbonPageCategory1.Name = "ribbonPageCategory1";
             this.ribbonPageCategory1.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] {
             this.ribbonPage7});
@@ -724,16 +736,17 @@
             this.ribbonPageGroup30,
             this.ribbonPageGroup25,
             this.ribbonPageGroup22});
+            this.ribbonPage7.Image = ((System.Drawing.Image)(resources.GetObject("ribbonPage7.Image")));
             this.ribbonPage7.MergeOrder = 9999;
             this.ribbonPage7.Name = "ribbonPage7";
             this.ribbonPage7.Text = "Помощь";
             // 
             // ribbonPageGroup30
             // 
-            this.ribbonPageGroup30.ItemLinks.Add(this.barButtonItem10);
-            this.ribbonPageGroup30.ItemLinks.Add(this.barButtonItem11);
-            this.ribbonPageGroup30.ItemLinks.Add(this.barButtonItem12);
-            this.ribbonPageGroup30.ItemLinks.Add(this.barButtonItem20);
+            this.ribbonPageGroup30.ItemLinks.Add(this.barButtonItemWeb);
+            this.ribbonPageGroup30.ItemLinks.Add(this.barButtonItemGroups);
+            this.ribbonPageGroup30.ItemLinks.Add(this.barButtonItemForum);
+            this.ribbonPageGroup30.ItemLinks.Add(this.barButtonItemError);
             this.ribbonPageGroup30.Name = "ribbonPageGroup30";
             this.ribbonPageGroup30.Text = "Ссылки";
             // 
@@ -779,7 +792,7 @@
             // 
             // ribbonPageGroup26
             // 
-            this.ribbonPageGroup26.ItemLinks.Add(this.barButtonItem8);
+            this.ribbonPageGroup26.ItemLinks.Add(this.barButtonItemGamma);
             this.ribbonPageGroup26.Name = "ribbonPageGroup26";
             this.ribbonPageGroup26.Text = "Анализ";
             // 
@@ -834,6 +847,10 @@
             this.ribbonPageGroup23.Name = "ribbonPageGroup23";
             this.ribbonPageGroup23.Text = "Помощь";
             // 
+            // defaultLookAndFeel1
+            // 
+            this.defaultLookAndFeel1.LookAndFeel.SkinName = "Metropolis";
+            // 
             // workspaceManager1
             // 
             this.workspaceManager1.TargetControl = this;
@@ -842,13 +859,13 @@
             // splitContainerControl1
             // 
             this.splitContainerControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainerControl1.Location = new System.Drawing.Point(0, 215);
+            this.splitContainerControl1.Location = new System.Drawing.Point(0, 249);
             this.splitContainerControl1.Name = "splitContainerControl1";
             this.splitContainerControl1.Panel1.Controls.Add(this.navBarControl1);
             this.splitContainerControl1.Panel1.Text = "Panel1";
             this.splitContainerControl1.Panel2.Controls.Add(this.mainControl);
             this.splitContainerControl1.Panel2.Text = "Panel2";
-            this.splitContainerControl1.Size = new System.Drawing.Size(1251, 612);
+            this.splitContainerControl1.Size = new System.Drawing.Size(1215, 566);
             this.splitContainerControl1.SplitterPosition = 211;
             this.splitContainerControl1.TabIndex = 5;
             this.splitContainerControl1.Text = "splitContainerControl1";
@@ -866,7 +883,7 @@
             this.navBarControl1.Location = new System.Drawing.Point(0, 0);
             this.navBarControl1.Name = "navBarControl1";
             this.navBarControl1.OptionsNavPane.ExpandedWidth = 211;
-            this.navBarControl1.Size = new System.Drawing.Size(211, 612);
+            this.navBarControl1.Size = new System.Drawing.Size(211, 566);
             this.navBarControl1.TabIndex = 1;
             this.navBarControl1.Text = "navBarControl1";
             this.navBarControl1.View = new DevExpress.XtraNavBar.ViewInfo.SkinExplorerBarViewInfoRegistrator();
@@ -913,7 +930,7 @@
             this.mainControl.Location = new System.Drawing.Point(0, 0);
             this.mainControl.Name = "mainControl";
             this.mainControl.SelectedMode = Steganography.BbsControl.Mode.Pack;
-            this.mainControl.Size = new System.Drawing.Size(1032, 612);
+            this.mainControl.Size = new System.Drawing.Size(986, 566);
             this.mainControl.TabIndex = 3;
             this.mainControl.TabsVisible = true;
             this.mainControl.SelectedModeChanged += new Steganography.BbsControl.SelectedModeChangedEventHandler(this.SelectedModeChanged);
@@ -935,7 +952,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1251, 870);
+            this.ClientSize = new System.Drawing.Size(1215, 870);
             this.Controls.Add(this.splitContainerControl1);
             this.Controls.Add(this.ribbonStatusBar2);
             this.Controls.Add(this.ribbonControl);
@@ -1020,33 +1037,34 @@
         private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup24;
         private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup23;
         private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup25;
-        private DevExpress.XtraBars.BarButtonItem barButtonItem8;
+        private DevExpress.XtraBars.BarButtonItem barButtonItemGamma;
         private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup26;
         private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup29;
         private DevExpress.XtraBars.BarButtonItem barButtonItem9;
-        private DevExpress.XtraBars.BarButtonItem barButtonItem10;
+        private DevExpress.XtraBars.BarButtonItem barButtonItemWeb;
         private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup30;
-        private DevExpress.XtraBars.BarButtonItem barButtonItem11;
-        private DevExpress.XtraBars.BarButtonItem barButtonItem12;
+        private DevExpress.XtraBars.BarButtonItem barButtonItemGroups;
+        private DevExpress.XtraBars.BarButtonItem barButtonItemForum;
         private DevExpress.XtraBars.BarButtonItem barButtonItem13;
         private DevExpress.XtraBars.BarButtonItem barButtonItem14;
-        private DevExpress.XtraBars.BarButtonItem barButtonItem15;
+        private DevExpress.XtraBars.BarButtonItem barButtonItemShowSampleImage;
         private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup31;
         private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup32;
         private DevExpress.XtraBars.BarButtonItem barButtonItem16;
         private DevExpress.XtraBars.BarButtonItem barButtonItem17;
-        private DevExpress.XtraBars.BarButtonItem barButtonItem18;
+        private DevExpress.XtraBars.BarButtonItem barButtonItemShowMedianImage;
         private DevExpress.XtraBars.Ribbon.RibbonPage ribbonPage4;
         private DevExpress.XtraBars.Ribbon.RibbonPage ribbonPage5;
         private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup33;
         private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup34;
         private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup35;
         private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup36;
-        private DevExpress.XtraBars.BarButtonItem barButtonItem20;
+        private DevExpress.XtraBars.BarButtonItem barButtonItemError;
         private DevExpress.XtraBars.Ribbon.RibbonPageCategory ribbonPageCategory1;
-        private DevExpress.XtraBars.BarButtonItem barButtonItem21;
-        private DevExpress.XtraBars.BarButtonItem barButtonItem22;
-        private DevExpress.XtraBars.BarButtonItem barButtonItem23;
+        private DevExpress.XtraBars.BarButtonItem barButtonItemBarcode;
+        private DevExpress.XtraBars.BarButtonItem barButtonItemErase;
+        private DevExpress.XtraBars.BarButtonItem barButtonItemCheck;
+        private DevExpress.XtraBars.BarButtonItem barButtonItemChecksum;
     }
 }
 

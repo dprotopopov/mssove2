@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 
 namespace BBSLib.Options
@@ -9,14 +10,15 @@ namespace BBSLib.Options
     public  class None
     {
 
-        public static int[] Identity(int len)
+        public static void Identity(int[] buffer)
         {
-            return Enumerable.Range(0, len).ToArray();
+            int len = buffer.Length;
+            Array.Copy(Enumerable.Range(0, len).ToArray(),buffer,len);
         }
 
-        public static byte[] Zero(int len)
+        public static void Zero(int[] buffer)
         {
-            return Enumerable.Repeat<byte>(0, len).ToArray();
+            Array.Clear(buffer, 0, buffer.Length);
         }
 
         public static void Forward(Stream input, Stream output)

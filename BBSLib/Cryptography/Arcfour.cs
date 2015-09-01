@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Text;
 
 namespace BBSLib.Cryptography
@@ -39,13 +40,12 @@ namespace BBSLib.Cryptography
         ///     то должно выполняться утверждение, что S всегда содержит один набор значений , который был дан при первоначальной
         ///     инициализации (S[i] := i).
         /// </summary>
-        /// <param name="len">Длина перестановки</param>
-        /// <returns>Перестановка</returns>
-        public int[] Ksa(int len)
+        public void Ksa(int[] s)
         {
+            int len = s.Length;
             int keyLength = _key.Length;
             int[] key = _key;
-            int[] s = Enumerable.Range(0, len).ToArray();
+            Array.Copy(Enumerable.Range(0, len).ToArray(), s, len);
             for (int i = 0, j = 0; i < len; i++)
             {
                 j = (j + s[i] + key[i%keyLength])%len;
@@ -53,7 +53,6 @@ namespace BBSLib.Cryptography
                 s[i] = s[j];
                 s[j] = temp;
             }
-            return s;
         }
 
         /// <summary>
@@ -61,13 +60,12 @@ namespace BBSLib.Cryptography
         ///     algorithm, PRGA). Генератор ключевого потока RC4 переставляет значения, хранящиеся в S. В одном цикле RC4
         ///     определяется одно n-битное слово K из ключевого потока.
         /// </summary>
-        /// <param name="len">Длина гаммы</param>
-        /// <returns>Гамма</returns>
-        public byte[] Prga(int len)
+        public void Prga(byte[] k)
         {
+            int len = k.Length;
             int keyLength = _key.Length;
-            var k = new byte[len];
-            int[] s = Ksa(256);
+            var s = new int[256];
+            Ksa(s);
             for (int index = 0, i = 0, j = 0; index < len; index++)
             {
                 i = (i + 1)%keyLength;
@@ -78,7 +76,6 @@ namespace BBSLib.Cryptography
                 int t = (s[i] + s[j])%keyLength;
                 k[index] = (byte) s[t];
             }
-            return k;
         }
 
         public void SetKey(string keyText)

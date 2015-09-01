@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -10,37 +10,12 @@ namespace BBSLib.Options
     /// <summary>
     ///     Класс алгоритмов формирования псевдослучайной последовательности
     /// </summary>
-    public class Gamma
+    public class Gamma : IDataGenerator
     {
-        /// <summary>
-        ///     Идентификаторы алгоритмов формирования гаммы
-        /// </summary>
-// ReSharper disable MemberCanBePrivate.Global
-        public enum GammaId
-// ReSharper restore MemberCanBePrivate.Global
-        {
-            None = 0,
-            Aes = 1,
-            Des = 2,
-            TripleDes = 3,
-            Arcfour = 4,
-        };
-
         private const byte FillByte = 0xAA; // Байт для инициализации массивов
         private const int BitsPerByte = 8; // Количество битов в байте
+        private static object[] _comboBoxItems;
         private static readonly Arcfour Arcfour = new Arcfour();
-
-        /// <summary>
-        ///     Список алгоритмов формирования гаммы
-        /// </summary>
-        public static readonly object[] ComboBoxItems =
-        {
-            new ComboBoxItem<GammaId>(GammaId.None, "Нет"),
-            new ComboBoxItem<GammaId>(GammaId.Aes, "AES"),
-            new ComboBoxItem<GammaId>(GammaId.Des, "DES"),
-            new ComboBoxItem<GammaId>(GammaId.TripleDes, "TripleDES"),
-            new ComboBoxItem<GammaId>(GammaId.Arcfour, "ARCFOUR")
-        };
 
         private readonly GammaId _gammaId; // Идентификатор алгоритма формирования гаммы
         private readonly string _key;
@@ -51,29 +26,48 @@ namespace BBSLib.Options
             _key = key;
         }
 
-
-        [SuppressMessage("Microsoft.Usage", "CA2202:Не ликвидировать объекты несколько раз")]
-        public byte[] GetGamma(int n)
+        /// <summary>
+        ///     Список алгоритмов формирования гаммы
+        /// </summary>
+        public static object[] ComboBoxItems
         {
+            get
+            {
+                if (_comboBoxItems != null) return _comboBoxItems;
+                var list = new List<object>(from object item in Enum.GetValues(typeof (GammaId))
+                    select new ComboBoxItem<GammaId>((GammaId) item, item.ToString()));
+                return _comboBoxItems = list.ToArray();
+            }
+        }
+
+        public void Dispose()
+        {
+        }
+
+
+        public void GetBytes(byte[] buffer)
+        {
+            int n = buffer.Length;
             switch (_gammaId)
             {
                 case GammaId.None:
-                    return None.Zero(n);
+                    Array.Clear(buffer, 0, n);
+                    break;
                 case GammaId.Aes:
                     using (Aes aes = Aes.Create())
                     {
                         Arcfour.SetKey(_key);
                         if (aes != null)
                         {
-                            aes.Key = Arcfour.Prga((aes.KeySize + BitsPerByte - 1)/BitsPerByte);
-                            aes.IV = Arcfour.Prga((aes.BlockSize + BitsPerByte - 1)/BitsPerByte);
+                            aes.Key = new byte[(aes.KeySize + BitsPerByte - 1)/BitsPerByte];
+                            aes.IV = new byte[(aes.BlockSize + BitsPerByte - 1)/BitsPerByte];
+                            Arcfour.Prga(aes.Key);
+                            Arcfour.Prga(aes.IV);
                             aes.Mode = CipherMode.CBC;
                             aes.Padding = PaddingMode.Zeros;
 
                             // Create a decrytor to perform the stream transform.
-// ReSharper disable AssignNullToNotNullAttribute
                             ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
-// ReSharper restore AssignNullToNotNullAttribute
 
                             // Create the streams used for encryption. 
                             using (var memoryStream = new MemoryStream())
@@ -88,14 +82,12 @@ namespace BBSLib.Options
                                         cryptoStream.Write(Enumerable.Repeat(FillByte, n).ToArray(), 0, n);
                                         cryptoStream.FlushFinalBlock();
                                     }
-// ReSharper disable EmptyGeneralCatchClause
                                     catch
-// ReSharper restore EmptyGeneralCatchClause
                                     {
                                     }
                                 }
                                 // Return the encrypted bytes from the memory stream. 
-                                return memoryStream.ToArray();
+                                Array.Copy(memoryStream.ToArray(), buffer, n);
                             }
                         }
                     }
@@ -104,17 +96,15 @@ namespace BBSLib.Options
                     using (var serviceProvider = new DESCryptoServiceProvider())
                     {
                         Arcfour.SetKey(_key);
-                        serviceProvider.Key =
-                            Arcfour.Prga((serviceProvider.KeySize + BitsPerByte - 1)/BitsPerByte);
-                        serviceProvider.IV =
-                            Arcfour.Prga((serviceProvider.BlockSize + BitsPerByte - 1)/BitsPerByte);
+                        serviceProvider.Key = new byte[(serviceProvider.KeySize + BitsPerByte - 1)/BitsPerByte];
+                        serviceProvider.IV = new byte[(serviceProvider.BlockSize + BitsPerByte - 1)/BitsPerByte];
+                        Arcfour.Prga(serviceProvider.Key);
+                        Arcfour.Prga(serviceProvider.IV);
                         serviceProvider.Mode = CipherMode.CBC;
                         serviceProvider.Padding = PaddingMode.Zeros;
 
                         // Create a decrytor to perform the stream transform.
-// ReSharper disable AssignNullToNotNullAttribute
                         ICryptoTransform encryptor = serviceProvider.CreateEncryptor(serviceProvider.Key,
-// ReSharper restore AssignNullToNotNullAttribute
                             serviceProvider.IV);
 
                         // Create the streams used for encryption. 
@@ -128,31 +118,28 @@ namespace BBSLib.Options
                                     cryptoStream.Write(Enumerable.Repeat(FillByte, n).ToArray(), 0, n);
                                     cryptoStream.FlushFinalBlock();
                                 }
-// ReSharper disable EmptyGeneralCatchClause
                                 catch
-// ReSharper restore EmptyGeneralCatchClause
                                 {
                                 }
                             }
                             // Return the encrypted bytes from the memory stream. 
-                            return memoryStream.ToArray();
+                            Array.Copy(memoryStream.ToArray(), buffer, n);
                         }
                     }
+                    break;
                 case GammaId.TripleDes:
                     using (var serviceProvider = new TripleDESCryptoServiceProvider())
                     {
                         Arcfour.SetKey(_key);
-                        serviceProvider.Key =
-                            Arcfour.Prga((serviceProvider.KeySize + BitsPerByte - 1)/BitsPerByte);
-                        serviceProvider.IV =
-                            Arcfour.Prga((serviceProvider.BlockSize + BitsPerByte - 1)/BitsPerByte);
+                        serviceProvider.Key = new byte[(serviceProvider.KeySize + BitsPerByte - 1)/BitsPerByte];
+                        serviceProvider.IV = new byte[(serviceProvider.BlockSize + BitsPerByte - 1)/BitsPerByte];
+                        Arcfour.Prga(serviceProvider.Key);
+                        Arcfour.Prga(serviceProvider.IV);
                         serviceProvider.Mode = CipherMode.CBC;
                         serviceProvider.Padding = PaddingMode.Zeros;
 
                         // Create a decrytor to perform the stream transform.
-// ReSharper disable AssignNullToNotNullAttribute
                         ICryptoTransform encryptor = serviceProvider.CreateEncryptor(serviceProvider.Key,
-// ReSharper restore AssignNullToNotNullAttribute
                             serviceProvider.IV);
 
                         // Create the streams used for encryption. 
@@ -166,21 +153,39 @@ namespace BBSLib.Options
                                     cryptoStream.Write(Enumerable.Repeat(FillByte, n).ToArray(), 0, n);
                                     cryptoStream.FlushFinalBlock();
                                 }
-// ReSharper disable EmptyGeneralCatchClause
                                 catch
-// ReSharper restore EmptyGeneralCatchClause
                                 {
                                 }
                             }
                             // Return the encrypted bytes from the memory stream. 
-                            return memoryStream.ToArray();
+                            Array.Copy(memoryStream.ToArray(), buffer, n);
                         }
                     }
+                    break;
                 case GammaId.Arcfour:
                     Arcfour.SetKey(_key);
-                    return Arcfour.Prga(n);
+                    Arcfour.Prga(buffer);
+                    break;
+                default:
+                    throw new NotImplementedException();
             }
+        }
+
+        public void GetInts(int[] buffer)
+        {
             throw new NotImplementedException();
         }
+
+        /// <summary>
+        ///     Идентификаторы алгоритмов формирования гаммы
+        /// </summary>
+        private enum GammaId
+        {
+            None = 0,
+            Aes = 1,
+            Des = 2,
+            TripleDes = 3,
+            Arcfour = 4,
+        };
     }
 }

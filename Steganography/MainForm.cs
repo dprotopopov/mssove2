@@ -143,7 +143,7 @@ namespace Steganography
 
         private void ViewSequence_ItemClick(object sender, ItemClickEventArgs e)
         {
-            mainControl.ViewSequence();
+            mainControl.ShowGamma();
         }
 
         private void PackingOpenFile_ItemClick(object sender, ItemClickEventArgs e)
@@ -223,6 +223,11 @@ namespace Steganography
         private void Check_ItemClick(object sender, ItemClickEventArgs e)
         {
             mainControl.Check();
+        }
+
+        private void barButtonItemChecksum_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            mainControl.CheckSum();
         }
     }
 }

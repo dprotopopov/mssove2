@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Security.Cryptography;
+using System.Text;
 using System.Windows.Forms;
 using BBSLib;
 using BBSLib.Options;
@@ -37,6 +40,7 @@ namespace Steganography
         }
 
         private const string DefaultOptionsFileName = "default.options";
+        private const int BitsPerByte = 8; // Количество битов в байте
 
         private readonly BbsBuilder _bbsBuilder = new BbsBuilder();
         private BbsOptions _bbsOptions = new BbsOptions();
@@ -226,11 +230,15 @@ namespace Steganography
             throw new NotImplementedException();
         }
 
-        public bool ViewSequence()
+        public bool ShowGamma()
         {
             _bbsOptions.ObjectToIndex();
-            using (var form = new GammaForm(_bbsOptions.Key, _bbsOptions.ExpandSize, _bbsOptions.GammaIndex))
-                form.ShowDialog();
+            var bytes = new byte[(_bbsOptions.ExpandSize + BitsPerByte - 1)/BitsPerByte];
+            using (var gamma = new Gamma(_bbsOptions.GammaIndex, _bbsOptions.Key))
+                gamma.GetBytes(bytes);
+            XtraMessageBox.Show(
+                string.Join("", bytes.ToArray().Select(x => x.ToString("X02"))),
+                "Псевдослучайная последовательность");
             return true;
         }
 
@@ -541,7 +549,7 @@ namespace Steganography
             try
             {
                 using (var barcode = new Barcode(_inputBitmap.Image.Bitmap))
-                    XtraMessageBox.Show(barcode.Decode());
+                    XtraMessageBox.Show(barcode.Decode(), "Баркод");
                 return true;
             }
             catch (Exception exception)
@@ -681,10 +689,38 @@ namespace Steganography
                         _medianBitmap = _bbsOptions.MedianBitmap;
                         unpackMedian.Image = _medianBitmap.GetBitmap();
                         bool check = String.Compare(unpackFile.RtfText, packFile.RtfText, StringComparison.Ordinal) == 0;
-                        XtraMessageBox.Show(check
-                            ? "Проверка пройдена"
-                            : "Проверка не пройдена");
+                        XtraMessageBox.Show(check ? "Проверка пройдена" : "Проверка не пройдена", "Проверка");
                         return check;
+                }
+            }
+            catch (Exception exception)
+            {
+                XtraMessageBox.Show(exception.Message);
+            }
+            return false;
+        }
+
+        public bool CheckSum()
+        {
+            SHA256 sha256 = SHA256.Create();
+            try
+            {
+                switch (SelectedMode)
+                {
+                    case Mode.Pack:
+                        using (var stream = new MemoryStream(Encoding.Default.GetBytes(packFile.RtfText)))
+                            XtraMessageBox.Show(
+                                string.Join("",
+                                    sha256.ComputeHash(stream).ToArray().Select(b => string.Format("{0:X2}", b))),
+                                "Контрольная сумма");
+                        return true;
+                    case Mode.Unpack:
+                        using (var stream = new MemoryStream(Encoding.Default.GetBytes(unpackFile.RtfText)))
+                            XtraMessageBox.Show(
+                                string.Join("",
+                                    sha256.ComputeHash(stream).ToArray().Select(b => string.Format("{0:X2}", b))),
+                                "Контрольная сумма");
+                        return true;
                 }
             }
             catch (Exception exception)

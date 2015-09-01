@@ -156,6 +156,7 @@
     <Compile Include="Options\Ecc.cs" />
     <Compile Include="Options\Envelope.cs" />
     <Compile Include="Options\Gamma.cs" />
+    <Compile Include="Options\IDataGenerator.cs" />
     <Compile Include="Options\IStreamTransform.cs" />
     <Compile Include="Options\Mixer.cs" />
     <Compile Include="Options\None.cs" />

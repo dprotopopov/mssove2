@@ -116,36 +116,44 @@ namespace BBSLib
                 Debug.WriteLine(string.Join("", data.Select(x => x.ToString("X02"))));
 
                 int length = formatedBitmap.Length;
-                int[] index = new Mixer(mixerIndex, key).GetIndeces(length);
-                byte[] gamma =
-                    new Gamma(gammaIndex, key).GetGamma(maximumGamma
-                        ? ((length + BitsPerByte - 1)/BitsPerByte)
-                        : ((expandSize + BitsPerByte - 1)/BitsPerByte));
-                byte[] colors = formatedBitmap.Select(index);
-                using (var bbSignals = new BbSignals(expandSize, maximumGamma))
-                {
-                    byte[] cw = bbSignals.Combine(colors, data, gamma, (byte) alpha);
 
-                    var outputBitmap = new CvBitmap(formatedBitmap, cw, index);
-                    if (!autoAlpha) return bbsOptions.OutputBitmap = outputBitmap;
-                    using (var builder = new BlurBuilder(filterStep))
-                        for (;;)
-                        {
-                            var medianBitmap = new CvBitmap(outputBitmap, builder);
-                            Debug.WriteLine(medianBitmap.ToString());
-                            Debug.WriteLine(outputBitmap.ToString());
-                            double average, average2;
-                            double delta, delta2;
-                            outputBitmap.AverageAndDelta(out average, out delta);
-                            medianBitmap.AverageAndDelta(out average2, out delta2);
-                            if (Math.Abs(average - average2) < alpha) break;
-                            alpha = (int) Math.Ceiling(Math.Abs(average - average2));
-                            cw = bbSignals.Combine(colors, data, gamma, (byte) alpha);
-                            outputBitmap = new CvBitmap(formatedBitmap, cw, index);
-                            Debug.WriteLine("alpha {0}", alpha);
-                        }
-                    return bbsOptions.OutputBitmap = outputBitmap;
-                }
+                var index = new int[length];
+                var colors = new byte[length];
+                var cw = new byte[length];
+
+                var gamma = new byte[maximumGamma
+                    ? ((length + BitsPerByte - 1)/BitsPerByte)
+                    : ((expandSize + BitsPerByte - 1)/BitsPerByte)];
+
+                using (var builder = new Mixer(mixerIndex, key))
+                    builder.GetInts(index);
+                using (var builder = new Gamma(gammaIndex, key))
+                    builder.GetBytes(gamma);
+                formatedBitmap.Select(index, colors);
+
+                using (var bbSignals = new BbSignals(expandSize, maximumGamma))
+                    bbSignals.Combine(colors, data, gamma, (byte) alpha, cw);
+
+                var outputBitmap = new CvBitmap(formatedBitmap, cw, index);
+                if (!autoAlpha) return bbsOptions.OutputBitmap = outputBitmap;
+                using (var builder = new BlurBuilder(filterStep))
+                    for (;;)
+                    {
+                        var medianBitmap = new CvBitmap(outputBitmap, builder);
+                        Debug.WriteLine(medianBitmap.ToString());
+                        Debug.WriteLine(outputBitmap.ToString());
+                        double average, average2;
+                        double delta, delta2;
+                        outputBitmap.AverageAndDelta(out average, out delta);
+                        medianBitmap.AverageAndDelta(out average2, out delta2);
+                        if (Math.Abs(average - average2) < alpha) break;
+                        alpha = (int) Math.Ceiling(Math.Abs(average - average2));
+                        using (var bbSignals = new BbSignals(expandSize, maximumGamma))
+                            bbSignals.Combine(colors, data, gamma, (byte) alpha, cw);
+                        outputBitmap = new CvBitmap(formatedBitmap, cw, index);
+                        Debug.WriteLine("alpha {0}", alpha);
+                    }
+                return bbsOptions.OutputBitmap = outputBitmap;
             }
         }
 
@@ -166,9 +174,6 @@ namespace BBSLib
             bool extractBarcode = bbsOptions.ExtractBarcode;
 
             CvBitmap inputBitmap = bbsOptions.InputBitmap;
-            using (var builder = new BlurBuilder(filterStep))
-                bbsOptions.MedianBitmap = new CvBitmap(inputBitmap, builder);
-            CvBitmap medianBitmap = bbsOptions.MedianBitmap;
 
             if (extractBarcode)
                 using (var barcode = new Barcode(inputBitmap.Image.Bitmap))
@@ -185,41 +190,52 @@ namespace BBSLib
                     key = barcode.Key;
                 }
 
+            using (var builder = new BlurBuilder(filterStep))
+                bbsOptions.MedianBitmap = new CvBitmap(inputBitmap, builder);
+            CvBitmap medianBitmap = bbsOptions.MedianBitmap;
+
+            int length = inputBitmap.Length;
+
+            var index = new int[length];
+            var cw = new byte[length];
+            var median = new byte[length];
+            var data = new byte[length/expandSize/BitsPerByte];
+
+            using (var builder = new Mixer(mixerIndex, key))
+                builder.GetInts(index);
+            var gamma = new byte[maximumGamma
+                ? ((length + BitsPerByte - 1)/BitsPerByte)
+                : ((expandSize + BitsPerByte - 1)/BitsPerByte)];
+            using (var builder = new Gamma(gammaIndex, key))
+                builder.GetBytes(gamma);
+            inputBitmap.Select(index, cw);
+            medianBitmap.Select(index, median);
+
             using (var bbSignals = new BbSignals(expandSize, maximumGamma))
+                bbSignals.Extract(cw, median, gamma, data);
+            Debug.WriteLine(string.Join("", data.Select(x => x.ToString("X02"))));
+
+            IStreamTransform[] streamTransforms =
             {
-                int length = inputBitmap.Length;
-                int[] index = new Mixer(mixerIndex, key).GetIndeces(length);
-                byte[] gamma = new Gamma(gammaIndex, key).GetGamma(maximumGamma
-                    ? ((length + BitsPerByte - 1)/BitsPerByte)
-                    : ((expandSize + BitsPerByte - 1)/BitsPerByte));
-                byte[] cw = inputBitmap.Select(index);
-                byte[] median = medianBitmap.Select(index);
-                byte[] data = bbSignals.Extract(cw, median, gamma);
-                Debug.WriteLine(string.Join("", data.Select(x => x.ToString("X02"))));
+                new Ecc(eccIndex, codeSize, dataSize), // Алгоритм коррекции ошибок
+                new Envelope(), // Извлечение из конверта
+                new Archiver(archiverIndex) // Алгоритм извлечения из сжатого архива
+            };
 
-                IStreamTransform[] streamTransforms =
-                {
-                    new Ecc(eccIndex, codeSize, dataSize), // Алгоритм коррекции ошибок
-                    new Envelope(), // Извлечение из конверта
-                    new Archiver(archiverIndex) // Алгоритм извлечения из сжатого архива
-                };
-
-                var input = new MemoryStream(data);
-                Debug.WriteLine("input {0}", input.Length);
-                foreach (IStreamTransform transform in streamTransforms)
-                {
-                    using (MemoryStream prev = input)
-                        transform.Backward(prev, input = new MemoryStream());
-                    input.Seek(0, SeekOrigin.Begin);
-                    Debug.WriteLine("{0} {1}", transform, input.Length);
-                }
-                using (var reader = new BinaryReader(input))
-                {
-                    byte[] bytes = reader.ReadBytes((int) input.Length);
-                    Debug.WriteLine(string.Join("", bytes.Select(x => x.ToString("X02"))));
-                    bbsOptions.MedianBitmap = medianBitmap;
-                    return bbsOptions.RtfText = Encoding.Default.GetString(bytes);
-                }
+            var input = new MemoryStream(data);
+            Debug.WriteLine("input {0}", input.Length);
+            foreach (IStreamTransform transform in streamTransforms)
+            {
+                using (MemoryStream prev = input)
+                    transform.Backward(prev, input = new MemoryStream());
+                input.Seek(0, SeekOrigin.Begin);
+                Debug.WriteLine("{0} {1}", transform, input.Length);
+            }
+            using (var reader = new BinaryReader(input))
+            {
+                byte[] bytes = reader.ReadBytes((int) input.Length);
+                Debug.WriteLine(string.Join("", bytes.Select(x => x.ToString("X02"))));
+                return bbsOptions.RtfText = Encoding.Default.GetString(bytes);
             }
         }
     }
