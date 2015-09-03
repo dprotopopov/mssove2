@@ -8,28 +8,18 @@ using System.Text;
 namespace BBSLib.Options
 {
     /// <summary>
-    ///     Класс реализованных в программе политик
+    ///     Класс реализованных в программе политик работы с пикселями изображения, незадействованными методом широкополосных
+    ///     сигналов
     /// </summary>
     public class Politic : IStreamTransform
     {
-        /// <summary>
-        ///     Идентификаторы политик
-        /// </summary>
-        private enum PoliticId
-        {
-            None,
-            Zeros,
-            RandomData,
-            FakeText
-        };
-
         private const int BitsPerByte = 8; // Количество битов в байте
-        private static object[] _comboBoxItems;
+        private static object[] _comboBoxItems; // Список значений для комбо-бокса
 
         private static readonly RandomNumberGenerator Rng = RandomNumberGenerator.Create();
         private readonly CvBitmap _bitmap;
         private readonly int _expandSize;
-        private readonly PoliticId _politicId; // Идентификатор политики
+        private readonly PoliticId _politicId; // Идентификатор выбранного алгоритма политики
         private readonly string _politicsText;
 
         public Politic(int itemIndex, string politicsText, int expandSize, CvBitmap bitmap)
@@ -41,7 +31,7 @@ namespace BBSLib.Options
         }
 
         /// <summary>
-        ///     Список алгоритмов сжатия данных
+        ///     Список политик
         /// </summary>
         public static object[] ComboBoxItems
         {
@@ -54,6 +44,9 @@ namespace BBSLib.Options
             }
         }
 
+        /// <summary>
+        ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
         public void Dispose()
         {
         }
@@ -96,5 +89,16 @@ namespace BBSLib.Options
         {
             throw new NotImplementedException();
         }
+
+        /// <summary>
+        ///     Идентификаторы политик
+        /// </summary>
+        private enum PoliticId
+        {
+            None,
+            Zeros,
+            RandomData,
+            FakeText
+        };
     }
 }

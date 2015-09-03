@@ -7,6 +7,8 @@ using BBSLib.Options;
 namespace BBSLib
 {
     /// <summary>
+    ///     Класс параметров, аргументов и результатов выполнения программы.
+    ///     Поддерживает сохранение и восстановление параметров в-из файл(а) сериализации для их повторного использования.
     ///     http://www.codeproject.com/Articles/1789/Object-Serialization-using-C
     /// </summary>
     [Serializable]
@@ -25,7 +27,6 @@ namespace BBSLib
             EccIndex = (int) info.GetValue("EccIndex", typeof (int));
             GammaIndex = (int) info.GetValue("GammaIndex", typeof (int));
             MixerIndex = (int) info.GetValue("MixerIndex", typeof (int));
-            PixelFormatIndex = (int) info.GetValue("PixelFormatIndex", typeof (int));
             PoliticIndex = (int) info.GetValue("PoliticIndex", typeof (int));
 
             Alpha = (int) info.GetValue("Alpha", typeof (int));
@@ -44,115 +45,161 @@ namespace BBSLib
             IndexToObject();
         }
 
-        [Description(@"Глубина погружения")]
-        [Category(@"Значения")]
-        public int Alpha { get; set; }
+        #region Элементы для работы с параметрами через комбо-боксы
 
         [Description(@"Алгоритм компрессии")]
         [Category(@"Алгоритмы")]
         public object ArchiverComboBoxItem { get; set; }
 
-        [Browsable(false)]
-        [Description(@"Алгоритм компрессии")]
-        [Category(@"Алгоритмы")]
-        public int ArchiverIndex { get; set; }
-
-        [Description(@"Избыточность")]
-        [Category(@"Значения")]
-        public int ExpandSize { get; set; }
-
-        [Description(@"Длина кода")]
-        [Category(@"Алгоритм коррекции ошибки")]
-        public int EccCodeSize { get; set; }
-
-        [Description(@"Длина данных")]
-        [Category(@"Алгоритм коррекции ошибки")]
-        public int EccDataSize { get; set; }
-
-        [Description(@"Параметр фильтра")]
-        [Category(@"Значения")]
-        public int FilterStep { get; set; }
-
-        [Browsable(false)]
-        [Description(@"Встраиваемый баркод")]
-        [Category(@"Значения")]
-        public int BarcodeIndex { get; set; }
-
-        [Description(@"Извлекать баркод")]
-        [Category(@"Значения")]
-        public bool ExtractBarcode { get; set; }
-
         [Description(@"Встраиваемый баркод")]
         [Category(@"Значения")]
         public object BarcodeComboBoxItem { get; set; }
+
+        [Description(@"Алгоритм коррекции ошибки")]
+        [Category(@"Алгоритмы")]
+        public object EccComboBoxItem { get; set; }
 
         [Description(@"Алгоритм гаммы")]
         [Category(@"Алгоритмы")]
         public object GammaComboBoxItem { get; set; }
 
-        [Browsable(false)]
-        [Description(@"Алгоритм гаммы")]
-        [Category(@"Алгоритмы")]
-        public int GammaIndex { get; set; }
-
-        [Description(@"Алгоритм коррекции ошибки")]
-        [Category(@"Алгоритмы")]
-        // ReSharper disable MemberCanBePrivate.Global
-        public object EccComboBoxItem { get; set; }
-
-        [Browsable(false)]
-        [Description(@"Алгоритм коррекции ошибки")]
-        [Category(@"Алгоритмы")]
-        public int EccIndex { get; set; }
+        [Description(@"Извлекать баркод")]
+        [Category(@"Значения")]
+        public bool ExtractBarcode { get; set; }
 
         [Description(@"Алгоритм перемешивания")]
         [Category(@"Алгоритмы")]
         public object MixerComboBoxItem { get; set; }
 
-        [Browsable(false)]
-        [Description(@"Алгоритм перемешивания")]
-        [Category(@"Алгоритмы")]
-        public int MixerIndex { get; set; }
-
-        [Description(@"Формат пикселей")]
-        [Category(@"Значения")]
-        public object PixelFormatComboBoxItem { get; set; }
-
-        [Browsable(false)]
-        [Description(@"Формат пикселей")]
-        [Category(@"Значения")]
-        public int PixelFormatIndex { get; set; }
-
         [Description(@"Политика заполения лишних пикселей")]
         [Category(@"Политика заполения лишних пикселей")]
         public object PoliticComboBoxItem { get; set; }
 
+        #endregion
+
+        /// <summary>
+        ///     Глубина погружения
+        /// </summary>
+        [Description(@"Глубина погружения")]
+        [Category(@"Значения")]
+        public int Alpha { get; set; }
+
+        /// <summary>
+        ///     Алгоритм компрессии
+        /// </summary>
+        [Browsable(false)]
+        [Description(@"Алгоритм компрессии")]
+        [Category(@"Алгоритмы")]
+        public int ArchiverIndex { get; set; }
+
+        /// <summary>
+        ///     Избыточность
+        /// </summary>
+        [Description(@"Избыточность")]
+        [Category(@"Значения")]
+        public int ExpandSize { get; set; }
+
+        /// <summary>
+        ///     Алгоритм коррекции ошибки
+        ///     Длина кода
+        /// </summary>
+        [Description(@"Длина кода")]
+        [Category(@"Алгоритм коррекции ошибки")]
+        public int EccCodeSize { get; set; }
+
+        /// <summary>
+        ///     Алгоритм коррекции ошибки
+        ///     Длина данных
+        /// </summary>
+        [Description(@"Длина данных")]
+        [Category(@"Алгоритм коррекции ошибки")]
+        public int EccDataSize { get; set; }
+
+        /// <summary>
+        ///     Параметр фильтра размытия изображения
+        /// </summary>
+        [Description(@"Параметр фильтра размытия изображения")]
+        [Category(@"Значения")]
+        public int FilterStep { get; set; }
+
+        /// <summary>
+        ///     Встраиваемый баркод
+        /// </summary>
+        [Browsable(false)]
+        [Description(@"Встраиваемый баркод")]
+        [Category(@"Значения")]
+        public int BarcodeIndex { get; set; }
+
+        /// <summary>
+        ///     Алгоритм формирования псевдослучайной последовательности
+        /// </summary>
+        [Browsable(false)]
+        [Description(@"Алгоритм формирования псевдослучайной последовательности")]
+        [Category(@"Алгоритмы")]
+        public int GammaIndex { get; set; }
+
+        /// <summary>
+        ///     Алгоритм коррекции ошибки
+        /// </summary>
+        [Browsable(false)]
+        [Description(@"Алгоритм коррекции ошибки")]
+        [Category(@"Алгоритмы")]
+        public int EccIndex { get; set; }
+
+        /// <summary>
+        ///     Алгоритм псевдослучайного перемешивания данных (перестановок бит)
+        /// </summary>
+        [Browsable(false)]
+        [Description(@"Алгоритм псевдослучайного перемешивания данных (перестановок бит)")]
+        [Category(@"Алгоритмы")]
+        public int MixerIndex { get; set; }
+
+        /// <summary>
+        ///     Политика заполения лишних пикселей
+        /// </summary>
         [Browsable(false)]
         [Description(@"Политика заполения лишних пикселей")]
         [Category(@"Политика заполения лишних пикселей")]
         public int PoliticIndex { get; set; }
 
+        /// <summary>
+        ///     Политика заполения лишних пикселей
+        ///     Альтернативное сообщение
+        /// </summary>
         [Description(@"Альтернативное сообщение")]
         [Category(@"Политика заполения лишних пикселей")]
         public string PoliticText { get; set; }
 
-        [Description(@"Маштабировать изображение")]
+        /// <summary>
+        ///     Маштабировать исходное изображение при необходимости
+        /// </summary>
+        [Description(@"Маштабировать исходное изображение при необходимости")]
         [Category(@"Значения")]
         public bool AutoResize { get; set; }
 
+        /// <summary>
+        ///     Подбирать глубину погружения
+        /// </summary>
         [Description(@"Подбирать глубину погружения")]
         [Category(@"Значения")]
         public bool AutoAlpha { get; set; }
 
-        [Description(@"Использовать гамму максимальной длины")]
+        /// <summary>
+        ///     Использовать псевдослучайную последовательность максимальной длины
+        ///     То есть каждому биту данных будет соответствовать своя псевдослучайная последовательность
+        /// </summary>
+        [Description(@"Использовать псевдослучайную последовательность максимальной длины")]
         [Category(@"Значения")]
         public bool MaximumGamma { get; set; }
 
-        [Description(@"Ключ")]
+        /// <summary>
+        ///     Стеганографический ключ
+        /// </summary>
+        [Description(@"Стеганографический ключ")]
         [Category(@"Значения")]
         public string Key { get; set; }
 
-        #region
+        #region Элементы исходных данных и результатов работы программы
 
         [Browsable(false)]
         public string RtfText { get; set; }
@@ -183,7 +230,6 @@ namespace BBSLib
             info.AddValue("EccIndex", EccIndex);
             info.AddValue("GammaIndex", GammaIndex);
             info.AddValue("MixerIndex", MixerIndex);
-            info.AddValue("PixelFormatIndex", PixelFormatIndex);
             info.AddValue("PoliticIndex", PoliticIndex);
 
             info.AddValue("Alpha", Alpha);
@@ -209,7 +255,6 @@ namespace BBSLib
             sb.AppendLine(string.Format("GammaIndex {0}", GammaIndex));
             sb.AppendLine(string.Format("EccIndex {0}", EccIndex));
             sb.AppendLine(string.Format("MixerIndex {0}", MixerIndex));
-            sb.AppendLine(string.Format("PixelFormatIndex {0}", PixelFormatIndex));
             sb.AppendLine(string.Format("PoliticIndex {0}", PoliticIndex));
 
             sb.AppendLine(string.Format("Alpha {0}", Alpha));
@@ -228,6 +273,9 @@ namespace BBSLib
             return sb.ToString();
         }
 
+        /// <summary>
+        ///     Заполнение значений элементов для комбо-боксов текущими значениями параметров
+        /// </summary>
         public void IndexToObject()
         {
             EccComboBoxItem = Ecc.ComboBoxItems[EccIndex];
@@ -235,10 +283,12 @@ namespace BBSLib
             GammaComboBoxItem = Gamma.ComboBoxItems[GammaIndex];
             ArchiverComboBoxItem = Archiver.ComboBoxItems[ArchiverIndex];
             PoliticComboBoxItem = Politic.ComboBoxItems[PoliticIndex];
-            PixelFormatComboBoxItem = CvBitmap.ComboBoxItems[PixelFormatIndex];
             BarcodeComboBoxItem = Barcode.ComboBoxItems[BarcodeIndex];
         }
 
+        /// <summary>
+        ///     Получение значений параметров из текущих значений элементов для комбо-боксов
+        /// </summary>
         public void ObjectToIndex()
         {
             EccIndex = Array.IndexOf(Ecc.ComboBoxItems, EccComboBoxItem);
@@ -246,7 +296,6 @@ namespace BBSLib
             GammaIndex = Array.IndexOf(Gamma.ComboBoxItems, GammaComboBoxItem);
             ArchiverIndex = Array.IndexOf(Archiver.ComboBoxItems, ArchiverComboBoxItem);
             PoliticIndex = Array.IndexOf(Politic.ComboBoxItems, PoliticComboBoxItem);
-            PixelFormatIndex = Array.IndexOf(CvBitmap.ComboBoxItems, PixelFormatComboBoxItem);
             BarcodeIndex = Array.IndexOf(Barcode.ComboBoxItems, BarcodeComboBoxItem);
         }
     }

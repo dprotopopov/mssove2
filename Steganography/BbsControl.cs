@@ -42,7 +42,6 @@ namespace Steganography
         private const string DefaultOptionsFileName = "default.options";
         private const int BitsPerByte = 8; // Количество битов в байте
 
-        private readonly BbsBuilder _bbsBuilder = new BbsBuilder();
         private BbsOptions _bbsOptions = new BbsOptions();
         private CvBitmap _inputBitmap;
         private CvBitmap _medianBitmap;
@@ -57,7 +56,6 @@ namespace Steganography
             repositoryItemComboBoxGamma.Items.AddRange(Gamma.ComboBoxItems);
             repositoryItemComboBoxMixer.Items.AddRange(Mixer.ComboBoxItems);
             repositoryItemComboBoxPolitic.Items.AddRange(Politic.ComboBoxItems);
-            repositoryItemComboBoxPixelFormat.Items.AddRange(CvBitmap.ComboBoxItems);
             repositoryItemComboBoxBarcode.Items.AddRange(Barcode.ComboBoxItems);
             try
             {
@@ -67,7 +65,6 @@ namespace Steganography
             }
             catch (Exception)
             {
-                _bbsOptions.PixelFormatIndex = 0;
                 _bbsOptions.PoliticIndex = 0;
                 _bbsOptions.EccIndex = 1;
                 _bbsOptions.GammaIndex = 1;
@@ -75,11 +72,11 @@ namespace Steganography
                 _bbsOptions.ArchiverIndex = 1;
                 _bbsOptions.BarcodeIndex = 1;
 
-                _bbsOptions.EccCodeSize = 127;
-                _bbsOptions.EccDataSize = 63;
-                _bbsOptions.ExpandSize = 31;
-                _bbsOptions.Alpha = 15;
-                _bbsOptions.FilterStep = 7;
+                _bbsOptions.EccCodeSize = 255;
+                _bbsOptions.EccDataSize = 224;
+                _bbsOptions.ExpandSize = 63;
+                _bbsOptions.Alpha = 10;
+                _bbsOptions.FilterStep = 10;
 
                 _bbsOptions.AutoResize = true;
                 _bbsOptions.AutoAlpha = true;
@@ -118,7 +115,6 @@ namespace Steganography
                 repositoryItemComboBoxEcc,
                 repositoryItemComboBoxArchiver,
                 repositoryItemComboBoxPolitic,
-                repositoryItemComboBoxPixelFormat,
                 repositoryItemMemoEditPoliticText,
                 repositoryItemCheckEditBoolean,
                 repositoryItemSpinEditNumber,
@@ -138,7 +134,6 @@ namespace Steganography
                 repositoryItemComboBoxEcc,
                 repositoryItemComboBoxArchiver,
                 repositoryItemComboBoxPolitic,
-                repositoryItemComboBoxPixelFormat,
                 repositoryItemMemoEditPoliticText,
                 repositoryItemCheckEditBoolean,
                 repositoryItemSpinEditNumber,
@@ -152,8 +147,6 @@ namespace Steganography
             BarcodeComboBoxItem1.Properties.RowEdit = BarcodeComboBoxItem.Properties.RowEdit.Clone() as RepositoryItem;
             PoliticComboBoxItem1.Properties.RowEdit = PoliticComboBoxItem.Properties.RowEdit.Clone() as RepositoryItem;
             PoliticText1.Properties.RowEdit = PoliticText.Properties.RowEdit.Clone() as RepositoryItem;
-            PixelFormatComboBoxItem1.Properties.RowEdit =
-                PixelFormatComboBoxItem.Properties.RowEdit.Clone() as RepositoryItem;
 
 
             ArchiverComboBoxItem2.Properties.RowEdit = ArchiverComboBoxItem.Properties.RowEdit.Clone() as RepositoryItem;
@@ -201,8 +194,11 @@ namespace Steganography
                         _bbsOptions.ObjectToIndex();
                         _bbsOptions.RtfText = packFile.RtfText;
                         _bbsOptions.SampleBitmap = _sampleBitmap;
-                        _outputBitmap = _bbsBuilder.Pack(_bbsOptions);
-                        packingImage.Image = _outputBitmap.GetBitmap();
+                        _outputBitmap = BbsBuilder.Pack(_bbsOptions);
+                        packingImage.Image = _outputBitmap.Bitmap;
+                        propertyGridControlOptions.Refresh();
+                        propertyGridControlPack.Refresh();
+                        propertyGridControlUnpack.Refresh();
                         return true;
                     }
                     catch (Exception exception)
@@ -216,9 +212,12 @@ namespace Steganography
                         if (unpackImage.Image == null) throw new Exception("Нет изображения");
                         _bbsOptions.ObjectToIndex();
                         _bbsOptions.InputBitmap = _inputBitmap;
-                        unpackFile.RtfText = _bbsBuilder.Unpack(_bbsOptions);
+                        unpackFile.RtfText = BbsBuilder.Unpack(_bbsOptions);
                         _medianBitmap = _bbsOptions.MedianBitmap;
-                        unpackMedian.Image = _medianBitmap.GetBitmap();
+                        unpackMedian.Image = _medianBitmap.Bitmap;
+                        propertyGridControlOptions.Refresh();
+                        propertyGridControlPack.Refresh();
+                        propertyGridControlUnpack.Refresh();
                         return true;
                     }
                     catch (Exception exception)
@@ -254,7 +253,7 @@ namespace Steganography
                 if (openSampleDialog.ShowDialog() == DialogResult.OK)
                 {
                     _sampleBitmap = new CvBitmap(openSampleDialog.FileName);
-                    packingSample.Image = _sampleBitmap.GetBitmap();
+                    packingSample.Image = _sampleBitmap.Bitmap;
                     return true;
                 }
             }
@@ -301,7 +300,7 @@ namespace Steganography
                 if (openImageDialog.ShowDialog() == DialogResult.OK)
                 {
                     _inputBitmap = new CvBitmap(openImageDialog.FileName);
-                    unpackImage.Image = _inputBitmap.GetBitmap();
+                    unpackImage.Image = _inputBitmap.Bitmap;
                     return true;
                 }
             }
@@ -405,7 +404,7 @@ namespace Steganography
             try
             {
                 if (_outputBitmap == null) throw new Exception("Нет изображения");
-                using (var imageViewer = new ImageViewer(_outputBitmap.Image, "Отправляемое изображение"))
+                using (var imageViewer = new ImageViewer(_outputBitmap, "Отправляемое изображение"))
                     imageViewer.ShowDialog();
                 return true;
             }
@@ -479,7 +478,7 @@ namespace Steganography
             try
             {
                 if (_sampleBitmap == null) throw new Exception("Нет изображения");
-                using (var imageViewer = new ImageViewer(_sampleBitmap.Image, "Исходное изображение"))
+                using (var imageViewer = new ImageViewer(_sampleBitmap, "Исходное изображение"))
                     imageViewer.ShowDialog();
                 return true;
             }
@@ -517,7 +516,7 @@ namespace Steganography
             try
             {
                 if (_inputBitmap == null) throw new Exception("Нет изображения");
-                using (var imageViewer = new ImageViewer(_inputBitmap.Image, "Полученное изображение"))
+                using (var imageViewer = new ImageViewer(_inputBitmap, "Полученное изображение"))
                     imageViewer.ShowDialog();
                 return true;
             }
@@ -533,7 +532,7 @@ namespace Steganography
             try
             {
                 if (_medianBitmap == null) throw new Exception("Нет изображения");
-                using (var imageViewer = new ImageViewer(_medianBitmap.Image, "Размытое изображение"))
+                using (var imageViewer = new ImageViewer(_medianBitmap, "Размытое изображение"))
                     imageViewer.ShowDialog();
                 return true;
             }
@@ -548,7 +547,7 @@ namespace Steganography
         {
             try
             {
-                using (var barcode = new Barcode(_inputBitmap.Image.Bitmap))
+                using (var barcode = new Barcode(_inputBitmap.Bitmap))
                     XtraMessageBox.Show(barcode.Decode(), "Баркод");
                 return true;
             }
@@ -684,10 +683,10 @@ namespace Steganography
                         _inputBitmap = null;
                         _medianBitmap = null;
                         _bbsOptions.InputBitmap = _inputBitmap = _outputBitmap;
-                        unpackImage.Image = _inputBitmap.GetBitmap();
-                        unpackFile.RtfText = _bbsBuilder.Unpack(_bbsOptions);
+                        unpackImage.Image = _inputBitmap.Bitmap;
+                        unpackFile.RtfText = BbsBuilder.Unpack(_bbsOptions);
                         _medianBitmap = _bbsOptions.MedianBitmap;
-                        unpackMedian.Image = _medianBitmap.GetBitmap();
+                        unpackMedian.Image = _medianBitmap.Bitmap;
                         bool check = String.Compare(unpackFile.RtfText, packFile.RtfText, StringComparison.Ordinal) == 0;
                         XtraMessageBox.Show(check ? "Проверка пройдена" : "Проверка не пройдена", "Проверка");
                         return check;

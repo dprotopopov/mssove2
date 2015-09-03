@@ -30,8 +30,8 @@ namespace Steganography
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BbsControl));
+            this.repositoryItemTextEditString = new DevExpress.XtraEditors.Repository.RepositoryItemTextEdit();
             this.openSampleDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveImageDialog = new System.Windows.Forms.SaveFileDialog();
             this.openImageDialog = new System.Windows.Forms.OpenFileDialog();
@@ -60,13 +60,13 @@ namespace Steganography
             this.AutoResize1 = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
             this.Key1 = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
             this.Alpha1 = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
-            this.PixelFormatComboBoxItem1 = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
             this.MaximumGamma1 = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
             this.ExpandSize1 = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
             this.BarcodeComboBoxItem1 = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
             this.PoliticComboBoxItem1 = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
             this.PoliticText1 = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
             this.AutoAlpha1 = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
+            this.FilterStep1 = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
             this.xtraTabPage2 = new DevExpress.XtraTab.XtraTabPage();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
@@ -89,17 +89,16 @@ namespace Steganography
             this.MaximumGamma2 = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
             this.ExpandSize2 = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
             this.ExtractBarcode2 = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
+            this.Alpha2 = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
             this.labelControl1 = new DevExpress.XtraEditors.LabelControl();
             this.xtraTabPageOptions = new DevExpress.XtraTab.XtraTabPage();
             this.propertyGridControlOptions = new DevExpress.XtraVerticalGrid.PropertyGridControl();
             this.repositoryItemCheckEditBoolean = new DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit();
             this.repositoryItemSpinEditNumber = new DevExpress.XtraEditors.Repository.RepositoryItemSpinEdit();
-            this.repositoryItemTextEditString = new DevExpress.XtraEditors.Repository.RepositoryItemTextEdit();
             this.repositoryItemComboBoxMixer = new DevExpress.XtraEditors.Repository.RepositoryItemComboBox();
             this.repositoryItemComboBoxGamma = new DevExpress.XtraEditors.Repository.RepositoryItemComboBox();
             this.repositoryItemComboBoxArchiver = new DevExpress.XtraEditors.Repository.RepositoryItemComboBox();
             this.repositoryItemComboBoxPolitic = new DevExpress.XtraEditors.Repository.RepositoryItemComboBox();
-            this.repositoryItemComboBoxPixelFormat = new DevExpress.XtraEditors.Repository.RepositoryItemComboBox();
             this.repositoryItemMemoEditPoliticText = new DevExpress.XtraEditors.Repository.RepositoryItemMemoEdit();
             this.repositoryItemComboBoxEcc = new DevExpress.XtraEditors.Repository.RepositoryItemComboBox();
             this.repositoryItemComboBoxBarcode = new DevExpress.XtraEditors.Repository.RepositoryItemComboBox();
@@ -115,7 +114,6 @@ namespace Steganography
             this.Key = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
             this.FilterStep = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
             this.Alpha = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
-            this.PixelFormatComboBoxItem = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
             this.MaximumGamma = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
             this.ExpandSize = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
             this.BarcodeComboBoxItem = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
@@ -124,9 +122,10 @@ namespace Steganography
             this.PoliticText = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
             this.AutoAlpha = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
             this.PixelFormatIndex = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
-            this.defaultLookAndFeel1 = new DevExpress.LookAndFeel.DefaultLookAndFeel(this.components);
+            this.defaultLookAndFeel1 = new DevExpress.LookAndFeel.DefaultLookAndFeel();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemTextEditString)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.groupControl1)).BeginInit();
             this.groupControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).BeginInit();
@@ -145,16 +144,19 @@ namespace Steganography
             ((System.ComponentModel.ISupportInitialize)(this.propertyGridControlOptions)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemCheckEditBoolean)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemSpinEditNumber)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemTextEditString)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBoxMixer)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBoxGamma)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBoxArchiver)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBoxPolitic)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBoxPixelFormat)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemMemoEditPoliticText)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBoxEcc)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBoxBarcode)).BeginInit();
             this.SuspendLayout();
+            // 
+            // repositoryItemTextEditString
+            // 
+            this.repositoryItemTextEditString.AutoHeight = false;
+            this.repositoryItemTextEditString.Name = "repositoryItemTextEditString";
             // 
             // openSampleDialog
             // 
@@ -347,7 +349,7 @@ namespace Steganography
             // GammaComboBoxItem1
             // 
             this.GammaComboBoxItem1.Name = "GammaComboBoxItem1";
-            this.GammaComboBoxItem1.Properties.Caption = "Алгоритм псевдослучайного генератора";
+            this.GammaComboBoxItem1.Properties.Caption = "Алгоритм псевдослучайной последовательности";
             this.GammaComboBoxItem1.Properties.FieldName = "GammaComboBoxItem";
             // 
             // EccComboBoxItem1
@@ -379,12 +381,12 @@ namespace Steganography
             this.AutoResize1,
             this.Key1,
             this.Alpha1,
-            this.PixelFormatComboBoxItem1,
             this.MaximumGamma1,
             this.ExpandSize1,
             this.BarcodeComboBoxItem1,
             this.PoliticComboBoxItem1,
-            this.AutoAlpha1});
+            this.AutoAlpha1,
+            this.FilterStep1});
             this.categoryPack.Name = "categoryPack";
             this.categoryPack.Properties.Caption = "Значения";
             // 
@@ -405,12 +407,6 @@ namespace Steganography
             this.Alpha1.Name = "Alpha1";
             this.Alpha1.Properties.Caption = "Глубина погружения";
             this.Alpha1.Properties.FieldName = "Alpha";
-            // 
-            // PixelFormatComboBoxItem1
-            // 
-            this.PixelFormatComboBoxItem1.Name = "PixelFormatComboBoxItem1";
-            this.PixelFormatComboBoxItem1.Properties.Caption = "Формат пикселей";
-            this.PixelFormatComboBoxItem1.Properties.FieldName = "PixelFormatComboBoxItem";
             // 
             // MaximumGamma1
             // 
@@ -451,6 +447,12 @@ namespace Steganography
             this.AutoAlpha1.Name = "AutoAlpha1";
             this.AutoAlpha1.Properties.Caption = "Подбирать глубину погружения";
             this.AutoAlpha1.Properties.FieldName = "AutoAlpha";
+            // 
+            // FilterStep1
+            // 
+            this.FilterStep1.Name = "FilterStep1";
+            this.FilterStep1.Properties.Caption = "Параметр фильтра размытия изображения";
+            this.FilterStep1.Properties.FieldName = "FilterStep";
             // 
             // xtraTabPage2
             // 
@@ -547,7 +549,7 @@ namespace Steganography
             // 
             // propertyGridControlUnpack
             // 
-            this.propertyGridControlUnpack.Cursor = System.Windows.Forms.Cursors.SizeWE;
+            this.propertyGridControlUnpack.Cursor = System.Windows.Forms.Cursors.SizeNS;
             this.propertyGridControlUnpack.Dock = System.Windows.Forms.DockStyle.Fill;
             this.propertyGridControlUnpack.Location = new System.Drawing.Point(3, 28);
             this.propertyGridControlUnpack.Name = "propertyGridControlUnpack";
@@ -583,7 +585,7 @@ namespace Steganography
             // GammaComboBoxItem2
             // 
             this.GammaComboBoxItem2.Name = "GammaComboBoxItem2";
-            this.GammaComboBoxItem2.Properties.Caption = "Алгоритм псевдослучайного генератора";
+            this.GammaComboBoxItem2.Properties.Caption = "Алгоритм псевдослучайной последовательности";
             this.GammaComboBoxItem2.Properties.FieldName = "GammaComboBoxItem";
             // 
             // EccComboBoxItem2
@@ -617,7 +619,8 @@ namespace Steganography
             this.FilterStep2,
             this.MaximumGamma2,
             this.ExpandSize2,
-            this.ExtractBarcode2});
+            this.ExtractBarcode2,
+            this.Alpha2});
             this.categoryUnpack.Name = "categoryUnpack";
             this.categoryUnpack.Properties.Caption = "Значения";
             // 
@@ -631,7 +634,7 @@ namespace Steganography
             // 
             this.FilterStep2.Height = 22;
             this.FilterStep2.Name = "FilterStep2";
-            this.FilterStep2.Properties.Caption = "Параметр фильтра";
+            this.FilterStep2.Properties.Caption = "Параметр фильтра размытия изображения";
             this.FilterStep2.Properties.FieldName = "FilterStep";
             // 
             // MaximumGamma2
@@ -651,6 +654,12 @@ namespace Steganography
             this.ExtractBarcode2.Name = "ExtractBarcode2";
             this.ExtractBarcode2.Properties.Caption = "Импорт параметров из баркода";
             this.ExtractBarcode2.Properties.FieldName = "ExtractBarcode";
+            // 
+            // Alpha2
+            // 
+            this.Alpha2.Name = "Alpha2";
+            this.Alpha2.Properties.Caption = "Глубина погружения";
+            this.Alpha2.Properties.FieldName = "Alpha";
             // 
             // labelControl1
             // 
@@ -684,11 +693,9 @@ namespace Steganography
             this.repositoryItemComboBoxGamma,
             this.repositoryItemComboBoxArchiver,
             this.repositoryItemComboBoxPolitic,
-            this.repositoryItemComboBoxPixelFormat,
             this.repositoryItemMemoEditPoliticText,
             this.repositoryItemCheckEditBoolean,
             this.repositoryItemSpinEditNumber,
-            this.repositoryItemTextEditString,
             this.repositoryItemComboBoxEcc,
             this.repositoryItemComboBoxBarcode});
             this.propertyGridControlOptions.Rows.AddRange(new DevExpress.XtraVerticalGrid.Rows.BaseRow[] {
@@ -711,7 +718,7 @@ namespace Steganography
             this.repositoryItemSpinEditNumber.IsFloatValue = false;
             this.repositoryItemSpinEditNumber.Mask.EditMask = "N00";
             this.repositoryItemSpinEditNumber.MaxValue = new decimal(new int[] {
-            255,
+            999999,
             0,
             0,
             0});
@@ -722,12 +729,6 @@ namespace Steganography
             0});
             this.repositoryItemSpinEditNumber.Name = "repositoryItemSpinEditNumber";
             this.repositoryItemSpinEditNumber.ValueChanged += new System.EventHandler(this.SelectedItemChanged);
-            // 
-            // repositoryItemTextEditString
-            // 
-            this.repositoryItemTextEditString.AutoHeight = false;
-            this.repositoryItemTextEditString.Name = "repositoryItemTextEditString";
-            this.repositoryItemTextEditString.Modified += new System.EventHandler(this.SelectedItemChanged);
             // 
             // repositoryItemComboBoxMixer
             // 
@@ -764,15 +765,6 @@ namespace Steganography
             this.repositoryItemComboBoxPolitic.Name = "repositoryItemComboBoxPolitic";
             this.repositoryItemComboBoxPolitic.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor;
             this.repositoryItemComboBoxPolitic.SelectedIndexChanged += new System.EventHandler(this.SelectedItemChanged);
-            // 
-            // repositoryItemComboBoxPixelFormat
-            // 
-            this.repositoryItemComboBoxPixelFormat.AutoHeight = false;
-            this.repositoryItemComboBoxPixelFormat.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.repositoryItemComboBoxPixelFormat.Name = "repositoryItemComboBoxPixelFormat";
-            this.repositoryItemComboBoxPixelFormat.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor;
-            this.repositoryItemComboBoxPixelFormat.SelectedIndexChanged += new System.EventHandler(this.SelectedItemChanged);
             // 
             // repositoryItemMemoEditPoliticText
             // 
@@ -821,7 +813,7 @@ namespace Steganography
             // 
             this.GammaComboBoxItem.Expanded = false;
             this.GammaComboBoxItem.Name = "GammaComboBoxItem";
-            this.GammaComboBoxItem.Properties.Caption = "Алгоритм псевдослучайного генератора";
+            this.GammaComboBoxItem.Properties.Caption = "Алгоритм псевдослучайной последовательности";
             this.GammaComboBoxItem.Properties.FieldName = "GammaComboBoxItem";
             this.GammaComboBoxItem.Properties.RowEdit = this.repositoryItemComboBoxGamma;
             // 
@@ -858,7 +850,6 @@ namespace Steganography
             this.Key,
             this.FilterStep,
             this.Alpha,
-            this.PixelFormatComboBoxItem,
             this.MaximumGamma,
             this.ExpandSize,
             this.BarcodeComboBoxItem,
@@ -885,7 +876,7 @@ namespace Steganography
             // FilterStep
             // 
             this.FilterStep.Name = "FilterStep";
-            this.FilterStep.Properties.Caption = "Параметр фильтра";
+            this.FilterStep.Properties.Caption = "Параметр фильтра размытия изображения";
             this.FilterStep.Properties.FieldName = "FilterStep";
             this.FilterStep.Properties.RowEdit = this.repositoryItemSpinEditNumber;
             // 
@@ -895,13 +886,6 @@ namespace Steganography
             this.Alpha.Properties.Caption = "Глубина погружения";
             this.Alpha.Properties.FieldName = "Alpha";
             this.Alpha.Properties.RowEdit = this.repositoryItemSpinEditNumber;
-            // 
-            // PixelFormatComboBoxItem
-            // 
-            this.PixelFormatComboBoxItem.Name = "PixelFormatComboBoxItem";
-            this.PixelFormatComboBoxItem.Properties.Caption = "Формат пикселей";
-            this.PixelFormatComboBoxItem.Properties.FieldName = "PixelFormatComboBoxItem";
-            this.PixelFormatComboBoxItem.Properties.RowEdit = this.repositoryItemComboBoxPixelFormat;
             // 
             // MaximumGamma
             // 
@@ -972,6 +956,7 @@ namespace Steganography
             this.Controls.Add(this.groupControl1);
             this.Name = "BbsControl";
             this.Size = new System.Drawing.Size(1235, 746);
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemTextEditString)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.groupControl1)).EndInit();
             this.groupControl1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).EndInit();
@@ -992,12 +977,10 @@ namespace Steganography
             ((System.ComponentModel.ISupportInitialize)(this.propertyGridControlOptions)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemCheckEditBoolean)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemSpinEditNumber)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemTextEditString)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBoxMixer)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBoxGamma)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBoxArchiver)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBoxPolitic)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBoxPixelFormat)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemMemoEditPoliticText)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBoxEcc)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBoxBarcode)).EndInit();
@@ -1029,7 +1012,6 @@ namespace Steganography
         private DevExpress.XtraVerticalGrid.Rows.PGridEditorRow EccCodeSize;
         private DevExpress.XtraVerticalGrid.Rows.PGridEditorRow FilterStep;
         private DevExpress.XtraVerticalGrid.Rows.PGridEditorRow Alpha;
-        private DevExpress.XtraVerticalGrid.Rows.PGridEditorRow PixelFormatComboBoxItem;
         private DevExpress.XtraEditors.LabelControl labelControl7;
         private DevExpress.XtraEditors.PictureEdit packingSample;
         private RichEditControl packFile;
@@ -1047,12 +1029,10 @@ namespace Steganography
         private DevExpress.XtraVerticalGrid.PropertyGridControl propertyGridControlOptions;
         private DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit repositoryItemCheckEditBoolean;
         private DevExpress.XtraEditors.Repository.RepositoryItemSpinEdit repositoryItemSpinEditNumber;
-        private DevExpress.XtraEditors.Repository.RepositoryItemTextEdit repositoryItemTextEditString;
         private DevExpress.XtraEditors.Repository.RepositoryItemComboBox repositoryItemComboBoxMixer;
         private DevExpress.XtraEditors.Repository.RepositoryItemComboBox repositoryItemComboBoxGamma;
         private DevExpress.XtraEditors.Repository.RepositoryItemComboBox repositoryItemComboBoxArchiver;
         private DevExpress.XtraEditors.Repository.RepositoryItemComboBox repositoryItemComboBoxPolitic;
-        private DevExpress.XtraEditors.Repository.RepositoryItemComboBox repositoryItemComboBoxPixelFormat;
         private DevExpress.XtraEditors.Repository.RepositoryItemMemoEdit repositoryItemMemoEditPoliticText;
         private DevExpress.XtraVerticalGrid.PropertyGridControl propertyGridControlUnpack;
         private DevExpress.XtraVerticalGrid.PropertyGridControl propertyGridControlPack;
@@ -1065,7 +1045,6 @@ namespace Steganography
         private DevExpress.XtraVerticalGrid.Rows.PGridEditorRow Key1;
         private DevExpress.XtraVerticalGrid.Rows.PGridEditorRow EccCodeSize1;
         private DevExpress.XtraVerticalGrid.Rows.PGridEditorRow Alpha1;
-        private DevExpress.XtraVerticalGrid.Rows.PGridEditorRow PixelFormatComboBoxItem1;
         private DevExpress.XtraVerticalGrid.Rows.PGridEditorRow PoliticComboBoxItem1;
         private DevExpress.XtraVerticalGrid.Rows.PGridEditorRow PoliticText1;
         private DevExpress.XtraVerticalGrid.Rows.CategoryRow category2;
@@ -1102,5 +1081,8 @@ namespace Steganography
         private DevExpress.XtraEditors.LabelControl labelControl2;
         private DevExpress.XtraVerticalGrid.Rows.PGridEditorRow AutoAlpha;
         private DevExpress.XtraVerticalGrid.Rows.PGridEditorRow AutoAlpha1;
+        private DevExpress.XtraEditors.Repository.RepositoryItemTextEdit repositoryItemTextEditString;
+        private DevExpress.XtraVerticalGrid.Rows.PGridEditorRow FilterStep1;
+        private DevExpress.XtraVerticalGrid.Rows.PGridEditorRow Alpha2;
     }
 }

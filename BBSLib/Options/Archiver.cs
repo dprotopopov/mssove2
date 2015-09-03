@@ -7,17 +7,37 @@ using System.Linq;
 namespace BBSLib.Options
 {
     /// <summary>
-    ///     Класс реализованных в программе алгоритмов сжатия данных
+    ///     Класс применяемых в программе алгоритмов сжатия данных
     /// </summary>
     public class Archiver : IStreamTransform
     {
-        private static object[] _comboBoxItems;
+        private static object[] _comboBoxItems; // Список значений для комбо-бокса
+        private readonly ArchiverId _archiverId; // Идентификатор выбранного алгоритма
 
-        private readonly ArchiverId _archiverId;
         public Archiver(int itemIndex)
         {
-            _archiverId = ((ComboBoxItem<ArchiverId>)ComboBoxItems[itemIndex]).HiddenValue;
+            _archiverId = ((ComboBoxItem<ArchiverId>) ComboBoxItems[itemIndex]).HiddenValue;
         }
+
+        /// <summary>
+        ///     Список алгоритмов сжатия данных
+        /// </summary>
+        public static object[] ComboBoxItems
+        {
+            get
+            {
+                if (_comboBoxItems != null) return _comboBoxItems;
+                var list = new List<object>(from object item in Enum.GetValues(typeof (ArchiverId))
+                    select new ComboBoxItem<ArchiverId>((ArchiverId) item, item.ToString()));
+                return _comboBoxItems = list.ToArray();
+            }
+        }
+
+        /// <summary>
+        ///     Вызов метода компрессии для текущего выбранного алгоритма сжатия данных
+        /// </summary>
+        /// <param name="input">Входной поток данных</param>
+        /// <param name="output">Выходной поток данных</param>
         public void Forward(Stream input, Stream output)
         {
             switch (_archiverId)
@@ -37,6 +57,12 @@ namespace BBSLib.Options
                     throw new NotImplementedException();
             }
         }
+
+        /// <summary>
+        ///     Вызов метода декомпрессии для текущего выбранного алгоритма сжатия данных
+        /// </summary>
+        /// <param name="input">Входной поток данных</param>
+        /// <param name="output">Выходной поток данных</param>
         public void Backward(Stream input, Stream output)
         {
             switch (_archiverId)
@@ -58,19 +84,11 @@ namespace BBSLib.Options
         }
 
         /// <summary>
-        ///     Список алгоритмов сжатия данных
+        ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
-        public static object[] ComboBoxItems
+        public void Dispose()
         {
-            get
-            {
-                if (_comboBoxItems != null) return _comboBoxItems;
-                var list = new List<object>(from object item in Enum.GetValues(typeof (ArchiverId))
-                    select new ComboBoxItem<ArchiverId>((ArchiverId) item, item.ToString()));
-                return _comboBoxItems = list.ToArray();
-            }
         }
-
 
         /// <summary>
         ///     Идентификаторы алгоритмов сжатия данных
@@ -81,9 +99,5 @@ namespace BBSLib.Options
             Deflate,
             GZip
         };
-
-        public void Dispose()
-        {
-        }
     }
 }

@@ -8,18 +8,18 @@ using ZXing.Common.ReedSolomon;
 namespace BBSLib.Options
 {
     /// <summary>
-    ///     Класс алгоритмов коррекции ошибок
+    ///     Класс применяемых в программе алгоритмов коррекции ошибок
     /// </summary>
     public class Ecc : IStreamTransform
     {
         private static readonly GenericGF Gf256 = GenericGF.QR_CODE_FIELD_256;
         private static readonly ReedSolomonEncoder RsEncoder = new ReedSolomonEncoder(Gf256);
         private static readonly ReedSolomonDecoder RsDecoder = new ReedSolomonDecoder(Gf256);
-        private static object[] _comboBoxItems;
+        private static object[] _comboBoxItems; // Список значений для комбо-бокса
 
         private readonly int _codeSize;
         private readonly int _dataSize;
-        private readonly EccId _eccId; // Идентификатор алгоритма коррекции ошибок
+        private readonly EccId _eccId; // Идентификатор выбранного алгоритма коррекции ошибок
 
         public Ecc(int itemIndex, int codeSize, int dataSize)
         {
@@ -112,6 +112,9 @@ namespace BBSLib.Options
             ReedSolomon
         };
 
+        /// <summary>
+        ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
         public void Dispose()
         {
         }

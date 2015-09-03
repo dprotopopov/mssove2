@@ -6,7 +6,13 @@ using BBSLib.Cryptography;
 namespace BBSLib.Options
 {
     /// <summary>
-    ///     Класс алгоритмов псевдослучайного перемешивания данных (перестановок бит)
+    ///     Класс применяемых в программе алгоритмов псевдослучайного перемешивания данных (перестановок бит)
+    ///     При передаче данных стеганографический ключ передаётся вместе с данными.
+    ///     Хотя для выработки псевдослучайной последовательности и для выработки индексов используются криптографические
+    ///     алгоритмы как алгоритмы с наиболее изученными статистическими свойствами,
+    ///     метод широкополосного сигнала НЕ ЯВЛЯЕТСЯ ШИФРОВАНИЕМ,
+    ///     а является одним из медотов скрытной передачи информации,
+    ///     то есть СТЕГАНОГРАФИЧЕСКИМ методом.
     /// </summary>
     public class Mixer : IDataGenerator
     {
@@ -15,7 +21,7 @@ namespace BBSLib.Options
         private static readonly Arcfour Arcfour = new Arcfour();
 
         private readonly string _key;
-        private readonly MixerId _mixerId; // Идентификатор алгоритма перемешивания (перестановок)
+        private readonly MixerId _mixerId; // Идентификатор выбранного алгоритма перемешивания (перестановок)
 
         public Mixer(int itemIndex, string key)
         {
@@ -37,6 +43,9 @@ namespace BBSLib.Options
             }
         }
 
+        /// <summary>
+        ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
         public void Dispose()
         {
         }

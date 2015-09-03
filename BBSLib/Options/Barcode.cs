@@ -11,12 +11,20 @@ using ZXing;
 
 namespace BBSLib.Options
 {
+    /// <summary>
+    ///     Класс применяемых в программе алгоритмов формирования баркода
+    ///     Кодируемые и декодированные данные передаются через аттрибуты класса
+    /// </summary>
     public class Barcode : IDisposable
     {
-        private static object[] _comboBoxItems;
-        private readonly int _barcodeId; // Идентификатор алгоритма сжатия данных
-        private Bitmap _bitmap;
+        private static object[] _comboBoxItems; // Список значений для комбо-бокса
+        private readonly int _barcodeId; // Идентификатор выбранного алгоритма формирования баркода
+        private Bitmap _bitmap; // Изображение содержащее баркод
 
+        /// <summary>
+        ///     Конструктор для работы в режиме формирования баркода
+        /// </summary>
+        /// <param name="itemIndex">Идентификатор выбранного алгоритма формирования баркода</param>
         public Barcode(int itemIndex)
         {
             switch (itemIndex)
@@ -30,6 +38,10 @@ namespace BBSLib.Options
             }
         }
 
+        /// <summary>
+        ///     Конструктор для работы в режиме декодирования баркода
+        /// </summary>
+        /// <param name="bitmap">Изображение содержащее баркод</param>
         public Barcode(Bitmap bitmap)
         {
             _bitmap = bitmap;
@@ -54,6 +66,8 @@ namespace BBSLib.Options
             }
         }
 
+        #region Кодируемые и декодированные данные
+
         [Description(@"Избыточность")]
         [Category(@"Значения")]
         public int ExpandSize { get; set; }
@@ -66,7 +80,7 @@ namespace BBSLib.Options
         [Category(@"Алгоритмы")]
         public int MixerIndex { get; set; }
 
-        [Description(@"Алгоритм гаммы")]
+        [Description(@"Алгоритм формирования псевдослучайной последовательности")]
         [Category(@"Алгоритмы")]
         public int GammaIndex { get; set; }
 
@@ -82,13 +96,15 @@ namespace BBSLib.Options
         [Category(@"Алгоритм коррекции ошибки")]
         public int EccDataSize { get; set; }
 
-        [Description(@"Использовать гамму максимальной длины")]
+        [Description(@"Использовать псевдослучайную последовательность максимальной длины")]
         [Category(@"Значения")]
         public bool MaximumGamma { get; set; }
 
         [Description(@"Ключ")]
         [Category(@"Значения")]
         public string Key { get; set; }
+
+        #endregion
 
         /// <summary>
         ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
@@ -112,6 +128,10 @@ namespace BBSLib.Options
             return sb.ToString();
         }
 
+        /// <summary>
+        ///     Формирования баркода выбранным алгоритмом
+        ///     Кодируемые и декодированные данные передаются через аттрибуты класса
+        /// </summary>
         public Bitmap Encode()
         {
             int count = Marshal.SizeOf(typeof (BinaryData));
@@ -148,6 +168,10 @@ namespace BBSLib.Options
             }
         }
 
+        /// <summary>
+        ///     Декодирование баркода
+        ///     Кодируемые и декодированные данные передаются через аттрибуты класса
+        /// </summary>
         public string Decode()
         {
             using (var image = new Image<Gray, Byte>(_bitmap))
@@ -177,6 +201,9 @@ namespace BBSLib.Options
             }
         }
 
+        /// <summary>
+        ///     Структура для упаковки в баркоде двоичных данных
+        /// </summary>
         [StructLayout(LayoutKind.Explicit)]
         private struct BinaryData
         {

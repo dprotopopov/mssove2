@@ -8,16 +8,22 @@ using BBSLib.Cryptography;
 namespace BBSLib.Options
 {
     /// <summary>
-    ///     Класс алгоритмов формирования псевдослучайной последовательности
+    ///     Класс применяемых в программе алгоритмов формирования псевдослучайной последовательности
+    ///     При передаче данных стеганографический ключ передаётся вместе с данными.
+    ///     Хотя для выработки псевдослучайной последовательности и для выработки индексов используются криптографические
+    ///     алгоритмы как алгоритмы с наиболее изученными статистическими свойствами,
+    ///     метод широкополосного сигнала НЕ ЯВЛЯЕТСЯ ШИФРОВАНИЕМ,
+    ///     а является одним из медотов скрытной передачи информации,
+    ///     то есть СТЕГАНОГРАФИЧЕСКИМ методом.
     /// </summary>
     public class Gamma : IDataGenerator
     {
-        private const byte FillByte = 0xAA; // Байт для инициализации массивов
+        private const byte FillByte = 0xAA; // Значение байта для инициализации массивов
         private const int BitsPerByte = 8; // Количество битов в байте
-        private static object[] _comboBoxItems;
+        private static object[] _comboBoxItems; // Список значений для комбо-бокса
         private static readonly Arcfour Arcfour = new Arcfour();
 
-        private readonly GammaId _gammaId; // Идентификатор алгоритма формирования гаммы
+        private readonly GammaId _gammaId; // Идентификатор выбранного алгоритма формирования псевдослучайной последовательности
         private readonly string _key;
 
         public Gamma(int itemIndex, string key)
@@ -27,7 +33,7 @@ namespace BBSLib.Options
         }
 
         /// <summary>
-        ///     Список алгоритмов формирования гаммы
+        ///     Список алгоритмов формирования псевдослучайной последовательности
         /// </summary>
         public static object[] ComboBoxItems
         {
@@ -40,6 +46,9 @@ namespace BBSLib.Options
             }
         }
 
+        /// <summary>
+        ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
         public void Dispose()
         {
         }
