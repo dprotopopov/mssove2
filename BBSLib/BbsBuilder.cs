@@ -122,7 +122,7 @@ namespace BBSLib
             long requiredLength = inputLength*expandSize*BitsPerByte; // Требуемое число пикселей
             Size sampleSize = sampleBitmap.Size;
             long sampleLength = sampleBitmap.Length;
-            double ratio = Math.Sqrt((double) requiredLength/sampleLength);
+            double ratio = Math.Sqrt(1+(double) requiredLength/sampleLength);
             ratio = Math.Max(ratio, (double) minSize.Width/sampleSize.Width);
             ratio = Math.Max(ratio, (double) minSize.Height/sampleSize.Height);
             minSize.Width = (int) Math.Max(minSize.Width, Math.Ceiling(ratio*sampleSize.Width));
