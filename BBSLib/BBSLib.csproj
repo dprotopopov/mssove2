@@ -148,9 +148,12 @@
     <Compile Include="BbsBuilder.cs" />
     <Compile Include="BbSignals.cs" />
     <Compile Include="BbsOptions.cs" />
+    <Compile Include="BitCounter.cs" />
     <Compile Include="ComboBoxItem.cs" />
     <Compile Include="Cryptography\Arcfour.cs" />
     <Compile Include="CvBitmap.cs" />
+    <Compile Include="DhtOfBitmap.cs" />
+    <Compile Include="IDataContainer.cs" />
     <Compile Include="Options\Archiver.cs" />
     <Compile Include="Options\Barcode.cs" />
     <Compile Include="Options\Ecc.cs" />
@@ -161,6 +164,7 @@
     <Compile Include="Options\Mixer.cs" />
     <Compile Include="Options\None.cs" />
     <Compile Include="Options\Politic.cs" />
+    <Compile Include="Options\Zipper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

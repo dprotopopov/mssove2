@@ -27,7 +27,7 @@ namespace BBSLib.Options
             _bitmap = bitmap;
             _politicsText = politicsText;
             _expandSize = expandSize;
-            _politicId = ((ComboBoxItem<PoliticId>) ComboBoxItems[itemIndex]).HiddenValue;
+            _politicId = ((ComboBoxItem<PoliticId>)ComboBoxItems[itemIndex]).HiddenValue;
         }
 
         /// <summary>
@@ -38,8 +38,8 @@ namespace BBSLib.Options
             get
             {
                 if (_comboBoxItems != null) return _comboBoxItems;
-                var list = new List<object>(from object item in Enum.GetValues(typeof (PoliticId))
-                    select new ComboBoxItem<PoliticId>((PoliticId) item, item.ToString()));
+                var list = new List<object>(from object item in Enum.GetValues(typeof(PoliticId))
+                                            select new ComboBoxItem<PoliticId>((PoliticId)item, item.ToString()));
                 return _comboBoxItems = list.ToArray();
             }
         }
@@ -58,7 +58,7 @@ namespace BBSLib.Options
         /// <param name="output">Выходной поток данных</param>
         public void Forward(Stream input, Stream output)
         {
-            var length = (int) (_bitmap.Length/BitsPerByte/_expandSize - input.Length);
+            var length = (int)(_bitmap.Length / BitsPerByte / _expandSize - input.Length);
             input.CopyTo(output);
             switch (_politicId)
             {

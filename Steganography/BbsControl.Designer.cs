@@ -30,6 +30,7 @@ namespace Steganography
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BbsControl));
             this.repositoryItemTextEditString = new DevExpress.XtraEditors.Repository.RepositoryItemTextEdit();
             this.openSampleDialog = new System.Windows.Forms.OpenFileDialog();
@@ -67,6 +68,7 @@ namespace Steganography
             this.PoliticText1 = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
             this.AutoAlpha1 = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
             this.FilterStep1 = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
+            this.DhtMode1 = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
             this.xtraTabPage2 = new DevExpress.XtraTab.XtraTabPage();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
@@ -90,6 +92,7 @@ namespace Steganography
             this.ExpandSize2 = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
             this.ExtractBarcode2 = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
             this.Alpha2 = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
+            this.DhtMode2 = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
             this.labelControl1 = new DevExpress.XtraEditors.LabelControl();
             this.xtraTabPageOptions = new DevExpress.XtraTab.XtraTabPage();
             this.propertyGridControlOptions = new DevExpress.XtraVerticalGrid.PropertyGridControl();
@@ -121,8 +124,9 @@ namespace Steganography
             this.PoliticComboBoxItem = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
             this.PoliticText = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
             this.AutoAlpha = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
+            this.DhtMode = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
             this.PixelFormatIndex = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
-            this.defaultLookAndFeel1 = new DevExpress.LookAndFeel.DefaultLookAndFeel();
+            this.defaultLookAndFeel1 = new DevExpress.LookAndFeel.DefaultLookAndFeel(this.components);
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemTextEditString)).BeginInit();
@@ -386,7 +390,8 @@ namespace Steganography
             this.BarcodeComboBoxItem1,
             this.PoliticComboBoxItem1,
             this.AutoAlpha1,
-            this.FilterStep1});
+            this.FilterStep1,
+            this.DhtMode1});
             this.categoryPack.Name = "categoryPack";
             this.categoryPack.Properties.Caption = "Значения";
             // 
@@ -453,6 +458,12 @@ namespace Steganography
             this.FilterStep1.Name = "FilterStep1";
             this.FilterStep1.Properties.Caption = "Параметр фильтра размытия изображения";
             this.FilterStep1.Properties.FieldName = "FilterStep";
+            // 
+            // DhtMode1
+            // 
+            this.DhtMode1.Name = "DhtMode1";
+            this.DhtMode1.Properties.Caption = "Использовать DHT образ как контейнер данных";
+            this.DhtMode1.Properties.FieldName = "DhtMode";
             // 
             // xtraTabPage2
             // 
@@ -620,7 +631,8 @@ namespace Steganography
             this.MaximumGamma2,
             this.ExpandSize2,
             this.ExtractBarcode2,
-            this.Alpha2});
+            this.Alpha2,
+            this.DhtMode2});
             this.categoryUnpack.Name = "categoryUnpack";
             this.categoryUnpack.Properties.Caption = "Значения";
             // 
@@ -660,6 +672,12 @@ namespace Steganography
             this.Alpha2.Name = "Alpha2";
             this.Alpha2.Properties.Caption = "Глубина погружения";
             this.Alpha2.Properties.FieldName = "Alpha";
+            // 
+            // DhtMode2
+            // 
+            this.DhtMode2.Name = "DhtMode2";
+            this.DhtMode2.Properties.Caption = "Использовать DHT образ как контейнер данных";
+            this.DhtMode2.Properties.FieldName = "DhtMode";
             // 
             // labelControl1
             // 
@@ -855,7 +873,8 @@ namespace Steganography
             this.BarcodeComboBoxItem,
             this.ExtractBarcode,
             this.PoliticComboBoxItem,
-            this.AutoAlpha});
+            this.AutoAlpha,
+            this.DhtMode});
             this.categoryPackUnpack.Height = 23;
             this.categoryPackUnpack.Name = "categoryPackUnpack";
             this.categoryPackUnpack.Properties.Caption = "Значения";
@@ -938,6 +957,13 @@ namespace Steganography
             this.AutoAlpha.Properties.Caption = "Подбирать глубину погружения";
             this.AutoAlpha.Properties.FieldName = "AutoAlpha";
             this.AutoAlpha.Properties.RowEdit = this.repositoryItemCheckEditBoolean;
+            // 
+            // DhtMode
+            // 
+            this.DhtMode.Name = "DhtMode";
+            this.DhtMode.Properties.Caption = "Использовать DHT образ как контейнер данных";
+            this.DhtMode.Properties.FieldName = "DhtMode";
+            this.DhtMode.Properties.RowEdit = this.repositoryItemCheckEditBoolean;
             // 
             // PixelFormatIndex
             // 
@@ -1084,5 +1110,8 @@ namespace Steganography
         private DevExpress.XtraEditors.Repository.RepositoryItemTextEdit repositoryItemTextEditString;
         private DevExpress.XtraVerticalGrid.Rows.PGridEditorRow FilterStep1;
         private DevExpress.XtraVerticalGrid.Rows.PGridEditorRow Alpha2;
+        private DevExpress.XtraVerticalGrid.Rows.PGridEditorRow DhtMode1;
+        private DevExpress.XtraVerticalGrid.Rows.PGridEditorRow DhtMode2;
+        private DevExpress.XtraVerticalGrid.Rows.PGridEditorRow DhtMode;
     }
 }

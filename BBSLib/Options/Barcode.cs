@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -68,6 +69,23 @@ namespace BBSLib.Options
 
         #region Кодируемые и декодированные данные
 
+        /// <summary>
+        ///     Подбирать глубину погружения
+        /// </summary>
+        [Description(@"Подбирать глубину погружения")]
+        [Category(@"Значения")]
+        public bool AutoAlpha { get; set; }
+
+        /// <summary>
+        ///     Использовать DHT образ как контейнер данных
+        /// </summary>
+        [Description(@"Использовать DHT образ как контейнер данных")]
+        [Category(@"Значения")]
+        public bool DhtMode { get; set; }
+
+        /// <summary>
+        ///     Избыточность
+        /// </summary>
         [Description(@"Избыточность")]
         [Category(@"Значения")]
         public int ExpandSize { get; set; }
@@ -76,31 +94,55 @@ namespace BBSLib.Options
         [Category(@"Алгоритмы")]
         public int ArchiverIndex { get; set; }
 
-        [Description(@"Алгоритм перемешивания")]
+        /// <summary>
+        ///     Алгоритм псевдослучайного перемешивания данных (перестановок бит)
+        /// </summary>
+        [Description(@"Алгоритм псевдослучайного перемешивания данных (перестановок бит)")]
         [Category(@"Алгоритмы")]
         public int MixerIndex { get; set; }
 
+        /// <summary>
+        ///     Алгоритм формирования псевдослучайной последовательности
+        /// </summary>
         [Description(@"Алгоритм формирования псевдослучайной последовательности")]
         [Category(@"Алгоритмы")]
         public int GammaIndex { get; set; }
 
+        /// <summary>
+        ///     Алгоритм коррекции ошибки
+        /// </summary>
         [Description(@"Алгоритм коррекции ошибки")]
         [Category(@"Алгоритмы")]
         public int EccIndex { get; set; }
 
+        /// <summary>
+        ///     Алгоритм коррекции ошибки
+        ///     Длина кода
+        /// </summary>
         [Description(@"Длина кода")]
         [Category(@"Алгоритм коррекции ошибки")]
         public int EccCodeSize { get; set; }
 
+        /// <summary>
+        ///     Алгоритм коррекции ошибки
+        ///     Длина данных
+        /// </summary>
         [Description(@"Длина данных")]
         [Category(@"Алгоритм коррекции ошибки")]
         public int EccDataSize { get; set; }
 
+        /// <summary>
+        ///     Использовать псевдослучайную последовательность максимальной длины
+        ///     То есть каждому биту данных будет соответствовать своя псевдослучайная последовательность
+        /// </summary>
         [Description(@"Использовать псевдослучайную последовательность максимальной длины")]
         [Category(@"Значения")]
         public bool MaximumGamma { get; set; }
 
-        [Description(@"Ключ")]
+        /// <summary>
+        ///     Стеганографический ключ
+        /// </summary>
+        [Description(@"Стеганографический ключ")]
         [Category(@"Значения")]
         public string Key { get; set; }
 
@@ -116,17 +158,19 @@ namespace BBSLib.Options
         public override string ToString()
         {
             var sb = new StringBuilder();
+            sb.AppendLine(string.Format("MaximumGamma {0}", MaximumGamma));
+            sb.AppendLine(string.Format("DhtMode {0}", DhtMode));
             sb.AppendLine(string.Format("ExpandSize {0}", ExpandSize));
             sb.AppendLine(string.Format("EccCodeSize {0}", EccCodeSize));
             sb.AppendLine(string.Format("EccDataSize {0}", EccDataSize));
             sb.AppendLine(string.Format("Key {0}", Key));
-            sb.AppendLine(string.Format("MaximumGamma {0}", MaximumGamma));
             sb.AppendLine(string.Format("EccIndex {0}", EccIndex));
             sb.AppendLine(string.Format("MixerIndex {0}", MixerIndex));
             sb.AppendLine(string.Format("GammaIndex {0}", GammaIndex));
             sb.AppendLine(string.Format("ArchiverIndex {0}", ArchiverIndex));
             return sb.ToString();
         }
+        private const int BitsPerByte = 8; // Количество битов в байте
 
         /// <summary>
         ///     Формирования баркода выбранным алгоритмом
@@ -134,7 +178,14 @@ namespace BBSLib.Options
         /// </summary>
         public Bitmap Encode()
         {
-            int count = Marshal.SizeOf(typeof (BinaryData));
+            var flags = new byte[1];
+            var bitArray = new BitArray(BitsPerByte * flags.Length);
+            bitArray[0] = DhtMode;
+            bitArray[1] = AutoAlpha;
+            bitArray[2] = MaximumGamma;
+            bitArray.CopyTo(flags, 0);
+
+            int sizeOfBinaryData = Marshal.SizeOf(typeof(BinaryData));
             var binaryData = new BinaryData
             {
                 ArchiverIndex = (byte) ArchiverIndex,
@@ -144,10 +195,10 @@ namespace BBSLib.Options
                 ExpandSize = (byte) ExpandSize,
                 EccCodeSize = (byte) EccCodeSize,
                 EccDataSize = (byte) EccDataSize,
-                MaximumGamma = (byte) (MaximumGamma ? 0 : -1),
+                Flags = flags[0],
             };
             byte[] keyBytes = Encoding.Default.GetBytes(Key);
-            var binaryBytes = new byte[count];
+            var binaryBytes = new byte[sizeOfBinaryData];
             IntPtr ptr = Marshal.AllocHGlobal(binaryBytes.Length);
             Marshal.StructureToPtr(binaryData, ptr, true);
             Marshal.Copy(ptr, binaryBytes, 0x0, binaryBytes.Length);
@@ -182,7 +233,7 @@ namespace BBSLib.Options
                     Result result = reader.Decode(bw.Bitmap);
                     if (result == null) throw new Exception("Баркод не распознан");
                     byte[] bytes = Convert.FromBase64String(result.Text);
-                    int count = Marshal.SizeOf(typeof (BinaryData));
+                    int sizeOfBinaryData = Marshal.SizeOf(typeof(BinaryData));
                     GCHandle handle = GCHandle.Alloc(bytes, GCHandleType.Pinned);
                     var binaryData =
                         (BinaryData) Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof (BinaryData));
@@ -194,8 +245,16 @@ namespace BBSLib.Options
                     ExpandSize = binaryData.ExpandSize;
                     EccCodeSize = binaryData.EccCodeSize;
                     EccDataSize = binaryData.EccDataSize;
-                    MaximumGamma = (binaryData.MaximumGamma == 0);
-                    Key = Encoding.Default.GetString(bytes.ToList().GetRange(count, bytes.Length - count).ToArray());
+
+                    var flags = new byte[1];
+                    flags[0] = binaryData.Flags;
+
+                    var bitArray = new BitArray(flags);
+                    DhtMode = bitArray[0];
+                    AutoAlpha = bitArray[1];
+                    MaximumGamma = bitArray[2];
+
+                    Key = Encoding.Default.GetString(bytes.ToList().GetRange(sizeOfBinaryData, bytes.Length - sizeOfBinaryData).ToArray());
                     return ToString();
                 }
             }
@@ -214,7 +273,7 @@ namespace BBSLib.Options
             [FieldOffset(4)] public byte ExpandSize;
             [FieldOffset(5)] public byte EccCodeSize;
             [FieldOffset(6)] public byte EccDataSize;
-            [FieldOffset(7)] public byte MaximumGamma;
+            [FieldOffset(7)] public byte Flags;
         };
     }
 }

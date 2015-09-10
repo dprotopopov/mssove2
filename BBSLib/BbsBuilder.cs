@@ -33,6 +33,7 @@ namespace BBSLib
     public class BbsBuilder
     {
         private const int BitsPerByte = 8; // Количество битов в байте
+        private const double F = 128;
 
         /// <summary>
         ///     Применение метода широкополосного сигнала
@@ -48,8 +49,9 @@ namespace BBSLib
             int expandSize = bbsOptions.ExpandSize;
             int codeSize = bbsOptions.EccCodeSize;
             int dataSize = bbsOptions.EccDataSize;
-            int alpha = bbsOptions.Alpha;
-            int betta = 0;
+            double alpha = bbsOptions.Alpha;
+            double betta = 0;
+            bool dhtMode = bbsOptions.DhtMode;
             bool autoAlpha = bbsOptions.AutoAlpha;
             bool autoResize = bbsOptions.AutoResize;
             bool maximumGamma = bbsOptions.MaximumGamma;
@@ -60,6 +62,7 @@ namespace BBSLib
             int gammaIndex = bbsOptions.GammaIndex;
             int archiverIndex = bbsOptions.ArchiverIndex;
             int barcodeIndex = bbsOptions.BarcodeIndex;
+            int zipperIndex = bbsOptions.ZipperIndex;
             int filterStep = bbsOptions.FilterStep;
 
             CvBitmap sampleBitmap = bbsOptions.SampleBitmap;
@@ -71,14 +74,20 @@ namespace BBSLib
             {
                 using (var barcode = new Barcode(barcodeIndex)
                 {
+                    // indeces
                     ArchiverIndex = archiverIndex,
                     EccIndex = eccIndex,
                     MixerIndex = mixerIndex,
                     GammaIndex = gammaIndex,
+                    // ints
                     ExpandSize = expandSize,
                     EccCodeSize = codeSize,
                     EccDataSize = dataSize,
+                    // bools
+                    DhtMode = dhtMode,
+                    AutoAlpha = autoAlpha,
                     MaximumGamma = maximumGamma,
+                    // strings
                     Key = key,
                 })
                 {
@@ -117,21 +126,23 @@ namespace BBSLib
             }
 
 
-            // для каждого бита сообщения нужно N байт носителя
+            // для каждого бита сообщения нужно N пикселей носителя
             long inputLength = input.Length; // Количество байт передаваемых данных
             long requiredLength = inputLength*expandSize*BitsPerByte; // Требуемое число пикселей
             Size sampleSize = sampleBitmap.Size;
             long sampleLength = sampleBitmap.Length;
-            double ratio = Math.Sqrt(1+(double) requiredLength/sampleLength);
+            double ratio = Math.Sqrt(1 + (double) requiredLength/sampleLength);
             ratio = Math.Max(ratio, (double) minSize.Width/sampleSize.Width);
             ratio = Math.Max(ratio, (double) minSize.Height/sampleSize.Height);
             minSize.Width = (int) Math.Max(minSize.Width, Math.Ceiling(ratio*sampleSize.Width));
             minSize.Height = (int) Math.Max(minSize.Height, Math.Ceiling(ratio*sampleSize.Height));
 
             CvBitmap bitmap;
+            CvBitmap median;
 
             using (var stretchBuilder = new StretchBuilder(minSize))
                 bitmap = new CvBitmap(sampleBitmap, stretchBuilder, autoResize);
+
 
             long length = bitmap.Length;
             Size size = bitmap.Size;
@@ -147,22 +158,28 @@ namespace BBSLib
                         "Размер изображения недостаточен для сохранения данных {0}x{1}/{2}x{3}",
                         size.Width, size.Height, minSize.Width, minSize.Height));
 
-            // Внедрения в передаваемое изображение баркода с настроечными параметрами для используемых алгоритмов
-            if (barcodeBitmap != null) bitmap.DrawCopyright(barcodeBitmap);
-
+            // Применение политики обработки неиспользуемых пикселей
             using (IStreamTransform streamTransform = new Politic(politicIndex, politicText, expandSize, bitmap))
             using (MemoryStream prev = input)
                 streamTransform.Forward(prev, input = new MemoryStream());
+
             input.Seek(0, SeekOrigin.Begin);
             Debug.WriteLine("input {0}", input.Length);
+
+            // Внедрения в передаваемое изображение баркода с настроечными параметрами для используемых алгоритмов
+            if (barcodeBitmap != null) bitmap.DrawCopyright(barcodeBitmap);
+
+            using (var builder = new BlurBuilder(filterStep))
+                median = new CvBitmap(bitmap, builder);
+
             using (var reader = new BinaryReader(input))
             {
                 byte[] data = reader.ReadBytes((int) input.Length);
                 Debug.WriteLine(string.Join("", data.Select(x => x.ToString("X02"))));
 
                 var index = new int[length];
-                var colors = new byte[length];
-                var cw = new byte[length];
+                var colors = new double[length];
+                var medianColors = new double[length];
 
                 var gamma = new byte[maximumGamma
                     ? ((length + BitsPerByte - 1)/BitsPerByte)
@@ -173,66 +190,66 @@ namespace BBSLib
                 using (var builder = new Gamma(gammaIndex, key))
                     builder.GetBytes(gamma);
 
-                bitmap.Select(index, colors);
+                IDataContainer bitmapDataContainer = dhtMode ? new DhtOfBitmap(bitmap) : (IDataContainer) bitmap;
+                bitmapDataContainer.Select(index, colors);
+
+                IDataContainer medianDataContainer = dhtMode
+                    ? new DhtOfBitmap(median)
+                    : (IDataContainer) median;
+                medianDataContainer.Select(index, medianColors);
+
+                Debug.Assert(dhtMode || colors.All(x => x >= 0));
+                Debug.Assert(dhtMode || medianColors.All(x => x >= 0));
+
+                // Рассчёт весов пикселей
+                var middle = medianColors.Average();
+                var weight = medianColors.Select(x => F/(F + Math.Abs(x - middle))).ToArray();
+                var average = weight.Average();
+                weight = weight.Select(x => x/average).ToArray();
 
                 if (autoAlpha)
                 {
-                    using (var blurBuilder = new BlurBuilder(filterStep))
-                    using (var median = new CvBitmap(bitmap, blurBuilder))
-                    {
-                        if (barcodeBitmap != null) median.DrawCopyright(barcodeBitmap);
-                        var medianColors = new byte[length];
-                        median.Select(index, medianColors);
+                    // Вычисление параметров из характеристик отправляемых данных
 
-                        double e1 = colors.Zip(medianColors,
-                            (x, y) => (int) x - (int) y).Average(x => (double) x);
-                        double e2 = colors.Zip(medianColors,
-                            (x, y) => (int) x - (int) y).Average(x => (double) x*x);
+                    double[] delta = colors.Zip(medianColors, (x, y) => (x - y)).Zip(weight, (x, y) => x*y).ToArray();
 
-                        alpha = (int) Math.Sqrt(e2 - e1*e1);
-                        bbsOptions.Alpha = alpha;
+                    double e1 = delta.Average(x => x);
+                    double e2 = delta.Average(x => x*x);
 
-                        // Вычисление оценки смещение яркости относительно средней яркости исходного изображения при прямом и дословном применении алгоритма
-                        // Построение массивов, содержащих статистическую информацию о исходных данных и псевдослучайной последовательности
-                        // То есть построение гистограмм исходных данных и псевдослучайной последовательности
-                        var countData = new int[256];
-                        var countGamma = new int[256];
-                        foreach (byte ch in data) countData[ch]++;
-                        foreach (byte ch in gamma) countGamma[ch]++;
+                    bbsOptions.Alpha = (int) Math.Ceiling(alpha = Math.Sqrt(e2 - e1*e1));
 
-                        // Построение массива, где каждый элемент содержит количество ненулевых бит в бинарном разложении индекса элемента
-                        var count = new int[256];
-                        count[0] = 0;
-                        for (int k = 1; k < 256; k <<= 1)
-                            for (int i = 0; i < k; i++)
-                                count[k + i] = count[i] + 1;
+                    // Использование псевдослучайной последовательности с характеристиками приближенными к равновероятной, для кодирования
+                    // данных, позволяет сохранить среднюю яркость пикселей у исходного графического изображения и у изображения,
+                    // содержащего внедрённые данные
+                    // Однако при прямом и дословном применении алгоритма средняя яркость пикселей могла бы иметь смещение относительно средней яркости у исходного изображения
+                    // Поэтому производим статистическую оценку такого смещения и вводим её в качестве компенсирующего слагаемого в алгоритм
 
-                        // Использование псевдослучайной последовательности с характеристиками приближенными к равновероятной, для кодирования
-                        // данных, позволяет сохранить среднюю яркость пикселей у исходного графического изображения и у изображения,
-                        // содержащего внедрённые данные
-                        // Однако при прямом и дословном применении алгоритма средняя яркость пикселей могла бы иметь смещение относительно средней яркости у исходного изображения
-                        // Поэтому производим статистическую оценку такого смещения и вводим её в качестве компенсирующего слагаемого в алгоритм
+                    // Вычисление количества единиц в исходных данных и псевдослучайной последовательности
+                    double trueData = BitCounter.Count(data);
+                    double trueGamma = BitCounter.Count(gamma);
 
-                        // Вычисление количества единиц в исходных данных и псевдослучайной последовательности
-                        double trueData = count.Zip(countData, (x, y) => (double) ((long) x*y)).Sum();
-                        double trueGamma = count.Zip(countGamma, (x, y) => (double) ((long) x*y)).Sum();
+                    // Вычисление количества нулей в исходных данных и псевдослучайной последовательности
+                    double falseData = (long) data.Length*BitsPerByte - trueData;
+                    double falseGamma = (long) gamma.Length*BitsPerByte - trueGamma;
 
-                        // Вычисление количества нулей в исходных данных и псевдослучайной последовательности
-                        double falseData = (long) data.Length*BitsPerByte - trueData;
-                        double falseGamma = (long) gamma.Length*BitsPerByte - trueGamma;
+                    // Вычисление оценки количества единиц и нулей при смешивании исходных данных и псевдослучайной последовательности
+                    double trueCount = trueGamma*falseData + falseGamma*trueData;
+                    double falseCount = trueGamma*trueData + falseGamma*falseData;
 
-                        // Вычисление оценки количества единиц и нулей при смешивании исходных данных и псевдослучайной последовательности
-                        double trueCount = trueGamma*falseData + falseGamma*trueData;
-                        double falseCount = trueGamma*trueData + falseGamma*falseData;
+                    betta = ((falseCount - trueCount)*alpha/(trueCount + falseCount));
 
-                        betta = (int) ((falseCount - trueCount)*alpha/(trueCount + falseCount));
-                        bbsOptions.Alpha = alpha;
-                    }
+                    Debug.WriteLine("alpha = {0} betta = {1}", alpha, betta);
                 }
 
                 using (var bbSignals = new BbSignals(expandSize, maximumGamma))
-                    bbSignals.Combine(colors, data, gamma, alpha, betta, cw);
-                bitmap.Replace(index, cw);
+                {
+                    var delta = new double[colors.Length];
+                    bbSignals.Combine(delta, data, gamma, alpha, betta);
+                    delta = delta.Zip(weight, (x, y) => x*y).ToArray();
+                    colors = colors.Zip(delta, (x, y) => (x + y)).ToArray();
+                }
+
+                bitmapDataContainer.Replace(index, colors);
                 return bbsOptions.OutputBitmap = bitmap;
             }
         }
@@ -256,8 +273,10 @@ namespace BBSLib
             int mixerIndex = bbsOptions.MixerIndex;
             int gammaIndex = bbsOptions.GammaIndex;
             int archiverIndex = bbsOptions.ArchiverIndex;
-            int alpha = bbsOptions.Alpha;
-            int betta = 0;
+            int zipperIndex = bbsOptions.ZipperIndex;
+            double alpha = bbsOptions.Alpha;
+            double betta = 0;
+            bool dhtMode = bbsOptions.DhtMode;
             bool autoAlpha = bbsOptions.AutoAlpha;
             bool maximumGamma = bbsOptions.MaximumGamma;
             bool extractBarcode = bbsOptions.ExtractBarcode;
@@ -274,11 +293,18 @@ namespace BBSLib
                     eccIndex = barcode.EccIndex;
                     mixerIndex = barcode.MixerIndex;
                     gammaIndex = barcode.GammaIndex;
+                    // ints
                     expandSize = barcode.ExpandSize;
                     codeSize = barcode.EccCodeSize;
                     dataSize = barcode.EccDataSize;
+                    // bools
+                    dhtMode = barcode.DhtMode;
+                    autoAlpha = barcode.AutoAlpha;
                     maximumGamma = barcode.MaximumGamma;
+                    // strings
                     key = barcode.Key;
+
+                    Debug.WriteLine(barcode.ToString());
                 }
 
             using (var builder = new BlurBuilder(filterStep))
@@ -288,8 +314,8 @@ namespace BBSLib
             long length = bitmap.Length;
 
             var index = new int[length];
-            var colors = new byte[length];
-            var medianColors = new byte[length];
+            var colors = new double[length];
+            var medianColors = new double[length];
             var data = new byte[length/expandSize/BitsPerByte];
 
             using (var builder = new Mixer(mixerIndex, key))
@@ -299,22 +325,39 @@ namespace BBSLib
                 : ((expandSize + BitsPerByte - 1)/BitsPerByte)];
             using (var builder = new Gamma(gammaIndex, key))
                 builder.GetBytes(gamma);
-            bitmap.Select(index, colors);
-            median.Select(index, medianColors);
+
+            IDataContainer bitmapDataContainer = dhtMode ? new DhtOfBitmap(bitmap) : (IDataContainer) bitmap;
+            bitmapDataContainer.Select(index, colors);
+
+            IDataContainer medianDataContainer = dhtMode ? new DhtOfBitmap(median) : (IDataContainer) median;
+            medianDataContainer.Select(index, medianColors);
+
+            Debug.Assert(dhtMode || colors.All(x => x >= 0));
+            Debug.Assert(dhtMode || medianColors.All(x => x >= 0));
+
+            // Рассчёт весов пикселей
+            var middle = medianColors.Average();
+            var weight = medianColors.Select(x => F / (F + Math.Abs(x - middle))).ToArray();
+            var average = weight.Average();
+            weight = weight.Select(x => x / average).ToArray();
+
+            double[] delta = colors.Zip(medianColors, (x, y) => (x - y)).Zip(weight, (x, y) => x * y).ToArray();
 
             if (autoAlpha)
             {
-                double e1 = colors.Zip(medianColors,
-                    (x, y) => (int) x - (int) y).Average(x => (double) x);
-                double e2 = colors.Zip(medianColors,
-                    (x, y) => (int) x - (int) y).Average(x => (double) x*x);
-                betta = (int) e1;
-                alpha = (int) Math.Sqrt(e2 - e1*e1);
-                bbsOptions.Alpha = alpha;
+                // Вычисление параметров из характеристик полученных данных
+
+                double e1 = delta.Average(x => x);
+                double e2 = delta.Average(x => x*x);
+                betta = e1;
+                bbsOptions.Alpha = (int) Math.Ceiling(alpha = Math.Sqrt(e2 - e1*e1));
+
+                Debug.WriteLine("alpha = {0} betta = {1}", alpha, betta);
             }
 
             using (var bbSignals = new BbSignals(expandSize, maximumGamma))
-                bbSignals.Extract(colors, medianColors, gamma, alpha, betta, data);
+                bbSignals.Extract(delta, data, gamma, alpha, betta);
+
             Debug.WriteLine(string.Join("", data.Select(x => x.ToString("X02"))));
 
             //     В дополнение к самому методу широкополосного сигнала данные могут быть сжаты алгоритмом компрессии данных,

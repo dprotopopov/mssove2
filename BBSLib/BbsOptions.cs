@@ -12,10 +12,41 @@ namespace BBSLib
     ///     http://www.codeproject.com/Articles/1789/Object-Serialization-using-C
     /// </summary>
     [Serializable]
-    public sealed class BbsOptions : ISerializable //derive your class from ISerializable
+    public sealed class BbsOptions : ISerializable, IDisposable
     {
         public BbsOptions()
         {
+            // indeces
+            EccIndex = 1;
+            GammaIndex = 1;
+            MixerIndex = 1;
+            ArchiverIndex = 1;
+            BarcodeIndex = 1;
+            PoliticIndex = 0;
+            ZipperIndex = 0;
+
+            // ints
+            EccCodeSize = 255;
+            EccDataSize = 224;
+            ExpandSize = 63;
+            Alpha = 1;
+            FilterStep = 1;
+            // bools
+            DhtMode = true;
+            AutoResize = true;
+            AutoAlpha = true;
+            ExtractBarcode = true;
+            MaximumGamma = true;
+            // strings
+            Key = "WELCOME";
+            PoliticText =
+                "Lorem ipsum dolor sit amet, his ea quod tation, ne sit mazim concludaturque, graece tincidunt pro ei. Vero diceret iracundia pro ea, ne eripuit mandamus mea, an usu nisl liber theophrastus. Partem mollis nostrud eam no. Duis partiendo no pro. Cu eum quot luptatum probatus. Ex per labitur incorrupte inciderint, sit sint nonumy melius ea.\n" +
+                "Tollit soleat torquatos qui eu. Cu mutat debitis legendos per. Nemore partiendo ne mei. At ridens eruditi efficiantur his.\n" +
+                "Petentium abhorreant definitiones mea ex. Dolore necessitatibus ad vim. No agam ubique efficiendi qui, has at dico dissentiet. Cu sed dicam omnesque, oratio ridens eum ne. Ea adolescens definiebas mel, cum eu debitis veritus. Mei purto essent cu.\n" +
+                "Perfecto complectitur no vel, ex oblique offendit quo. Ad eos viris scripta postulant. Dolorem volumus eam id. Dicant consectetuer consequuntur et vim, ad sed saepe impedit. Vim ei error tibique. Vitae admodum est eu, mundi eligendi evertitur an vix. Pri doming dicunt repudiandae an, debitis inimicus has no.\n" +
+                "Vidisse torquatos ius te, his ei nibh ornatus moderatius. Eu qui aperiam omittam albucius, at pro vivendo scriptorem. Has natum volumus suavitate eu, mazim consulatu imperdiet an nam. Id mei idque aliquid, ad cetero suavitate quo. Vel soluta ridens invenire id.";
+
+            IndexToObject();
         }
 
         // Deserialization constructor.
@@ -28,6 +59,7 @@ namespace BBSLib
             GammaIndex = (int) info.GetValue("GammaIndex", typeof (int));
             MixerIndex = (int) info.GetValue("MixerIndex", typeof (int));
             PoliticIndex = (int) info.GetValue("PoliticIndex", typeof (int));
+            ZipperIndex = (int) info.GetValue("ZipperIndex", typeof (int));
 
             Alpha = (int) info.GetValue("Alpha", typeof (int));
             ExpandSize = (int) info.GetValue("ExpandSize", typeof (int));
@@ -35,9 +67,10 @@ namespace BBSLib
             EccDataSize = (int) info.GetValue("EccDataSize", typeof (int));
             FilterStep = (int) info.GetValue("FilterStep", typeof (int));
 
-            ExtractBarcode = (bool) info.GetValue("ExtractBarcode", typeof (bool));
-            AutoResize = (bool) info.GetValue("AutoResize", typeof (bool));
+            DhtMode = (bool) info.GetValue("DhtMode", typeof (bool));
             AutoAlpha = (bool) info.GetValue("AutoAlpha", typeof (bool));
+            AutoResize = (bool) info.GetValue("AutoResize", typeof (bool));
+            ExtractBarcode = (bool) info.GetValue("ExtractBarcode", typeof (bool));
             MaximumGamma = (bool) info.GetValue("MaximumGamma", typeof (bool));
 
             Key = (string) info.GetValue("Key", typeof (string));
@@ -75,6 +108,10 @@ namespace BBSLib
         [Category(@"Политика заполения лишних пикселей")]
         public object PoliticComboBoxItem { get; set; }
 
+        [Description(@"Алгоритм арифметики сложения/вычитания")]
+        [Category(@"Алгоритмы")]
+        public object ZipperComboBoxItem { get; set; }
+
         #endregion
 
         /// <summary>
@@ -83,6 +120,14 @@ namespace BBSLib
         [Description(@"Глубина погружения")]
         [Category(@"Значения")]
         public int Alpha { get; set; }
+
+        /// <summary>
+        ///     Алгоритм арифметики сложения/вычитания
+        /// </summary>
+        [Browsable(false)]
+        [Description(@"Алгоритм арифметики сложения/вычитания")]
+        [Category(@"Алгоритмы")]
+        public int ZipperIndex { get; set; }
 
         /// <summary>
         ///     Алгоритм компрессии
@@ -185,6 +230,13 @@ namespace BBSLib
         public bool AutoAlpha { get; set; }
 
         /// <summary>
+        ///     Использовать DHT образ как контейнер данных
+        /// </summary>
+        [Description(@"Использовать DHT образ как контейнер данных")]
+        [Category(@"Значения")]
+        public bool DhtMode { get; set; }
+
+        /// <summary>
         ///     Использовать псевдослучайную последовательность максимальной длины
         ///     То есть каждому биту данных будет соответствовать своя псевдослучайная последовательность
         /// </summary>
@@ -218,11 +270,18 @@ namespace BBSLib
 
         #endregion
 
+        /// <summary>
+        ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public void Dispose()
+        {
+        }
+
         // Serialization function.
         public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
         {
             ObjectToIndex();
-            //You can use any custom name for your name-value pair. But make sure you
+            // You can use any custom name for your name-value pair. But make sure you
             // read the values with the same name. For ex:- If you write EmpId as "EmployeeId"
             // then you should read the same with "EmployeeId"
             info.AddValue("ArchiverIndex", ArchiverIndex);
@@ -231,6 +290,7 @@ namespace BBSLib
             info.AddValue("GammaIndex", GammaIndex);
             info.AddValue("MixerIndex", MixerIndex);
             info.AddValue("PoliticIndex", PoliticIndex);
+            info.AddValue("ZipperIndex", ZipperIndex);
 
             info.AddValue("Alpha", Alpha);
             info.AddValue("ExpandSize", ExpandSize);
@@ -242,6 +302,7 @@ namespace BBSLib
             info.AddValue("ExtractBarcode", ExtractBarcode);
             info.AddValue("AutoResize", AutoResize);
             info.AddValue("AutoAlpha", AutoAlpha);
+            info.AddValue("DhtMode", DhtMode);
 
             info.AddValue("Key", Key);
             info.AddValue("PoliticText", PoliticText);
@@ -256,6 +317,7 @@ namespace BBSLib
             sb.AppendLine(string.Format("EccIndex {0}", EccIndex));
             sb.AppendLine(string.Format("MixerIndex {0}", MixerIndex));
             sb.AppendLine(string.Format("PoliticIndex {0}", PoliticIndex));
+            sb.AppendLine(string.Format("ZipperIndex {0}", ZipperIndex));
 
             sb.AppendLine(string.Format("Alpha {0}", Alpha));
             sb.AppendLine(string.Format("ExpandSize {0}", ExpandSize));
@@ -263,9 +325,10 @@ namespace BBSLib
             sb.AppendLine(string.Format("EccDataSize {0}", EccDataSize));
             sb.AppendLine(string.Format("FilterStep {0}", FilterStep));
 
-            sb.AppendLine(string.Format("ExtractBarcode {0}", ExtractBarcode));
-            sb.AppendLine(string.Format("AutoResize {0}", AutoResize));
+            sb.AppendLine(string.Format("DhtMode {0}", DhtMode));
             sb.AppendLine(string.Format("AutoAlpha {0}", AutoAlpha));
+            sb.AppendLine(string.Format("AutoResize {0}", AutoResize));
+            sb.AppendLine(string.Format("ExtractBarcode {0}", ExtractBarcode));
             sb.AppendLine(string.Format("MaximumGamma {0}", MaximumGamma));
 
             sb.AppendLine(string.Format("Key {0}", Key));
@@ -284,6 +347,7 @@ namespace BBSLib
             ArchiverComboBoxItem = Archiver.ComboBoxItems[ArchiverIndex];
             PoliticComboBoxItem = Politic.ComboBoxItems[PoliticIndex];
             BarcodeComboBoxItem = Barcode.ComboBoxItems[BarcodeIndex];
+            ZipperComboBoxItem = Zipper.ComboBoxItems[ZipperIndex];
         }
 
         /// <summary>
@@ -297,6 +361,7 @@ namespace BBSLib
             ArchiverIndex = Array.IndexOf(Archiver.ComboBoxItems, ArchiverComboBoxItem);
             PoliticIndex = Array.IndexOf(Politic.ComboBoxItems, PoliticComboBoxItem);
             BarcodeIndex = Array.IndexOf(Barcode.ComboBoxItems, BarcodeComboBoxItem);
+            ZipperIndex = Array.IndexOf(Zipper.ComboBoxItems, ZipperComboBoxItem);
         }
     }
 }

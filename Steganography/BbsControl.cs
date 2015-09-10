@@ -57,41 +57,16 @@ namespace Steganography
             repositoryItemComboBoxMixer.Items.AddRange(Mixer.ComboBoxItems);
             repositoryItemComboBoxPolitic.Items.AddRange(Politic.ComboBoxItems);
             repositoryItemComboBoxBarcode.Items.AddRange(Barcode.ComboBoxItems);
+
             try
             {
                 Debug.WriteLine("Reading Default Options Information");
                 using (Stream stream = File.Open(DefaultOptionsFileName, FileMode.Open))
                     _bbsOptions = (BbsOptions) new BinaryFormatter().Deserialize(stream);
+                _bbsOptions.IndexToObject();
             }
             catch (Exception)
             {
-                _bbsOptions.PoliticIndex = 0;
-                _bbsOptions.EccIndex = 1;
-                _bbsOptions.GammaIndex = 1;
-                _bbsOptions.MixerIndex = 1;
-                _bbsOptions.ArchiverIndex = 1;
-                _bbsOptions.BarcodeIndex = 1;
-
-                _bbsOptions.EccCodeSize = 255;
-                _bbsOptions.EccDataSize = 224;
-                _bbsOptions.ExpandSize = 63;
-                _bbsOptions.Alpha = 10;
-                _bbsOptions.FilterStep = 10;
-
-                _bbsOptions.AutoResize = true;
-                _bbsOptions.AutoAlpha = true;
-                _bbsOptions.ExtractBarcode = true;
-                _bbsOptions.MaximumGamma = true;
-
-                _bbsOptions.Key = "WELCOME";
-                _bbsOptions.PoliticText =
-                    "Lorem ipsum dolor sit amet, his ea quod tation, ne sit mazim concludaturque, graece tincidunt pro ei. Vero diceret iracundia pro ea, ne eripuit mandamus mea, an usu nisl liber theophrastus. Partem mollis nostrud eam no. Duis partiendo no pro. Cu eum quot luptatum probatus. Ex per labitur incorrupte inciderint, sit sint nonumy melius ea.\n" +
-                    "Tollit soleat torquatos qui eu. Cu mutat debitis legendos per. Nemore partiendo ne mei. At ridens eruditi efficiantur his.\n" +
-                    "Petentium abhorreant definitiones mea ex. Dolore necessitatibus ad vim. No agam ubique efficiendi qui, has at dico dissentiet. Cu sed dicam omnesque, oratio ridens eum ne. Ea adolescens definiebas mel, cum eu debitis veritus. Mei purto essent cu.\n" +
-                    "Perfecto complectitur no vel, ex oblique offendit quo. Ad eos viris scripta postulant. Dolorem volumus eam id. Dicant consectetuer consequuntur et vim, ad sed saepe impedit. Vim ei error tibique. Vitae admodum est eu, mundi eligendi evertitur an vix. Pri doming dicunt repudiandae an, debitis inimicus has no.\n" +
-                    "Vidisse torquatos ius te, his ei nibh ornatus moderatius. Eu qui aperiam omittam albucius, at pro vivendo scriptorem. Has natum volumus suavitate eu, mazim consulatu imperdiet an nam. Id mei idque aliquid, ad cetero suavitate quo. Vel soluta ridens invenire id.";
-
-                _bbsOptions.IndexToObject();
             }
 
             _sampleBitmap = _bbsOptions.SampleBitmap;
@@ -106,7 +81,6 @@ namespace Steganography
                 new DefaultEditor(typeof (int), repositoryItemSpinEditNumber),
                 new DefaultEditor(typeof (string), repositoryItemTextEditString)
             });
-
             propertyGridControlPack.RepositoryItems.AddRange(new RepositoryItem[]
             {
                 repositoryItemComboBoxBarcode,
@@ -147,7 +121,6 @@ namespace Steganography
             BarcodeComboBoxItem1.Properties.RowEdit = BarcodeComboBoxItem.Properties.RowEdit.Clone() as RepositoryItem;
             PoliticComboBoxItem1.Properties.RowEdit = PoliticComboBoxItem.Properties.RowEdit.Clone() as RepositoryItem;
             PoliticText1.Properties.RowEdit = PoliticText.Properties.RowEdit.Clone() as RepositoryItem;
-
 
             ArchiverComboBoxItem2.Properties.RowEdit = ArchiverComboBoxItem.Properties.RowEdit.Clone() as RepositoryItem;
             EccComboBoxItem2.Properties.RowEdit = EccComboBoxItem.Properties.RowEdit.Clone() as RepositoryItem;

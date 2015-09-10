@@ -11,19 +11,22 @@ using FFTTools;
 namespace BBSLib
 {
     /// <summary>
-    ///      Класс инструментов для работы с изображениями формата BMP.
+    ///      Класс инструментов для работы с BMP изображениями 
     /// Основан на классе изображения из пакета Emgu.CV
     /// </summary>
-    public class CvBitmap : Image<Bgr, Byte>
+    public class CvBitmap : Image<Bgr, Byte>, IDataContainer
     {
-        public CvBitmap(string fileName):base(new Bitmap(fileName))
+        public CvBitmap(string fileName)
+            : base(new Bitmap(fileName))
         {
         }
 
         public CvBitmap(CvBitmap input, StretchBuilder builder, bool autoResize)
-            : base(autoResize?builder.Stretch(input).Data:input.Data)
-         {
-         }
+            : base(autoResize ? builder.Stretch(input).Data : input.Data)
+        {
+        }
+
+
 
         /// <summary>
         ///     Blur bitmap with the Fastest Fourier Transform
@@ -53,13 +56,58 @@ namespace BBSLib
         /// </summary>
         /// <param name="index">Массив индексов пикселей</param>
         /// <param name="colors">Массив извлечённых значений яркостей пикселей</param>
-        public void Select(int[] index, byte[] colors)
+        public void Select(int[] index, double[] colors)
+        {
+            var bytes = new byte[Bytes.Length];
+            Array.Copy(Bytes, 0, bytes, 0, Bytes.Length);
+
+            int j = 0;
+            foreach (int i in index)
+                colors[j++] = bytes[i];
+        }
+
+        /// <summary>
+        /// Замена в изображении, в соответствии с указанными индексами, значений яркостей пикселей 
+        /// </summary>
+        /// <param name="index">Массив индексов пикселей</param>
+        /// <param name="colors">Массив заменяющих значений яркостей пикселей</param>
+        public void Replace(int[] index, double[] colors)
+        {
+            var bytes = new byte[Bytes.Length];
+            Array.Copy(Bytes, 0, bytes, 0, Bytes.Length);
+            int j = 0;
+            foreach (int i in index)
+                bytes[i] = (byte)Math.Max(0, Math.Min(colors[j++], 255));
+            Buffer.BlockCopy(bytes, 0, Data, 0, Data.Length);
+        }
+
+        /// <summary>
+        /// Вычисление статистических характеристик изображения
+        /// </summary>
+        /// <param name="average">Средняя яркость пикселей</param>
+        /// <param name="delta">Дисперсия яркости пикселей</param>
+        public void AverageAndDelta(out double average, out double delta)
         {
             byte[] bytes = Bytes;
+            average = bytes.Average(x => (double)x);
+            delta = Math.Sqrt(bytes.Average(x => (double)x * x) - average * average);
+        }
+
+        /// <summary>
+        /// Извлечение из изображения значений яркостей пикселей, в соответствии с указанными индексами
+        /// </summary>
+        /// <param name="index">Массив индексов пикселей</param>
+        /// <param name="colors">Массив извлечённых значений яркостей пикселей</param>
+        public void Select(int[] index, byte[] colors)
+        {
+            var bytes = new byte[Bytes.Length];
+            Array.Copy(Bytes, 0, bytes, 0, Bytes.Length);
+
             using (var stream = new MemoryStream(colors))
                 foreach (int i in index)
                     stream.WriteByte(bytes[i]);
         }
+
         /// <summary>
         /// Замена в изображении, в соответствии с указанными индексами, значений яркостей пикселей 
         /// </summary>
@@ -67,13 +115,13 @@ namespace BBSLib
         /// <param name="colors">Массив заменяющих значений яркостей пикселей</param>
         public void Replace(int[] index, byte[] colors)
         {
-            byte[, ,] data = Data;
-            var array = new byte[data.Length];
-            Buffer.BlockCopy(data, 0, array, 0, data.Length);
+            var bytes = new byte[Bytes.Length];
+            Array.Copy(Bytes, 0, bytes, 0, Bytes.Length);
+
             using (var stream = new MemoryStream(colors))
                 foreach (int i in index)
-                    array[i] = (byte)stream.ReadByte();
-            Buffer.BlockCopy(array, 0, data, 0, data.Length);
+                    bytes[i] = (byte)stream.ReadByte();
+            Buffer.BlockCopy(bytes, 0, Data, 0, Data.Length);
         }
 
         /// <summary>
@@ -94,7 +142,7 @@ namespace BBSLib
         {
             Size size = barcodeBitmap.Size;
             var pt = new Point(Size - new Size(size.Width * 3 / 2, size.Height * 3 / 2));
-            ROI = new Rectangle(pt,size);
+            ROI = new Rectangle(pt, size);
             barcodeBitmap.CopyTo(this);
             ROI = Rectangle.Empty;
         }
@@ -110,18 +158,6 @@ namespace BBSLib
             sb.AppendLine(string.Format("Average {0}", average));
             sb.AppendLine(string.Format("Delta {0}", delta));
             return sb.ToString();
-        }
-
-        /// <summary>
-        /// Вычисление статистических характеристик изображения
-        /// </summary>
-        /// <param name="average">Средняя яркость пикселей</param>
-        /// <param name="delta">Дисперсия яркости пикселей</param>
-        public void AverageAndDelta(out double average, out double delta)
-        {
-            byte[] bytes = Bytes;
-            average = bytes.Average(x => (double)x);
-            delta = Math.Sqrt(bytes.Average(x => (double)x * x) - average * average);
         }
     }
 }
