@@ -152,7 +152,7 @@
     <Compile Include="ComboBoxItem.cs" />
     <Compile Include="Cryptography\Arcfour.cs" />
     <Compile Include="CvBitmap.cs" />
-    <Compile Include="DhtOfBitmap.cs" />
+    <Compile Include="HartleyOfBitmap.cs" />
     <Compile Include="IDataContainer.cs" />
     <Compile Include="Options\Archiver.cs" />
     <Compile Include="Options\Barcode.cs" />

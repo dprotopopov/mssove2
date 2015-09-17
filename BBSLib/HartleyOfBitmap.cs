@@ -11,7 +11,7 @@ namespace BBSLib
     /// <summary>
     ///     Класс инструментов для работы с DHT изображений
     /// </summary>
-    public class DhtOfBitmap : IDataContainer
+    public class HartleyOfBitmap : IDataContainer
     {
         private static readonly Mutex FFTW_Lock = new Mutex();
         private readonly CvBitmap _cvBitmap;
@@ -21,7 +21,7 @@ namespace BBSLib
         private readonly IntPtr _fftwplan; // pointer to the FFTW plan object
         private readonly GCHandle _gcHandle;
 
-        public DhtOfBitmap(CvBitmap cvBitmap)
+        public HartleyOfBitmap(CvBitmap cvBitmap)
         {
             int n0 = cvBitmap.Data.GetLength(0);
             int n1 = cvBitmap.Data.GetLength(1);

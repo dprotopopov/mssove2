@@ -190,11 +190,11 @@ namespace BBSLib
                 using (var builder = new Gamma(gammaIndex, key))
                     builder.GetBytes(gamma);
 
-                IDataContainer bitmapDataContainer = dhtMode ? new DhtOfBitmap(bitmap) : (IDataContainer) bitmap;
+                IDataContainer bitmapDataContainer = dhtMode ? new HartleyOfBitmap(bitmap) : (IDataContainer) bitmap;
                 bitmapDataContainer.Select(index, colors);
 
                 IDataContainer medianDataContainer = dhtMode
-                    ? new DhtOfBitmap(median)
+                    ? new HartleyOfBitmap(median)
                     : (IDataContainer) median;
                 medianDataContainer.Select(index, medianColors);
 
@@ -326,10 +326,10 @@ namespace BBSLib
             using (var builder = new Gamma(gammaIndex, key))
                 builder.GetBytes(gamma);
 
-            IDataContainer bitmapDataContainer = dhtMode ? new DhtOfBitmap(bitmap) : (IDataContainer) bitmap;
+            IDataContainer bitmapDataContainer = dhtMode ? new HartleyOfBitmap(bitmap) : (IDataContainer) bitmap;
             bitmapDataContainer.Select(index, colors);
 
-            IDataContainer medianDataContainer = dhtMode ? new DhtOfBitmap(median) : (IDataContainer) median;
+            IDataContainer medianDataContainer = dhtMode ? new HartleyOfBitmap(median) : (IDataContainer) median;
             medianDataContainer.Select(index, medianColors);
 
             Debug.Assert(dhtMode || colors.All(x => x >= 0));
