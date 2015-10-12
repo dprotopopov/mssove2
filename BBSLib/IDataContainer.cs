@@ -19,7 +19,7 @@ namespace BBSLib
         /// </summary>
         /// <param name="index">Массив индексов пикселей</param>
         /// <param name="colors">Массив извлечённых значений яркостей пикселей</param>
-       void Replace(int[] index, double[] colors);
+        void Replace(int[] index, double[] colors);
 
         /// <summary>
         ///     Вычисление статистических характеристик контейнера

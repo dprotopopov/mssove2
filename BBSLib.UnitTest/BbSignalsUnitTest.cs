@@ -59,12 +59,12 @@ namespace BBSLib.UnitTest
                 double trueGamma = BitCounter.Count(gamma);
 
                 // Вычисление количества нулей в исходных данных и псевдослучайной последовательности
-                double falseData = (long) input.Length*BitsPerByte - trueData;
-                double falseGamma = (long) gamma.Length*BitsPerByte - trueGamma;
+                var falseData = (long) input.Length*BitsPerByte - trueData;
+                var falseGamma = (long) gamma.Length*BitsPerByte - trueGamma;
 
                 // Вычисление оценки количества единиц и нулей при смешивании исходных данных и псевдослучайной последовательности
-                double trueCount = trueGamma*falseData + falseGamma*trueData;
-                double falseCount = trueGamma*trueData + falseGamma*falseData;
+                var trueCount = trueGamma*falseData + falseGamma*trueData;
+                var falseCount = trueGamma*trueData + falseGamma*falseData;
                 Console.WriteLine("p0 = {0} p1 = {1}", trueCount/(trueCount + falseCount),
                     falseCount/(trueCount + falseCount));
 
@@ -75,8 +75,8 @@ namespace BBSLib.UnitTest
                 //////////////////////////////////////////////////
                 buffer = buffer.Select(x => x + 1).ToArray();
 
-                double e1 = buffer.Average();
-                double e2 = buffer.Average(x => x*x);
+                var e1 = buffer.Average();
+                var e2 = buffer.Average(x => x*x);
                 betta = e1;
                 alpha = Math.Sqrt(e2 - e1*e1);
                 Console.WriteLine("alpha = {0} betta = {1}", alpha, betta);

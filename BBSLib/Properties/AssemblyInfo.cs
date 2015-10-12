@@ -1,15 +1,16 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Resources;
 
 // Управление общими сведениями о сборке осуществляется с помощью 
 // набора атрибутов. Измените значения этих атрибутов, чтобы изменить сведения,
 // связанные со сборкой.
 
-[assembly: AssemblyTitle("BBSLib")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Метод широкополосного сигнала (библиотека классов)")]
+[assembly: AssemblyDescription("В соответствии с методом широкополосного сигнала, каждый бит данных кодируется последовательностью изменённых яркостей пикселей в соответствии со значениями бит псевдослучайной последовательности.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("BBSLib")]
+[assembly: AssemblyCompany("Технологии информационной безопасности 21 века.")]
+[assembly: AssemblyProduct("Метод широкополосного сигнала (библиотека классов)")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -37,3 +38,4 @@ using System.Runtime.InteropServices;
 
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: NeutralResourcesLanguageAttribute("ru")]

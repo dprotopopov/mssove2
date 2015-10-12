@@ -23,9 +23,9 @@ namespace BBSLib
 
         public HartleyOfBitmap(CvBitmap cvBitmap)
         {
-            int n0 = cvBitmap.Data.GetLength(0);
-            int n1 = cvBitmap.Data.GetLength(1);
-            int n2 = cvBitmap.Data.GetLength(2);
+            var n0 = cvBitmap.Data.GetLength(0);
+            var n1 = cvBitmap.Data.GetLength(1);
+            var n2 = cvBitmap.Data.GetLength(2);
 
             _cvBitmap = cvBitmap;
             _data = new double[cvBitmap.Length];
@@ -53,8 +53,8 @@ namespace BBSLib
             var bytes = new byte[_cvBitmap.Bytes.Length];
             Array.Copy(_cvBitmap.Bytes, 0, bytes, 0, _cvBitmap.Bytes.Length);
 
-            int j = 0;
-            foreach (byte ch in bytes)
+            var j = 0;
+            foreach (var ch in bytes)
                 _data[j++] = ch;
 
             Debug.Assert(_data.All(x => x >= 0));
@@ -64,7 +64,7 @@ namespace BBSLib
             FFTW_Lock.ReleaseMutex();
 
             j = 0;
-            foreach (int i in index)
+            foreach (var i in index)
                 colors[j++] = _data[i]/_divider;
         }
 
@@ -78,8 +78,8 @@ namespace BBSLib
             var bytes = new byte[_cvBitmap.Bytes.Length];
             Array.Copy(_cvBitmap.Bytes, 0, bytes, 0, _cvBitmap.Bytes.Length);
 
-            int j = 0;
-            foreach (int i in index)
+            var j = 0;
+            foreach (var i in index)
                 _data[i] = colors[j++];
 
             FFTW_Lock.WaitOne();
@@ -87,7 +87,7 @@ namespace BBSLib
             FFTW_Lock.ReleaseMutex();
 
             j = 0;
-            foreach (double d in _data)
+            foreach (var d in _data)
                 bytes[j++] = (byte) Math.Max(0, Math.Min(Math.Round(d/_divider), 255));
 
             Buffer.BlockCopy(bytes, 0, _cvBitmap.Data, 0, (int) _cvBitmap.Length);

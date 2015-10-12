@@ -28,13 +28,24 @@
 
     <!-- The PageAdornerControl displays the back button and a page title.  -->
     <Layout:PageAdornerControl DataContext="{Binding Group}"
-            d:DataContext="{Binding AllGroups[0], Source={d:DesignInstance Type=data:SampleDataSource, IsDesignTimeCreatable=True}}"
+            d:DataContext="{Binding AllGroups[0], Source={d:DesignInstance IsDesignTimeCreatable=True, Type=data:SampleDataSource}}"
             Header="{Binding Title}"
             Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
         <Grid>
             <!-- Defines the visibility of controls according to the application's state
 (Portrait, Landscape, Snapped and Filled) -->
             <Layout:LayoutAwareDecorator>
+
+                <VisualStateManager.VisualStateGroups>
+                    <!--The DevExpress controls automatically change their layout according to the application's view state.
+                    You can use the code below to perform additional customization actions.-->
+                    <VisualStateGroup x:Name="ApplicationViewStates">
+                        <VisualState x:Name="FullScreenLandscape"/>
+                        <VisualState x:Name="Filled"/>
+                        <VisualState x:Name="FullScreenPortrait"/>
+                        <VisualState x:Name="Snapped"/>
+                    </VisualStateGroup>
+                </VisualStateManager.VisualStateGroups>
 
                 <!-- Horizontal scrolling grid used in most view states -->
                 <Layout:DXGridView
@@ -44,23 +55,23 @@
                     Padding="120 10 10 10"
                     ItemsSource="{Binding Source={StaticResource itemsViewSource}}"
                     ItemTemplate="{StaticResource Standard500x130ItemTemplate}"
-                    ItemNavigationTargetType="ItemDetailPage"
+                    ItemNavigationTargetTypeBinding ="{Binding NavigationTarget}"
                     ItemNavigationTargetParameterBinding="{Binding UniqueId}"
                     SelectionMode="None"
                     IsSwipeEnabled="false"
                     IsItemClickEnabled="True">
-                    <GridView.Header>
+                    <Layout:DXGridView.Header>
                         <StackPanel Width="480" Margin="0,4,14,0">
                             <TextBlock Text="{Binding Subtitle}" Margin="0,0,18,20" Style="{StaticResource SubheaderTextStyle}" MaxHeight="60"/>
-                            <Image Source="{Binding Image}" Height="400" Margin="0,0,18,20" Stretch="UniformToFill" AutomationProperties.Name="{Binding Title}"/>
+                            <Image Source="{Binding Image}" Height="400" Margin="0,0,18,20" AutomationProperties.Name="{Binding Title}"/>
                             <TextBlock Text="{Binding Description}" Margin="0,0,18,0" Style="{StaticResource BodyTextStyle}"/>
                         </StackPanel>
-                    </GridView.Header>
-                    <GridView.ItemContainerStyle>
+                    </Layout:DXGridView.Header>
+                    <Layout:DXGridView.ItemContainerStyle>
                         <Style TargetType="FrameworkElement">
                             <Setter Property="Margin" Value="52,0,0,10"/>
                         </Style>
-                    </GridView.ItemContainerStyle>
+                    </Layout:DXGridView.ItemContainerStyle>
                 </Layout:DXGridView>
 
                 <!-- Vertical scrolling list only used when snapped -->
@@ -77,28 +88,18 @@
                     SelectionMode="None"
                     IsSwipeEnabled="false"
                     IsItemClickEnabled="True"
-                    ItemNavigationTargetType="ItemDetailPage"
+                    ItemNavigationTargetTypeBinding ="{Binding NavigationTarget}"
                     ItemNavigationTargetParameterBinding="{Binding UniqueId}">
 
                     <Layout:DXListView.Header>
                         <StackPanel>
                             <TextBlock Text="{Binding Subtitle}" Margin="10,0,18,20" Style="{StaticResource TitleTextStyle}" MaxHeight="60"/>
-                            <Image Source="{Binding Image}" Margin="10,0,18,0" MaxHeight="160" Stretch="UniformToFill" AutomationProperties.Name="{Binding Title}"/>
+                            <Image Source="{Binding Image}" Margin="10,0,18,0" MaxHeight="160" AutomationProperties.Name="{Binding Title}"/>
                             <TextBlock Margin="10,20,18,30" Text="{Binding Description}" Style="{StaticResource BodyTextStyle}"/>
                         </StackPanel>
                     </Layout:DXListView.Header>
                 </Layout:DXListView>
 
-                <VisualStateManager.VisualStateGroups>
-                    <!--The DevExpress controls automatically change their layout according to the application's view state.
-                    You can use the code below to perform additional customization actions.-->
-                    <VisualStateGroup x:Name="ApplicationViewStates">
-                        <VisualState x:Name="FullScreenLandscape"/>
-                        <VisualState x:Name="Filled"/>
-                        <VisualState x:Name="FullScreenPortrait"/>
-                        <VisualState x:Name="Snapped"/>
-                    </VisualStateGroup>
-                </VisualStateManager.VisualStateGroups>
             </Layout:LayoutAwareDecorator>
         </Grid>
     </Layout:PageAdornerControl>

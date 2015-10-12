@@ -1,32 +1,30 @@
 ﻿using BBSGridApp.DataModel;
 using DevExpress.Core;
-using DevExpress.UI.Xaml.Layout;
+using BindableBase = DevExpress.Mvvm.BindableBase;
 
 namespace BBSGridApp.ViewModel
 {
     //A View Model for an ItemDetailPage
-    public class ItemDetailViewModel : DevExpress.Mvvm.BindableBase, ISupportSaveLoadState
+    public sealed class ItemDetailViewModel : BindableBase, ISupportSaveLoadState
     {
-        SampleDataItem selectedItem;
-        SampleDataGroup group;
-        public ItemDetailViewModel() { }
+        private SampleDataGroup _flatGroup = SampleDataSource.GetFlatGroup();
+        private SampleDataItem selectedItem;
 
         public SampleDataItem SelectedItem
         {
             get { return selectedItem; }
-            set { SetProperty<SampleDataItem>(ref selectedItem, value); }
+            set { SetProperty(ref selectedItem, value); }
         }
 
-        public SampleDataGroup Group
+        public SampleDataGroup FlatGroup
         {
-            get { return group; }
-            private set { SetProperty<SampleDataGroup>(ref group, value); }
+            get { return _flatGroup; }
+            private set { SetProperty(ref _flatGroup, value); }
         }
 
         void ISupportSaveLoadState.LoadState(object navigationParameter, PageStateStorage pageState)
         {
-            SampleDataItem item = SampleDataSource.GetItem(pageState.GetParameter("SelectedItem", (string)navigationParameter));
-            Group = item.Group;
+            var item = SampleDataSource.GetItem(pageState.GetParameter("SelectedItem", (string) navigationParameter));
             SelectedItem = item;
         }
 

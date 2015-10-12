@@ -27,7 +27,7 @@ namespace BBSLib.Options
             _bitmap = bitmap;
             _politicsText = politicsText;
             _expandSize = expandSize;
-            _politicId = ((ComboBoxItem<PoliticId>)ComboBoxItems[itemIndex]).HiddenValue;
+            _politicId = ((ComboBoxItem<PoliticId>) ComboBoxItems[itemIndex]).HiddenValue;
         }
 
         /// <summary>
@@ -38,8 +38,8 @@ namespace BBSLib.Options
             get
             {
                 if (_comboBoxItems != null) return _comboBoxItems;
-                var list = new List<object>(from object item in Enum.GetValues(typeof(PoliticId))
-                                            select new ComboBoxItem<PoliticId>((PoliticId)item, item.ToString()));
+                var list = new List<object>(from object item in Enum.GetValues(typeof (PoliticId))
+                    select new ComboBoxItem<PoliticId>((PoliticId) item, item.ToString()));
                 return _comboBoxItems = list.ToArray();
             }
         }
@@ -58,7 +58,7 @@ namespace BBSLib.Options
         /// <param name="output">Выходной поток данных</param>
         public void Forward(Stream input, Stream output)
         {
-            var length = (int)(_bitmap.Length / BitsPerByte / _expandSize - input.Length);
+            var length = (int) (_bitmap.Length/BitsPerByte/_expandSize - input.Length);
             input.CopyTo(output);
             switch (_politicId)
             {
@@ -76,8 +76,8 @@ namespace BBSLib.Options
                     break;
                 case PoliticId.FakeText:
                     if (string.IsNullOrWhiteSpace(_politicsText)) throw new Exception("Отсутствует заполняющий текст");
-                    byte[] buffer = Encoding.Default.GetBytes(_politicsText);
-                    for (int i = 0; i < length; i += buffer.Length)
+                    var buffer = Encoding.GetEncoding(0).GetBytes(_politicsText);
+                    for (var i = 0; i < length; i += buffer.Length)
                         output.Write(buffer, 0, Math.Min(buffer.Length, length - i));
                     break;
                 default:

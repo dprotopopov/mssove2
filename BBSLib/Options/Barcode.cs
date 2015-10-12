@@ -18,6 +18,7 @@ namespace BBSLib.Options
     /// </summary>
     public class Barcode : IDisposable
     {
+        private const int BitsPerByte = 8; // Количество битов в байте
         private static object[] _comboBoxItems; // Список значений для комбо-бокса
         private readonly int _barcodeId; // Идентификатор выбранного алгоритма формирования баркода
         private Bitmap _bitmap; // Изображение содержащее баркод
@@ -66,6 +67,136 @@ namespace BBSLib.Options
                 return _comboBoxItems = list.ToArray();
             }
         }
+
+        /// <summary>
+        ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public void Dispose()
+        {
+        }
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine(string.Format("MaximumGamma {0}", MaximumGamma));
+            sb.AppendLine(string.Format("DhtMode {0}", DhtMode));
+            sb.AppendLine(string.Format("ExpandSize {0}", ExpandSize));
+            sb.AppendLine(string.Format("EccCodeSize {0}", EccCodeSize));
+            sb.AppendLine(string.Format("EccDataSize {0}", EccDataSize));
+            sb.AppendLine(string.Format("Key {0}", Key));
+            sb.AppendLine(string.Format("EccIndex {0}", EccIndex));
+            sb.AppendLine(string.Format("MixerIndex {0}", MixerIndex));
+            sb.AppendLine(string.Format("GammaIndex {0}", GammaIndex));
+            sb.AppendLine(string.Format("ArchiverIndex {0}", ArchiverIndex));
+            return sb.ToString();
+        }
+
+        /// <summary>
+        ///     Формирования баркода выбранным алгоритмом
+        ///     Кодируемые и декодированные данные передаются через аттрибуты класса
+        /// </summary>
+        public Bitmap Encode()
+        {
+            var flags = new byte[1];
+            var bitArray = new BitArray(BitsPerByte*flags.Length);
+            bitArray[0] = DhtMode;
+            bitArray[1] = AutoAlpha;
+            bitArray[2] = MaximumGamma;
+            bitArray.CopyTo(flags, 0);
+
+            var sizeOfBinaryData = Marshal.SizeOf(typeof (BinaryData));
+            var binaryData = new BinaryData
+            {
+                ArchiverIndex = (byte) ArchiverIndex,
+                MixerIndex = (byte) MixerIndex,
+                GammaIndex = (byte) GammaIndex,
+                EccIndex = (byte) EccIndex,
+                ExpandSize = (byte) ExpandSize,
+                EccCodeSize = (byte) EccCodeSize,
+                EccDataSize = (byte) EccDataSize,
+                Flags = flags[0]
+            };
+            var keyBytes = Encoding.GetEncoding(0).GetBytes(Key);
+            var binaryBytes = new byte[sizeOfBinaryData];
+            var ptr = Marshal.AllocHGlobal(binaryBytes.Length);
+            Marshal.StructureToPtr(binaryData, ptr, true);
+            Marshal.Copy(ptr, binaryBytes, 0x0, binaryBytes.Length);
+            Marshal.FreeHGlobal(ptr);
+            var text = Convert.ToBase64String(binaryBytes.Concat(keyBytes).ToArray());
+            switch (_barcodeId)
+            {
+                case 0:
+                    throw new ArgumentNullException();
+                default:
+                    var writer = new BarcodeWriter
+                    {
+                        Format = (BarcodeFormat) _barcodeId
+                    };
+                    var result = writer.Write(text);
+                    using (var image = new Image<Gray, byte>(result))
+                        return _bitmap = image.Bitmap;
+            }
+        }
+
+        /// <summary>
+        ///     Декодирование баркода
+        ///     Кодируемые и декодированные данные передаются через аттрибуты класса
+        /// </summary>
+        public string Decode()
+        {
+            using (var image = new Image<Gray, byte>(_bitmap))
+            {
+                using (var bw = image.Convert(b => (byte) ((b < 128) ? 0 : 255)))
+                {
+                    var reader = new BarcodeReader();
+                    var result = reader.Decode(bw.Bitmap);
+                    if (result == null) throw new Exception("Баркод не распознан");
+                    var bytes = Convert.FromBase64String(result.Text);
+                    var sizeOfBinaryData = Marshal.SizeOf(typeof (BinaryData));
+                    var handle = GCHandle.Alloc(bytes, GCHandleType.Pinned);
+                    var binaryData =
+                        (BinaryData) Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof (BinaryData));
+                    handle.Free();
+                    ArchiverIndex = binaryData.ArchiverIndex;
+                    GammaIndex = binaryData.GammaIndex;
+                    MixerIndex = binaryData.MixerIndex;
+                    EccIndex = binaryData.EccIndex;
+                    ExpandSize = binaryData.ExpandSize;
+                    EccCodeSize = binaryData.EccCodeSize;
+                    EccDataSize = binaryData.EccDataSize;
+
+                    var flags = new byte[1];
+                    flags[0] = binaryData.Flags;
+
+                    var bitArray = new BitArray(flags);
+                    DhtMode = bitArray[0];
+                    AutoAlpha = bitArray[1];
+                    MaximumGamma = bitArray[2];
+
+                    Key =
+                        Encoding.GetEncoding(0)
+                            .GetString(
+                                bytes.ToList().GetRange(sizeOfBinaryData, bytes.Length - sizeOfBinaryData).ToArray());
+                    return ToString();
+                }
+            }
+        }
+
+        /// <summary>
+        ///     Структура для упаковки в баркоде двоичных данных
+        /// </summary>
+        [StructLayout(LayoutKind.Explicit)]
+        private struct BinaryData
+        {
+            [FieldOffset(0)] public byte ArchiverIndex;
+            [FieldOffset(1)] public byte MixerIndex;
+            [FieldOffset(2)] public byte GammaIndex;
+            [FieldOffset(3)] public byte EccIndex;
+            [FieldOffset(4)] public byte ExpandSize;
+            [FieldOffset(5)] public byte EccCodeSize;
+            [FieldOffset(6)] public byte EccDataSize;
+            [FieldOffset(7)] public byte Flags;
+        };
 
         #region Кодируемые и декодированные данные
 
@@ -147,133 +278,5 @@ namespace BBSLib.Options
         public string Key { get; set; }
 
         #endregion
-
-        /// <summary>
-        ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-        /// </summary>
-        public void Dispose()
-        {
-        }
-
-        public override string ToString()
-        {
-            var sb = new StringBuilder();
-            sb.AppendLine(string.Format("MaximumGamma {0}", MaximumGamma));
-            sb.AppendLine(string.Format("DhtMode {0}", DhtMode));
-            sb.AppendLine(string.Format("ExpandSize {0}", ExpandSize));
-            sb.AppendLine(string.Format("EccCodeSize {0}", EccCodeSize));
-            sb.AppendLine(string.Format("EccDataSize {0}", EccDataSize));
-            sb.AppendLine(string.Format("Key {0}", Key));
-            sb.AppendLine(string.Format("EccIndex {0}", EccIndex));
-            sb.AppendLine(string.Format("MixerIndex {0}", MixerIndex));
-            sb.AppendLine(string.Format("GammaIndex {0}", GammaIndex));
-            sb.AppendLine(string.Format("ArchiverIndex {0}", ArchiverIndex));
-            return sb.ToString();
-        }
-        private const int BitsPerByte = 8; // Количество битов в байте
-
-        /// <summary>
-        ///     Формирования баркода выбранным алгоритмом
-        ///     Кодируемые и декодированные данные передаются через аттрибуты класса
-        /// </summary>
-        public Bitmap Encode()
-        {
-            var flags = new byte[1];
-            var bitArray = new BitArray(BitsPerByte * flags.Length);
-            bitArray[0] = DhtMode;
-            bitArray[1] = AutoAlpha;
-            bitArray[2] = MaximumGamma;
-            bitArray.CopyTo(flags, 0);
-
-            int sizeOfBinaryData = Marshal.SizeOf(typeof(BinaryData));
-            var binaryData = new BinaryData
-            {
-                ArchiverIndex = (byte) ArchiverIndex,
-                MixerIndex = (byte) MixerIndex,
-                GammaIndex = (byte) GammaIndex,
-                EccIndex = (byte) EccIndex,
-                ExpandSize = (byte) ExpandSize,
-                EccCodeSize = (byte) EccCodeSize,
-                EccDataSize = (byte) EccDataSize,
-                Flags = flags[0],
-            };
-            byte[] keyBytes = Encoding.Default.GetBytes(Key);
-            var binaryBytes = new byte[sizeOfBinaryData];
-            IntPtr ptr = Marshal.AllocHGlobal(binaryBytes.Length);
-            Marshal.StructureToPtr(binaryData, ptr, true);
-            Marshal.Copy(ptr, binaryBytes, 0x0, binaryBytes.Length);
-            Marshal.FreeHGlobal(ptr);
-            string text = Convert.ToBase64String(binaryBytes.Concat(keyBytes).ToArray());
-            switch (_barcodeId)
-            {
-                case 0:
-                    throw new ArgumentNullException();
-                default:
-                    var writer = new BarcodeWriter
-                    {
-                        Format = (BarcodeFormat) _barcodeId,
-                    };
-                    Bitmap result = writer.Write(text);
-                    using (var image = new Image<Gray, Byte>(result))
-                        return _bitmap = image.Bitmap;
-            }
-        }
-
-        /// <summary>
-        ///     Декодирование баркода
-        ///     Кодируемые и декодированные данные передаются через аттрибуты класса
-        /// </summary>
-        public string Decode()
-        {
-            using (var image = new Image<Gray, Byte>(_bitmap))
-            {
-                using (Image<Gray, byte> bw = image.Convert(b => (byte) ((b < 128) ? 0 : 255)))
-                {
-                    var reader = new BarcodeReader();
-                    Result result = reader.Decode(bw.Bitmap);
-                    if (result == null) throw new Exception("Баркод не распознан");
-                    byte[] bytes = Convert.FromBase64String(result.Text);
-                    int sizeOfBinaryData = Marshal.SizeOf(typeof(BinaryData));
-                    GCHandle handle = GCHandle.Alloc(bytes, GCHandleType.Pinned);
-                    var binaryData =
-                        (BinaryData) Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof (BinaryData));
-                    handle.Free();
-                    ArchiverIndex = binaryData.ArchiverIndex;
-                    GammaIndex = binaryData.GammaIndex;
-                    MixerIndex = binaryData.MixerIndex;
-                    EccIndex = binaryData.EccIndex;
-                    ExpandSize = binaryData.ExpandSize;
-                    EccCodeSize = binaryData.EccCodeSize;
-                    EccDataSize = binaryData.EccDataSize;
-
-                    var flags = new byte[1];
-                    flags[0] = binaryData.Flags;
-
-                    var bitArray = new BitArray(flags);
-                    DhtMode = bitArray[0];
-                    AutoAlpha = bitArray[1];
-                    MaximumGamma = bitArray[2];
-
-                    Key = Encoding.Default.GetString(bytes.ToList().GetRange(sizeOfBinaryData, bytes.Length - sizeOfBinaryData).ToArray());
-                    return ToString();
-                }
-            }
-        }
-
-        /// <summary>
-        ///     Структура для упаковки в баркоде двоичных данных
-        /// </summary>
-        [StructLayout(LayoutKind.Explicit)]
-        private struct BinaryData
-        {
-            [FieldOffset(0)] public byte ArchiverIndex;
-            [FieldOffset(1)] public byte MixerIndex;
-            [FieldOffset(2)] public byte GammaIndex;
-            [FieldOffset(3)] public byte EccIndex;
-            [FieldOffset(4)] public byte ExpandSize;
-            [FieldOffset(5)] public byte EccCodeSize;
-            [FieldOffset(6)] public byte EccDataSize;
-            [FieldOffset(7)] public byte Flags;
-        };
     }
 }

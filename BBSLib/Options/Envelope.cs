@@ -32,7 +32,7 @@ namespace BBSLib.Options
         {
             var length = new byte[4];
             input.Read(length, 0, length.Length);
-            Int32 count = BitConverter.ToInt32(length, 0) & 0x7FFFFFFF;
+            var count = BitConverter.ToInt32(length, 0) & 0x7FFFFFFF;
             input.CopyTo(output);
             if (output.Length > count)
                 output.SetLength(count);

@@ -15,7 +15,7 @@ namespace BBSLib.Options
         /// <param name="buffer"></param>
         public static void Identity(int[] buffer)
         {
-            int len = buffer.Length;
+            var len = buffer.Length;
             Array.Copy(Enumerable.Range(0, len).ToArray(),buffer,len);
         }
 

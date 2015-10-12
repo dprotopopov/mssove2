@@ -1,6 +1,6 @@
 [submodule "FFTWSharp"]
 	path = FFTWSharp
-	url = https://github.com/tszalay/FFTWSharp.git
+	url = https://github.com/dprotopopov/FFTWSharp.git
 [submodule "FFTTools"]
 	path = FFTTools
 	url = https://github.com/dprotopopov/FFTTools.git

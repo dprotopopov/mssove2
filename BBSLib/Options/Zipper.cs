@@ -49,28 +49,27 @@ namespace BBSLib.Options
         ///     Вызов метода алгоритма компандера
         /// </summary>
         /// <param name="delta">Массив изменений значений яркостей пикселей</param>
-        /// <param name="media"></param>
         public void Compact(double[] delta)
         {
-            int index = 0;
+            var index = 0;
             switch (_zipperId)
             {
                 case ZipperId.Linear:
                     break;
                 case ZipperId.Quadratic:
-                    foreach (double value in delta)
+                    foreach (var value in delta)
                         delta[index++] = _expect +
                                          _sigma*Math.Sign(value - _expect)*
                                          Math.Sqrt(Math.Abs(value - _expect)/_sigma);
                     break;
                 case ZipperId.Cubic:
-                    foreach (double value in delta)
+                    foreach (var value in delta)
                         delta[index++] = _expect +
                                          _sigma*Math.Sign(value - _expect)*
                                          Math.Pow(Math.Abs(value - _expect)/_sigma, 1.0/3);
                     break;
                 case ZipperId.Exponential:
-                    foreach (double value in delta)
+                    foreach (var value in delta)
                         delta[index++] = _expect +
                                          _sigma*Math.Sign(value - _expect)*
                                          Math.Log(1 + (Math.Abs(value - _expect)/_sigma));
@@ -84,28 +83,27 @@ namespace BBSLib.Options
         ///     Вызов метода алгоритма экспандера
         /// </summary>
         /// <param name="delta">Массив изменений значений яркостей пикселей</param>
-        /// <param name="media"></param>
         public void Expand(double[] delta)
         {
-            int index = 0;
+            var index = 0;
             switch (_zipperId)
             {
                 case ZipperId.Linear:
                     break;
                 case ZipperId.Quadratic:
-                    foreach (double value in delta)
+                    foreach (var value in delta)
                         delta[index++] = _expect +
                                          _sigma*Math.Sign(value - _expect)*
                                          Square((value - _expect)/_sigma);
                     break;
                 case ZipperId.Cubic:
-                    foreach (double value in delta)
+                    foreach (var value in delta)
                         delta[index++] = _expect +
                                          _sigma*Math.Sign(value - _expect)*
                                          Math.Pow(Math.Abs(value - _expect)/_sigma, 3);
                     break;
                 case ZipperId.Exponential:
-                    foreach (double value in delta)
+                    foreach (var value in delta)
                         delta[index++] = _expect +
                                          _sigma*Math.Sign(value - _expect)*
                                          (Math.Exp(Math.Abs(value - _expect)/_sigma) - 1.0);
@@ -128,7 +126,7 @@ namespace BBSLib.Options
             Linear,
             Quadratic,
             Cubic,
-            Exponential,
+            Exponential
         };
     }
 }

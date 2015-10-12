@@ -14,7 +14,7 @@ namespace BBSLib
     ///      Класс инструментов для работы с BMP изображениями 
     /// Основан на классе изображения из пакета Emgu.CV
     /// </summary>
-    public class CvBitmap : Image<Bgr, Byte>, IDataContainer
+    public class CvBitmap : Image<Bgr, byte>, IDataContainer
     {
         public CvBitmap(string fileName)
             : base(new Bitmap(fileName))
@@ -25,7 +25,6 @@ namespace BBSLib
             : base(autoResize ? builder.Stretch(input).Data : input.Data)
         {
         }
-
 
 
         /// <summary>
@@ -49,7 +48,7 @@ namespace BBSLib
         /// <summary>
         /// Количество пикселей в изображении
         /// </summary>
-        public long Length { get { return Data.Length; } }
+        public long Length => Data.Length;
 
         /// <summary>
         /// Извлечение из изображения значений яркостей пикселей, в соответствии с указанными индексами
@@ -61,8 +60,8 @@ namespace BBSLib
             var bytes = new byte[Bytes.Length];
             Array.Copy(Bytes, 0, bytes, 0, Bytes.Length);
 
-            int j = 0;
-            foreach (int i in index)
+            var j = 0;
+            foreach (var i in index)
                 colors[j++] = bytes[i];
         }
 
@@ -75,8 +74,8 @@ namespace BBSLib
         {
             var bytes = new byte[Bytes.Length];
             Array.Copy(Bytes, 0, bytes, 0, Bytes.Length);
-            int j = 0;
-            foreach (int i in index)
+            var j = 0;
+            foreach (var i in index)
                 bytes[i] = (byte)Math.Max(0, Math.Min(colors[j++], 255));
             Buffer.BlockCopy(bytes, 0, Data, 0, Data.Length);
         }
@@ -88,7 +87,7 @@ namespace BBSLib
         /// <param name="delta">Дисперсия яркости пикселей</param>
         public void AverageAndDelta(out double average, out double delta)
         {
-            byte[] bytes = Bytes;
+            var bytes = Bytes;
             average = bytes.Average(x => (double)x);
             delta = Math.Sqrt(bytes.Average(x => (double)x * x) - average * average);
         }
@@ -104,7 +103,7 @@ namespace BBSLib
             Array.Copy(Bytes, 0, bytes, 0, Bytes.Length);
 
             using (var stream = new MemoryStream(colors))
-                foreach (int i in index)
+                foreach (var i in index)
                     stream.WriteByte(bytes[i]);
         }
 
@@ -119,7 +118,7 @@ namespace BBSLib
             Array.Copy(Bytes, 0, bytes, 0, Bytes.Length);
 
             using (var stream = new MemoryStream(colors))
-                foreach (int i in index)
+                foreach (var i in index)
                     bytes[i] = (byte)stream.ReadByte();
             Buffer.BlockCopy(bytes, 0, Data, 0, Data.Length);
         }
@@ -133,6 +132,7 @@ namespace BBSLib
         {
             Bitmap.Save(fileName, ImageFormat.Bmp);
         }
+
         /// <summary>
         ///  Размещение дополнительного изображения в правой нижней части.
         /// Используется для внедрения в исходное изображение баркода с настроечными параметрами программы, вклучая стеганографический ключ для выработки принимающей стороной псевдослучайной последовательности и псевдослучайной перестановки.
@@ -140,7 +140,7 @@ namespace BBSLib
         /// <param name="barcodeBitmap">Внедряемое изображение</param>
         public void DrawCopyright(CvBitmap barcodeBitmap)
         {
-            Size size = barcodeBitmap.Size;
+            var size = barcodeBitmap.Size;
             var pt = new Point(Size - new Size(size.Width * 3 / 2, size.Height * 3 / 2));
             ROI = new Rectangle(pt, size);
             barcodeBitmap.CopyTo(this);

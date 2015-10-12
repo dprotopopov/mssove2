@@ -16,7 +16,7 @@ namespace BBSLib.UnitTest
         {
             double[] delta = {-2, -1, 0, 1, 2};
 
-            for (int i = 0; i < 4; i++)
+            for (var i = 0; i < 4; i++)
                 using (var zipper = new Zipper(i))
                 {
                     var input = delta.ToArray();
@@ -37,9 +37,9 @@ namespace BBSLib.UnitTest
             var buffer = new byte[length];
             Rng.GetBytes(buffer);
 
-            double[] delta = buffer.Select(x => (double) x).ToArray();
+            var delta = buffer.Select(x => (double) x).ToArray();
 
-            for (int i = 0; i < 4; i++)
+            for (var i = 0; i < 4; i++)
                 using (var zipper = new Zipper(i))
                 {
                     Console.WriteLine(Zipper.ComboBoxItems[i]);

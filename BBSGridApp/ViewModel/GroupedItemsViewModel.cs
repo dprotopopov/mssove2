@@ -1,23 +1,24 @@
-﻿using BBSGridApp.DataModel;
+﻿using System.Collections.Generic;
+using BBSGridApp.DataModel;
 using DevExpress.Core;
-using System.Collections.Generic;
+using BindableBase = DevExpress.Mvvm.BindableBase;
 
 namespace BBSGridApp.ViewModel
 {
     //A View Model for a GroupedItemsPage
-    public class GroupedItemsViewModel : DevExpress.Mvvm.BindableBase, ISupportSaveLoadState
+    public sealed class GroupedItemsViewModel : BindableBase, ISupportSaveLoadState
     {
-        IEnumerable<SampleDataGroup> groups;
-        public GroupedItemsViewModel() { }
+        private IEnumerable<SampleDataGroup> groups;
+
         public IEnumerable<SampleDataGroup> Groups
         {
             get { return groups; }
-            private set { SetProperty<IEnumerable<SampleDataGroup>>(ref groups, value); }
+            private set { SetProperty(ref groups, value); }
         }
 
         void ISupportSaveLoadState.LoadState(object navigationParameter, PageStateStorage pageState)
         {
-            Groups = SampleDataSource.GetGroups((string)navigationParameter);
+            Groups = SampleDataSource.GetGroups((string) navigationParameter);
         }
 
         void ISupportSaveLoadState.SaveState(PageStateStorage pageState)

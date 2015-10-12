@@ -12,8 +12,8 @@ namespace BBSLib
         static BitCounter()
         {
             BitCount[0] = 0;
-            for (int k = 1; k < BitCount.Length; k <<= 1)
-                for (int i = 0; i < k; i++)
+            for (var k = 1; k < BitCount.Length; k <<= 1)
+                for (var i = 0; i < k; i++)
                     BitCount[k + i] = BitCount[i] + 1;
         }
 
@@ -25,7 +25,7 @@ namespace BBSLib
         public static long Count(byte[] bytes)
         {
             var byteCount = new int[256];
-            foreach (byte ch in bytes) byteCount[ch]++;
+            foreach (var ch in bytes) byteCount[ch]++;
             return BitCount.Zip(byteCount, (x, y) => x*y).Sum();
         }
     }

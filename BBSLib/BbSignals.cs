@@ -71,16 +71,16 @@ namespace BBSLib
             // Применение вычисленной оценки смещения средней яркости для компенсации в алгоритме
             var delta0 = (int) Math.Round(alpha - betta);
             var delta1 = (int) Math.Round(-alpha - betta);
-            int index = 0;
-            bool[] negGammaBits = Enumerable.Range(index, _expandSize)
+            var index = 0;
+            var negGammaBits = Enumerable.Range(index, _expandSize)
                 .Select(i => ((gamma[i >> 3] >> (i & 7)) & 1) == 0).ToArray();
-            foreach (byte ch in data)
-                foreach (bool negDataBit in Enumerable.Range(0, BitsPerByte).Select(j => ((ch >> j) & 1) == 0))
+            foreach (var ch in data)
+                foreach (var negDataBit in Enumerable.Range(0, BitsPerByte).Select(j => ((ch >> j) & 1) == 0))
                 {
                     if (_maximumGamma && index > 0)
                         negGammaBits = Enumerable.Range(index, _expandSize)
                             .Select(i => ((gamma[i >> 3] >> (i & 7)) & 1) == 0).ToArray();
-                    int[] buffer = negDataBit
+                    var buffer = negDataBit
                         ? negGammaBits.Select(negGammaBit => (negGammaBit ? delta0 : delta1)).ToArray()
                         : negGammaBits.Select(negGammaBit => (negGammaBit ? delta1 : delta0)).ToArray();
                     Array.Copy(buffer, 0, delta, index, _expandSize);
@@ -112,18 +112,18 @@ namespace BBSLib
             Debug.Assert(gamma.Length*BitsPerByte >= _expandSize);
 
             // Применение вычисленной оценки смещения средней яркости для компенсации в алгоритме
-            double delta0 = alpha - betta;
-            double delta1 = -alpha - betta;
-            int index = 0;
-            bool[] negGammaBits = Enumerable.Range(index, _expandSize)
+            var delta0 = alpha - betta;
+            var delta1 = -alpha - betta;
+            var index = 0;
+            var negGammaBits = Enumerable.Range(index, _expandSize)
                 .Select(i => ((gamma[i >> 3] >> (i & 7)) & 1) == 0).ToArray();
-            foreach (byte ch in data)
-                foreach (bool negDataBit in Enumerable.Range(0, BitsPerByte).Select(j => ((ch >> j) & 1) == 0))
+            foreach (var ch in data)
+                foreach (var negDataBit in Enumerable.Range(0, BitsPerByte).Select(j => ((ch >> j) & 1) == 0))
                 {
                     if (_maximumGamma && index > 0)
                         negGammaBits = Enumerable.Range(index, _expandSize)
                             .Select(i => ((gamma[i >> 3] >> (i & 7)) & 1) == 0).ToArray();
-                    double[] buffer = negDataBit
+                    var buffer = negDataBit
                         ? negGammaBits.Select(negGammaBit => (negGammaBit ? delta0 : delta1)).ToArray()
                         : negGammaBits.Select(negGammaBit => (negGammaBit ? delta1 : delta0)).ToArray();
                     Array.Copy(buffer, 0, delta, index, _expandSize);
@@ -150,16 +150,16 @@ namespace BBSLib
 
             using (var z = new MemoryStream(data))
             {
-                int count = delta.Length/BitsPerByte/_expandSize; // Длина строки в байтах
+                var count = delta.Length/BitsPerByte/_expandSize; // Длина строки в байтах
                 var votes = new double[BitsPerByte];
                 var buffer = new int[_expandSize];
-                int index = 0;
-                bool[] negGammaBits = Enumerable.Range(index, _expandSize)
+                var index = 0;
+                var negGammaBits = Enumerable.Range(index, _expandSize)
                     .Select(i => ((gamma[i >> 3] >> (i & 7)) & 1) == 0).ToArray();
                 while (count-- > 0)
                 {
                     Array.Clear(votes, 0, votes.Length);
-                    for (int j = 0; j < BitsPerByte; j++)
+                    for (var j = 0; j < BitsPerByte; j++)
                     {
                         Array.Copy(delta, index, buffer, 0, buffer.Length);
                         if (_maximumGamma && index > 0)
@@ -194,16 +194,16 @@ namespace BBSLib
 
             using (var z = new MemoryStream(data))
             {
-                int count = delta.Length/BitsPerByte/_expandSize; // Длина результата в байтах
+                var count = delta.Length/BitsPerByte/_expandSize; // Длина результата в байтах
                 var votes = new double[BitsPerByte];
                 var buffer = new double[_expandSize];
-                int index = 0;
-                bool[] negGammaBits = Enumerable.Range(index, _expandSize)
+                var index = 0;
+                var negGammaBits = Enumerable.Range(index, _expandSize)
                     .Select(i => ((gamma[i >> 3] >> (i & 7)) & 1) == 0).ToArray();
                 while (count-- > 0)
                 {
                     Array.Clear(votes, 0, votes.Length);
-                    for (int j = 0; j < BitsPerByte; j++)
+                    for (var j = 0; j < BitsPerByte; j++)
                     {
                         Array.Copy(delta, index, buffer, 0, buffer.Length);
                         if (_maximumGamma && index > 0)

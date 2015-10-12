@@ -23,7 +23,9 @@ namespace BBSLib.Options
         private static object[] _comboBoxItems; // Список значений для комбо-бокса
         private static readonly Arcfour Arcfour = new Arcfour();
 
-        private readonly GammaId _gammaId; // Идентификатор выбранного алгоритма формирования псевдослучайной последовательности
+        private readonly GammaId _gammaId;
+            // Идентификатор выбранного алгоритма формирования псевдослучайной последовательности
+
         private readonly string _key;
 
         public Gamma(int itemIndex, string key)
@@ -56,14 +58,14 @@ namespace BBSLib.Options
 
         public void GetBytes(byte[] buffer)
         {
-            int n = buffer.Length;
+            var n = buffer.Length;
             switch (_gammaId)
             {
                 case GammaId.None:
                     Array.Clear(buffer, 0, n);
                     break;
                 case GammaId.Aes:
-                    using (Aes aes = Aes.Create())
+                    using (var aes = Aes.Create())
                     {
                         Arcfour.SetKey(_key);
                         if (aes != null)
@@ -76,7 +78,7 @@ namespace BBSLib.Options
                             aes.Padding = PaddingMode.Zeros;
 
                             // Create a decrytor to perform the stream transform.
-                            ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
+                            var encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
 
                             // Create the streams used for encryption. 
                             using (var memoryStream = new MemoryStream())
@@ -113,7 +115,7 @@ namespace BBSLib.Options
                         serviceProvider.Padding = PaddingMode.Zeros;
 
                         // Create a decrytor to perform the stream transform.
-                        ICryptoTransform encryptor = serviceProvider.CreateEncryptor(serviceProvider.Key,
+                        var encryptor = serviceProvider.CreateEncryptor(serviceProvider.Key,
                             serviceProvider.IV);
 
                         // Create the streams used for encryption. 
@@ -148,7 +150,7 @@ namespace BBSLib.Options
                         serviceProvider.Padding = PaddingMode.Zeros;
 
                         // Create a decrytor to perform the stream transform.
-                        ICryptoTransform encryptor = serviceProvider.CreateEncryptor(serviceProvider.Key,
+                        var encryptor = serviceProvider.CreateEncryptor(serviceProvider.Key,
                             serviceProvider.IV);
 
                         // Create the streams used for encryption. 
@@ -194,7 +196,7 @@ namespace BBSLib.Options
             Aes = 1,
             Des = 2,
             TripleDes = 3,
-            Arcfour = 4,
+            Arcfour = 4
         };
     }
 }

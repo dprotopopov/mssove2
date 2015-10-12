@@ -50,9 +50,9 @@ namespace BBSLib.Options
         /// <param name="output">Выходной поток данных</param>
         public void Forward(Stream input, Stream output)
         {
-            int codeSize = _codeSize;
-            int dataSize = _dataSize;
-            int twoS = Math.Abs(codeSize - dataSize);
+            var codeSize = _codeSize;
+            var dataSize = _dataSize;
+            var twoS = Math.Abs(codeSize - dataSize);
             Debug.Assert(codeSize > dataSize);
             switch (_eccId)
             {
@@ -63,7 +63,7 @@ namespace BBSLib.Options
                     var buffer = new byte[Math.Max(codeSize, dataSize)];
                     while (input.Read(buffer, 0, dataSize) > 0)
                     {
-                        int[] array = buffer.Select(x => (int) x).ToArray();
+                        var array = buffer.Select(x => (int) x).ToArray();
                         RsEncoder.encode(array, twoS);
                         output.Write(array.Select(x => (byte) x).ToArray(), 0, codeSize);
                     }
@@ -80,9 +80,9 @@ namespace BBSLib.Options
         /// <param name="output">Выходной поток данных</param>
         public void Backward(Stream input, Stream output)
         {
-            int codeSize = _codeSize;
-            int dataSize = _dataSize;
-            int twoS = Math.Abs(codeSize - dataSize);
+            var codeSize = _codeSize;
+            var dataSize = _dataSize;
+            var twoS = Math.Abs(codeSize - dataSize);
             Debug.Assert(codeSize > dataSize);
             switch (_eccId)
             {
@@ -93,7 +93,7 @@ namespace BBSLib.Options
                     var buffer = new byte[Math.Max(codeSize, dataSize)];
                     while (input.Read(buffer, 0, codeSize) > 0)
                     {
-                        int[] array = buffer.Select(x => (int) x).ToArray();
+                        var array = buffer.Select(x => (int) x).ToArray();
                         RsDecoder.decode(array, twoS);
                         output.Write(array.Select(x => (byte) x).ToArray(), 0, dataSize);
                     }
@@ -104,6 +104,13 @@ namespace BBSLib.Options
         }
 
         /// <summary>
+        ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public void Dispose()
+        {
+        }
+
+        /// <summary>
         ///     Идентификаторы алгоритмов коррекции ошибок
         /// </summary>
         private enum EccId
@@ -111,12 +118,5 @@ namespace BBSLib.Options
             None = 0,
             ReedSolomon
         };
-
-        /// <summary>
-        ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-        /// </summary>
-        public void Dispose()
-        {
-        }
     }
 }

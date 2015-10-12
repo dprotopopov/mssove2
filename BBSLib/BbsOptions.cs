@@ -78,42 +78,6 @@ namespace BBSLib
             IndexToObject();
         }
 
-        #region Элементы для работы с параметрами через комбо-боксы
-
-        [Description(@"Алгоритм компрессии")]
-        [Category(@"Алгоритмы")]
-        public object ArchiverComboBoxItem { get; set; }
-
-        [Description(@"Встраиваемый баркод")]
-        [Category(@"Значения")]
-        public object BarcodeComboBoxItem { get; set; }
-
-        [Description(@"Алгоритм коррекции ошибки")]
-        [Category(@"Алгоритмы")]
-        public object EccComboBoxItem { get; set; }
-
-        [Description(@"Алгоритм гаммы")]
-        [Category(@"Алгоритмы")]
-        public object GammaComboBoxItem { get; set; }
-
-        [Description(@"Извлекать баркод")]
-        [Category(@"Значения")]
-        public bool ExtractBarcode { get; set; }
-
-        [Description(@"Алгоритм перемешивания")]
-        [Category(@"Алгоритмы")]
-        public object MixerComboBoxItem { get; set; }
-
-        [Description(@"Политика заполения лишних пикселей")]
-        [Category(@"Политика заполения лишних пикселей")]
-        public object PoliticComboBoxItem { get; set; }
-
-        [Description(@"Алгоритм арифметики сложения/вычитания")]
-        [Category(@"Алгоритмы")]
-        public object ZipperComboBoxItem { get; set; }
-
-        #endregion
-
         /// <summary>
         ///     Глубина погружения
         /// </summary>
@@ -251,25 +215,6 @@ namespace BBSLib
         [Category(@"Значения")]
         public string Key { get; set; }
 
-        #region Элементы исходных данных и результатов работы программы
-
-        [Browsable(false)]
-        public string RtfText { get; set; }
-
-        [Browsable(false)]
-        public CvBitmap InputBitmap { get; set; }
-
-        [Browsable(false)]
-        public CvBitmap OutputBitmap { get; set; }
-
-        [Browsable(false)]
-        public CvBitmap SampleBitmap { get; set; }
-
-        [Browsable(false)]
-        public CvBitmap MedianBitmap { get; set; }
-
-        #endregion
-
         /// <summary>
         ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
@@ -363,5 +308,60 @@ namespace BBSLib
             BarcodeIndex = Array.IndexOf(Barcode.ComboBoxItems, BarcodeComboBoxItem);
             ZipperIndex = Array.IndexOf(Zipper.ComboBoxItems, ZipperComboBoxItem);
         }
+
+        #region Элементы для работы с параметрами через комбо-боксы
+
+        [Description(@"Алгоритм компрессии")]
+        [Category(@"Алгоритмы")]
+        public object ArchiverComboBoxItem { get; set; }
+
+        [Description(@"Встраиваемый баркод")]
+        [Category(@"Значения")]
+        public object BarcodeComboBoxItem { get; set; }
+
+        [Description(@"Алгоритм коррекции ошибки")]
+        [Category(@"Алгоритмы")]
+        public object EccComboBoxItem { get; set; }
+
+        [Description(@"Алгоритм гаммы")]
+        [Category(@"Алгоритмы")]
+        public object GammaComboBoxItem { get; set; }
+
+        [Description(@"Извлекать баркод")]
+        [Category(@"Значения")]
+        public bool ExtractBarcode { get; set; }
+
+        [Description(@"Алгоритм перемешивания")]
+        [Category(@"Алгоритмы")]
+        public object MixerComboBoxItem { get; set; }
+
+        [Description(@"Политика заполения лишних пикселей")]
+        [Category(@"Политика заполения лишних пикселей")]
+        public object PoliticComboBoxItem { get; set; }
+
+        [Description(@"Алгоритм арифметики сложения/вычитания")]
+        [Category(@"Алгоритмы")]
+        public object ZipperComboBoxItem { get; set; }
+
+        #endregion
+
+        #region Элементы исходных данных и результатов работы программы
+
+        [Browsable(false)]
+        public string RtfText { get; set; }
+
+        [Browsable(false)]
+        public CvBitmap InputBitmap { get; set; }
+
+        [Browsable(false)]
+        public CvBitmap OutputBitmap { get; set; }
+
+        [Browsable(false)]
+        public CvBitmap SampleBitmap { get; set; }
+
+        [Browsable(false)]
+        public CvBitmap MedianBitmap { get; set; }
+
+        #endregion
     }
 }

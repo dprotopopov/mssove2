@@ -42,14 +42,14 @@ namespace BBSLib.Cryptography
         /// </summary>
         public void Ksa(int[] s)
         {
-            int len = s.Length;
-            int keyLength = _key.Length;
-            int[] key = _key;
+            var len = s.Length;
+            var keyLength = _key.Length;
+            var key = _key;
             Array.Copy(Enumerable.Range(0, len).ToArray(), s, len);
             for (int i = 0, j = 0; i < len; i++)
             {
                 j = (j + s[i] + key[i%keyLength])%len;
-                int temp = s[i];
+                var temp = s[i];
                 s[i] = s[j];
                 s[j] = temp;
             }
@@ -62,27 +62,27 @@ namespace BBSLib.Cryptography
         /// </summary>
         public void Prga(byte[] k)
         {
-            int len = k.Length;
-            int keyLength = _key.Length;
+            var len = k.Length;
+            var keyLength = _key.Length;
             var s = new int[256];
             Ksa(s);
             for (int index = 0, i = 0, j = 0; index < len; index++)
             {
                 i = (i + 1)%keyLength;
                 j = (j + s[i])%keyLength;
-                int temp = s[i];
+                var temp = s[i];
                 s[i] = s[j];
                 s[j] = temp;
-                int t = (s[i] + s[j])%keyLength;
+                var t = (s[i] + s[j])%keyLength;
                 k[index] = (byte) s[t];
             }
         }
 
         public void SetKey(string keyText)
         {
-            byte[] bytes = Encoding.Default.GetBytes(keyText);
+            var bytes = Encoding.GetEncoding(0).GetBytes(keyText);
             var key = new int[bytes.Length];
-            for (int index = 0; index < bytes.Length; index++) key[index] = bytes[index];
+            for (var index = 0; index < bytes.Length; index++) key[index] = bytes[index];
             _key = key;
         }
     }

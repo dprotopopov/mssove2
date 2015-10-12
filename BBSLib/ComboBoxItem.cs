@@ -13,15 +13,9 @@
         }
 
         //Accessor
-        public T HiddenValue
-        {
-            get { return _hiddenValue; }
-        }
+        public T HiddenValue => _hiddenValue;
 
         //Override ToString method
-        public override string ToString()
-        {
-            return _displayValue;
-        }
+        public override string ToString() => _displayValue;
     }
 }

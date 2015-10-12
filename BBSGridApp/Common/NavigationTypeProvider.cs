@@ -1,20 +1,19 @@
-﻿using System.Reflection;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Reflection;
 using DevExpress.UI.Xaml.Layout;
 
 namespace BBSGridApp
 {
-
     //The NavigationTypeProvider class returns an instance of a type by the type's name.
     //It is used when navigating pages within View Models and when a target page is set in XAML.
     public class NavigationTypeProvider : TypeProviderBase
     {
-        public override IEnumerable<System.Reflection.Assembly> Assemblies
+        public override IEnumerable<Assembly> Assemblies
         {
             get
             {
                 //Here you can enumerate assemblies that contain classes of pages used for navigating.
-                yield return typeof(App).GetTypeInfo().Assembly;
+                yield return typeof (App).GetTypeInfo().Assembly;
             }
         }
     }
