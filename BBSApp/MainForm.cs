@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Windows.Forms;
+using BBSLib;
 using DevExpress.XtraBars;
 using DevExpress.XtraBars.Helpers;
 using DevExpress.XtraBars.Ribbon;
@@ -14,7 +15,7 @@ namespace BBSApp
     /// </summary>
     public partial class MainForm : RibbonForm
     {
-        public MainForm()
+        public MainForm(BbsOptions bbsOptions, BbsControl.Mode selectedMode)
         {
             InitializeComponent();
             InitSkinGallery();
@@ -23,7 +24,8 @@ namespace BBSApp
             ribbonPageCategoryUnpack.Visible = false;
             ribbonPageCategoryOptions.Visible = false;
             ribbonControl.SelectedPage = ribbonPagePack;
-            mainControl.SelectedMode = BbsControl.Mode.Pack;
+            mainControl.BbsOptions = bbsOptions;
+            mainControl.SelectedMode = selectedMode;
         }
 
         private void InitSkinGallery()

@@ -40,7 +40,7 @@ namespace BBSApp
             this.openOptionsDialog = new System.Windows.Forms.OpenFileDialog();
             this.groupControl1 = new DevExpress.XtraEditors.GroupControl();
             this.xtraTabControl1 = new DevExpress.XtraTab.XtraTabControl();
-            this.xtraTabPage1 = new DevExpress.XtraTab.XtraTabPage();
+            this.xtraTabPagePack = new DevExpress.XtraTab.XtraTabPage();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.labelControl3 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl7 = new DevExpress.XtraEditors.LabelControl();
@@ -69,7 +69,8 @@ namespace BBSApp
             this.AutoAlpha1 = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
             this.FilterStep1 = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
             this.DhtMode1 = new DevExpress.XtraVerticalGrid.Rows.PGridEditorRow();
-            this.xtraTabPage2 = new DevExpress.XtraTab.XtraTabPage();
+            this.xtraTabPageWelcome = new DevExpress.XtraTab.XtraTabPage();
+            this.xtraTabPageUnpack = new DevExpress.XtraTab.XtraTabPage();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl17 = new DevExpress.XtraEditors.LabelControl();
@@ -129,17 +130,19 @@ namespace BBSApp
             this.defaultLookAndFeel1 = new DevExpress.LookAndFeel.DefaultLookAndFeel(this.components);
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemTextEditString)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.groupControl1)).BeginInit();
             this.groupControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).BeginInit();
             this.xtraTabControl1.SuspendLayout();
-            this.xtraTabPage1.SuspendLayout();
+            this.xtraTabPagePack.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.packingSample.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.packingImage.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.propertyGridControlPack)).BeginInit();
-            this.xtraTabPage2.SuspendLayout();
+            this.xtraTabPageWelcome.SuspendLayout();
+            this.xtraTabPageUnpack.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.unpackMedian.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.unpackImage.Properties)).BeginInit();
@@ -155,6 +158,7 @@ namespace BBSApp
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemMemoEditPoliticText)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBoxEcc)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBoxBarcode)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // repositoryItemTextEditString
@@ -201,22 +205,23 @@ namespace BBSApp
             this.xtraTabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.xtraTabControl1.Location = new System.Drawing.Point(3, 3);
             this.xtraTabControl1.Name = "xtraTabControl1";
-            this.xtraTabControl1.SelectedTabPage = this.xtraTabPage1;
+            this.xtraTabControl1.SelectedTabPage = this.xtraTabPagePack;
             this.xtraTabControl1.Size = new System.Drawing.Size(1229, 740);
             this.xtraTabControl1.TabIndex = 0;
             this.xtraTabControl1.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] {
-            this.xtraTabPage1,
-            this.xtraTabPage2,
+            this.xtraTabPageWelcome,
+            this.xtraTabPagePack,
+            this.xtraTabPageUnpack,
             this.xtraTabPageOptions});
             this.xtraTabControl1.SelectedPageChanged += new DevExpress.XtraTab.TabPageChangedEventHandler(this.SelectedPageChanged);
             // 
-            // xtraTabPage1
+            // xtraTabPagePack
             // 
-            this.xtraTabPage1.Controls.Add(this.tableLayoutPanel1);
-            this.xtraTabPage1.Image = ((System.Drawing.Image)(resources.GetObject("xtraTabPage1.Image")));
-            this.xtraTabPage1.Name = "xtraTabPage1";
-            this.xtraTabPage1.Size = new System.Drawing.Size(1219, 685);
-            this.xtraTabPage1.Text = "Режим упаковки";
+            this.xtraTabPagePack.Controls.Add(this.tableLayoutPanel1);
+            this.xtraTabPagePack.Image = ((System.Drawing.Image)(resources.GetObject("xtraTabPagePack.Image")));
+            this.xtraTabPagePack.Name = "xtraTabPagePack";
+            this.xtraTabPagePack.Size = new System.Drawing.Size(1225, 690);
+            this.xtraTabPagePack.Text = "Режим упаковки";
             // 
             // tableLayoutPanel1
             // 
@@ -240,7 +245,7 @@ namespace BBSApp
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 36.43411F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1219, 685);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1225, 690);
             this.tableLayoutPanel1.TabIndex = 52;
             // 
             // labelControl3
@@ -255,7 +260,7 @@ namespace BBSApp
             // labelControl7
             // 
             this.labelControl7.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.labelControl7.Location = new System.Drawing.Point(3, 431);
+            this.labelControl7.Location = new System.Drawing.Point(3, 434);
             this.labelControl7.Name = "labelControl7";
             this.labelControl7.Size = new System.Drawing.Size(62, 19);
             this.labelControl7.TabIndex = 47;
@@ -264,11 +269,11 @@ namespace BBSApp
             // packingSample
             // 
             this.packingSample.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.packingSample.Location = new System.Drawing.Point(3, 456);
+            this.packingSample.Location = new System.Drawing.Point(3, 459);
             this.packingSample.Name = "packingSample";
             this.packingSample.Properties.ShowMenu = false;
             this.packingSample.Properties.SizeMode = DevExpress.XtraEditors.Controls.PictureSizeMode.Zoom;
-            this.packingSample.Size = new System.Drawing.Size(603, 226);
+            this.packingSample.Size = new System.Drawing.Size(606, 228);
             this.packingSample.TabIndex = 16;
             this.packingSample.Click += new System.EventHandler(this.packSample_Click);
             this.packingSample.DoubleClick += new System.EventHandler(this.packSample_Click);
@@ -276,7 +281,7 @@ namespace BBSApp
             // labelControl10
             // 
             this.labelControl10.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.labelControl10.Location = new System.Drawing.Point(612, 3);
+            this.labelControl10.Location = new System.Drawing.Point(615, 3);
             this.labelControl10.Name = "labelControl10";
             this.labelControl10.Size = new System.Drawing.Size(84, 19);
             this.labelControl10.TabIndex = 50;
@@ -286,17 +291,18 @@ namespace BBSApp
             // 
             this.packFile.Dock = System.Windows.Forms.DockStyle.Fill;
             this.packFile.EnableToolTips = true;
-            this.packFile.Location = new System.Drawing.Point(612, 28);
+            this.packFile.Location = new System.Drawing.Point(615, 28);
             this.packFile.Name = "packFile";
-            this.packFile.Options.Bookmarks.AllowNameResolution = false;
-            this.packFile.Size = new System.Drawing.Size(604, 397);
+            this.packFile.Options.Export.PlainText.ExportFinalParagraphMark = DevExpress.XtraRichEdit.Export.PlainText.ExportFinalParagraphMark.Never;
+            this.packFile.Options.Fields.UpdateFieldsInTextBoxes = false;
+            this.packFile.Size = new System.Drawing.Size(607, 400);
             this.packFile.TabIndex = 1;
             this.packFile.DoubleClick += new System.EventHandler(this.packFile_DoubleClick);
             // 
             // labelControl8
             // 
             this.labelControl8.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.labelControl8.Location = new System.Drawing.Point(612, 431);
+            this.labelControl8.Location = new System.Drawing.Point(615, 434);
             this.labelControl8.Name = "labelControl8";
             this.labelControl8.Size = new System.Drawing.Size(69, 19);
             this.labelControl8.TabIndex = 48;
@@ -305,11 +311,11 @@ namespace BBSApp
             // packingImage
             // 
             this.packingImage.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.packingImage.Location = new System.Drawing.Point(612, 456);
+            this.packingImage.Location = new System.Drawing.Point(615, 459);
             this.packingImage.Name = "packingImage";
             this.packingImage.Properties.ShowMenu = false;
             this.packingImage.Properties.SizeMode = DevExpress.XtraEditors.Controls.PictureSizeMode.Zoom;
-            this.packingImage.Size = new System.Drawing.Size(604, 226);
+            this.packingImage.Size = new System.Drawing.Size(607, 228);
             this.packingImage.TabIndex = 15;
             this.packingImage.Click += new System.EventHandler(this.packImage_Click);
             // 
@@ -322,7 +328,7 @@ namespace BBSApp
             this.propertyGridControlPack.Rows.AddRange(new DevExpress.XtraVerticalGrid.Rows.BaseRow[] {
             this.category1,
             this.categoryPack});
-            this.propertyGridControlPack.Size = new System.Drawing.Size(603, 397);
+            this.propertyGridControlPack.Size = new System.Drawing.Size(606, 400);
             this.propertyGridControlPack.TabIndex = 52;
             this.propertyGridControlPack.CellValueChanged += new DevExpress.XtraVerticalGrid.Events.CellValueChangedEventHandler(this.CellValueChanged);
             // 
@@ -465,13 +471,20 @@ namespace BBSApp
             this.DhtMode1.Properties.Caption = "Использовать DHT образ как контейнер данных";
             this.DhtMode1.Properties.FieldName = "DhtMode";
             // 
-            // xtraTabPage2
+            // xtraTabPageWelcome
             // 
-            this.xtraTabPage2.Controls.Add(this.tableLayoutPanel2);
-            this.xtraTabPage2.Image = ((System.Drawing.Image)(resources.GetObject("xtraTabPage2.Image")));
-            this.xtraTabPage2.Name = "xtraTabPage2";
-            this.xtraTabPage2.Size = new System.Drawing.Size(1219, 685);
-            this.xtraTabPage2.Text = "Режим распаковки";
+            this.xtraTabPageWelcome.Controls.Add(this.pictureBox1);
+            this.xtraTabPageWelcome.Name = "xtraTabPageWelcome";
+            this.xtraTabPageWelcome.Size = new System.Drawing.Size(1225, 690);
+            this.xtraTabPageWelcome.Text = "Добро пожаловать!";
+            // 
+            // xtraTabPageUnpack
+            // 
+            this.xtraTabPageUnpack.Controls.Add(this.tableLayoutPanel2);
+            this.xtraTabPageUnpack.Image = ((System.Drawing.Image)(resources.GetObject("xtraTabPageUnpack.Image")));
+            this.xtraTabPageUnpack.Name = "xtraTabPageUnpack";
+            this.xtraTabPageUnpack.Size = new System.Drawing.Size(1225, 690);
+            this.xtraTabPageUnpack.Text = "Режим распаковки";
             // 
             // tableLayoutPanel2
             // 
@@ -495,7 +508,7 @@ namespace BBSApp
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 35.96899F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(1219, 685);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(1225, 690);
             this.tableLayoutPanel2.TabIndex = 48;
             // 
             // labelControl2
@@ -510,7 +523,7 @@ namespace BBSApp
             // labelControl17
             // 
             this.labelControl17.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.labelControl17.Location = new System.Drawing.Point(3, 434);
+            this.labelControl17.Location = new System.Drawing.Point(3, 437);
             this.labelControl17.Name = "labelControl17";
             this.labelControl17.Size = new System.Drawing.Size(69, 19);
             this.labelControl17.TabIndex = 45;
@@ -519,28 +532,28 @@ namespace BBSApp
             // unpackMedian
             // 
             this.unpackMedian.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.unpackMedian.Location = new System.Drawing.Point(612, 459);
+            this.unpackMedian.Location = new System.Drawing.Point(615, 462);
             this.unpackMedian.Name = "unpackMedian";
             this.unpackMedian.Properties.ShowMenu = false;
             this.unpackMedian.Properties.SizeMode = DevExpress.XtraEditors.Controls.PictureSizeMode.Zoom;
-            this.unpackMedian.Size = new System.Drawing.Size(604, 223);
+            this.unpackMedian.Size = new System.Drawing.Size(607, 225);
             this.unpackMedian.TabIndex = 38;
             // 
             // unpackImage
             // 
             this.unpackImage.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.unpackImage.Location = new System.Drawing.Point(3, 459);
+            this.unpackImage.Location = new System.Drawing.Point(3, 462);
             this.unpackImage.Name = "unpackImage";
             this.unpackImage.Properties.ShowMenu = false;
             this.unpackImage.Properties.SizeMode = DevExpress.XtraEditors.Controls.PictureSizeMode.Zoom;
-            this.unpackImage.Size = new System.Drawing.Size(603, 223);
+            this.unpackImage.Size = new System.Drawing.Size(606, 225);
             this.unpackImage.TabIndex = 14;
             this.unpackImage.Click += new System.EventHandler(this.unpackImage_Click);
             // 
             // labelControl18
             // 
             this.labelControl18.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.labelControl18.Location = new System.Drawing.Point(612, 3);
+            this.labelControl18.Location = new System.Drawing.Point(615, 3);
             this.labelControl18.Name = "labelControl18";
             this.labelControl18.Size = new System.Drawing.Size(84, 19);
             this.labelControl18.TabIndex = 46;
@@ -550,11 +563,12 @@ namespace BBSApp
             // 
             this.unpackFile.Dock = System.Windows.Forms.DockStyle.Fill;
             this.unpackFile.EnableToolTips = true;
-            this.unpackFile.Location = new System.Drawing.Point(612, 28);
+            this.unpackFile.Location = new System.Drawing.Point(615, 28);
             this.unpackFile.Name = "unpackFile";
-            this.unpackFile.Options.Bookmarks.AllowNameResolution = false;
+            this.unpackFile.Options.Export.PlainText.ExportFinalParagraphMark = DevExpress.XtraRichEdit.Export.PlainText.ExportFinalParagraphMark.Never;
+            this.unpackFile.Options.Fields.UpdateFieldsInTextBoxes = false;
             this.unpackFile.ReadOnly = true;
-            this.unpackFile.Size = new System.Drawing.Size(604, 400);
+            this.unpackFile.Size = new System.Drawing.Size(607, 403);
             this.unpackFile.TabIndex = 9;
             this.unpackFile.DoubleClick += new System.EventHandler(this.unpackFile_DoubleClick);
             // 
@@ -567,7 +581,7 @@ namespace BBSApp
             this.propertyGridControlUnpack.Rows.AddRange(new DevExpress.XtraVerticalGrid.Rows.BaseRow[] {
             this.category2,
             this.categoryUnpack});
-            this.propertyGridControlUnpack.Size = new System.Drawing.Size(603, 400);
+            this.propertyGridControlUnpack.Size = new System.Drawing.Size(606, 403);
             this.propertyGridControlUnpack.TabIndex = 48;
             this.propertyGridControlUnpack.CellValueChanged += new DevExpress.XtraVerticalGrid.Events.CellValueChangedEventHandler(this.CellValueChanged);
             // 
@@ -682,7 +696,7 @@ namespace BBSApp
             // labelControl1
             // 
             this.labelControl1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.labelControl1.Location = new System.Drawing.Point(612, 434);
+            this.labelControl1.Location = new System.Drawing.Point(615, 437);
             this.labelControl1.Name = "labelControl1";
             this.labelControl1.Size = new System.Drawing.Size(61, 19);
             this.labelControl1.TabIndex = 49;
@@ -693,7 +707,7 @@ namespace BBSApp
             this.xtraTabPageOptions.Controls.Add(this.propertyGridControlOptions);
             this.xtraTabPageOptions.Image = ((System.Drawing.Image)(resources.GetObject("xtraTabPageOptions.Image")));
             this.xtraTabPageOptions.Name = "xtraTabPageOptions";
-            this.xtraTabPageOptions.Size = new System.Drawing.Size(1219, 685);
+            this.xtraTabPageOptions.Size = new System.Drawing.Size(1225, 690);
             this.xtraTabPageOptions.Text = "Режим параметров";
             // 
             // propertyGridControlOptions
@@ -719,7 +733,7 @@ namespace BBSApp
             this.propertyGridControlOptions.Rows.AddRange(new DevExpress.XtraVerticalGrid.Rows.BaseRow[] {
             this.category,
             this.categoryPackUnpack});
-            this.propertyGridControlOptions.Size = new System.Drawing.Size(1219, 685);
+            this.propertyGridControlOptions.Size = new System.Drawing.Size(1225, 690);
             this.propertyGridControlOptions.TabIndex = 0;
             this.propertyGridControlOptions.CellValueChanged += new DevExpress.XtraVerticalGrid.Events.CellValueChangedEventHandler(this.CellValueChanged);
             // 
@@ -971,9 +985,24 @@ namespace BBSApp
             this.PixelFormatIndex.Properties.Caption = "Формат пикселей";
             this.PixelFormatIndex.Properties.FieldName = "PixelFormatComboBoxItem";
             // 
+            // defaultLookAndFeel1
+            // 
+            this.defaultLookAndFeel1.LookAndFeel.SkinName = "Metropolis";
+            // 
             // openFileDialog
             // 
             this.openFileDialog.FileName = "openFileDialog1";
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(1225, 690);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox1.TabIndex = 0;
+            this.pictureBox1.TabStop = false;
             // 
             // BbsControl
             // 
@@ -987,13 +1016,14 @@ namespace BBSApp
             this.groupControl1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).EndInit();
             this.xtraTabControl1.ResumeLayout(false);
-            this.xtraTabPage1.ResumeLayout(false);
+            this.xtraTabPagePack.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.packingSample.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.packingImage.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.propertyGridControlPack)).EndInit();
-            this.xtraTabPage2.ResumeLayout(false);
+            this.xtraTabPageWelcome.ResumeLayout(false);
+            this.xtraTabPageUnpack.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.unpackMedian.Properties)).EndInit();
@@ -1010,6 +1040,7 @@ namespace BBSApp
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemMemoEditPoliticText)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBoxEcc)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBoxBarcode)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1023,8 +1054,8 @@ namespace BBSApp
         private System.Windows.Forms.SaveFileDialog saveOptionsDialog;
         private DevExpress.XtraEditors.GroupControl groupControl1;
         private DevExpress.XtraTab.XtraTabControl xtraTabControl1;
-        private DevExpress.XtraTab.XtraTabPage xtraTabPage1;
-        private DevExpress.XtraTab.XtraTabPage xtraTabPage2;
+        private DevExpress.XtraTab.XtraTabPage xtraTabPagePack;
+        private DevExpress.XtraTab.XtraTabPage xtraTabPageUnpack;
         private DevExpress.XtraTab.XtraTabPage xtraTabPageOptions;
         private DevExpress.LookAndFeel.DefaultLookAndFeel defaultLookAndFeel1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
@@ -1113,5 +1144,7 @@ namespace BBSApp
         private DevExpress.XtraVerticalGrid.Rows.PGridEditorRow DhtMode1;
         private DevExpress.XtraVerticalGrid.Rows.PGridEditorRow DhtMode2;
         private DevExpress.XtraVerticalGrid.Rows.PGridEditorRow DhtMode;
+        private DevExpress.XtraTab.XtraTabPage xtraTabPageWelcome;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }

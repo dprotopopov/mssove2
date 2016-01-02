@@ -279,12 +279,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <SDKReference Include="DevExpress.Controls, Version=15.1">
-      <Name>DevExpress.Controls %28DevExpress.Controls, Version=15.1%29</Name>
-    </SDKReference>
-    <SDKReference Include="DevExpress.Core, Version=15.1">
-      <Name>DevExpress.Core</Name>
-    </SDKReference>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="..\BBSGridApp.Shared\BBSGridApp.Shared.projitems" Label="Shared" />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">

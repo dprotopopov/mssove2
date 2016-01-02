@@ -34,15 +34,15 @@ namespace BBSApp
 
         public enum Mode
         {
-            Pack = 0,
-            Unpack = 1,
-            Options = 2
+            Welcome = 0,
+            Pack = 1,
+            Unpack = 2,
+            Options = 3
         }
 
-        private const string DefaultOptionsFileName = "default.options";
         private const int BitsPerByte = 8; // Количество битов в байте
 
-        private BbsOptions _bbsOptions = new BbsOptions();
+        private BbsOptions _bbsOptions;
         private CvBitmap _inputBitmap;
         private CvBitmap _medianBitmap;
         private CvBitmap _outputBitmap;
@@ -51,28 +51,13 @@ namespace BBSApp
         public BbsControl()
         {
             InitializeComponent();
+
             repositoryItemComboBoxArchiver.Items.AddRange(Archiver.ComboBoxItems);
             repositoryItemComboBoxEcc.Items.AddRange(Ecc.ComboBoxItems);
             repositoryItemComboBoxGamma.Items.AddRange(Gamma.ComboBoxItems);
             repositoryItemComboBoxMixer.Items.AddRange(Mixer.ComboBoxItems);
             repositoryItemComboBoxPolitic.Items.AddRange(Politic.ComboBoxItems);
             repositoryItemComboBoxBarcode.Items.AddRange(Barcode.ComboBoxItems);
-
-            try
-            {
-                Debug.WriteLine("Reading Default Options Information");
-                using (Stream stream = File.Open(DefaultOptionsFileName, FileMode.Open))
-                    _bbsOptions = (BbsOptions) new BinaryFormatter().Deserialize(stream);
-                _bbsOptions.IndexToObject();
-            }
-            catch (Exception)
-            {
-            }
-
-            _sampleBitmap = _bbsOptions.SampleBitmap;
-            _inputBitmap = _bbsOptions.InputBitmap;
-            _outputBitmap = _bbsOptions.OutputBitmap;
-            _medianBitmap = _bbsOptions.MedianBitmap;
 
 
             propertyGridControlPack.DefaultEditors.AddRange(new[]
@@ -127,9 +112,6 @@ namespace BBSApp
             MixerComboBoxItem2.Properties.RowEdit = MixerComboBoxItem.Properties.RowEdit.Clone() as RepositoryItem;
             GammaComboBoxItem2.Properties.RowEdit = GammaComboBoxItem.Properties.RowEdit.Clone() as RepositoryItem;
 
-            propertyGridControlOptions.SelectedObject = _bbsOptions;
-            propertyGridControlPack.SelectedObject = _bbsOptions;
-            propertyGridControlUnpack.SelectedObject = _bbsOptions;
 
             openSampleDialog.Filter =
                 openImageDialog.Filter =
@@ -138,6 +120,21 @@ namespace BBSApp
             saveFileDialog.Filter =
                 openFileDialog.Filter =
                     @"Rich Text Files (*.rtf)|*.rtf|All Files (*.*)|*.*";
+        }
+
+        public BbsOptions BbsOptions
+        {
+            get { return _bbsOptions; }
+            set{
+                propertyGridControlUnpack.SelectedObject =
+                    propertyGridControlPack.SelectedObject =
+                        propertyGridControlOptions.SelectedObject = 
+                            _bbsOptions = value;
+                _sampleBitmap = _bbsOptions.SampleBitmap;
+                _inputBitmap = _bbsOptions.InputBitmap;
+                _outputBitmap = _bbsOptions.OutputBitmap;
+                _medianBitmap = _bbsOptions.MedianBitmap;
+            }
         }
 
         public Mode SelectedMode
@@ -164,10 +161,10 @@ namespace BBSApp
                     try
                     {
                         if (packingSample.Image == null) throw new Exception("Нет изображения");
-                        _bbsOptions.ObjectToIndex();
-                        _bbsOptions.RtfText = packFile.RtfText;
-                        _bbsOptions.SampleBitmap = _sampleBitmap;
-                        _outputBitmap = BbsBuilder.Pack(_bbsOptions);
+                        BbsOptions.ObjectToIndex();
+                        BbsOptions.RtfText = packFile.RtfText;
+                        BbsOptions.SampleBitmap = _sampleBitmap;
+                        _outputBitmap = BbsBuilder.Pack(BbsOptions);
                         packingImage.Image = _outputBitmap.Bitmap;
                         propertyGridControlOptions.Refresh();
                         propertyGridControlPack.Refresh();
@@ -183,10 +180,10 @@ namespace BBSApp
                     try
                     {
                         if (unpackImage.Image == null) throw new Exception("Нет изображения");
-                        _bbsOptions.ObjectToIndex();
-                        _bbsOptions.InputBitmap = _inputBitmap;
-                        unpackFile.RtfText = BbsBuilder.Unpack(_bbsOptions);
-                        _medianBitmap = _bbsOptions.MedianBitmap;
+                        BbsOptions.ObjectToIndex();
+                        BbsOptions.InputBitmap = _inputBitmap;
+                        unpackFile.RtfText = BbsBuilder.Unpack(BbsOptions);
+                        _medianBitmap = BbsOptions.MedianBitmap;
                         unpackMedian.Image = _medianBitmap.Bitmap;
                         propertyGridControlOptions.Refresh();
                         propertyGridControlPack.Refresh();
@@ -204,9 +201,9 @@ namespace BBSApp
 
         public bool ShowGamma()
         {
-            _bbsOptions.ObjectToIndex();
-            var bytes = new byte[(_bbsOptions.ExpandSize + BitsPerByte - 1)/BitsPerByte];
-            using (var gamma = new Gamma(_bbsOptions.GammaIndex, _bbsOptions.Key))
+            BbsOptions.ObjectToIndex();
+            var bytes = new byte[(BbsOptions.ExpandSize + BitsPerByte - 1)/BitsPerByte];
+            using (var gamma = new Gamma(BbsOptions.GammaIndex, BbsOptions.Key))
                 gamma.GetBytes(bytes);
             XtraMessageBox.Show(
                 string.Join("", bytes.ToArray().Select(x => x.ToString("X02"))),
@@ -328,9 +325,9 @@ namespace BBSApp
             if (SelectedMode == Mode.Options) propertyGridControlOptions.UpdateFocusedRecord();
             if (SelectedMode == Mode.Pack) propertyGridControlPack.UpdateFocusedRecord();
             if (SelectedMode == Mode.Unpack) propertyGridControlUnpack.UpdateFocusedRecord();
-            _bbsOptions.ObjectToIndex();
+            BbsOptions.ObjectToIndex();
             using (Stream stream = File.Open(saveOptionsDialog.FileName, FileMode.Create))
-                new BinaryFormatter().Serialize(stream, _bbsOptions);
+                new BinaryFormatter().Serialize(stream, BbsOptions);
             return true;
         }
 
@@ -338,11 +335,11 @@ namespace BBSApp
         {
             if (openOptionsDialog.ShowDialog() != DialogResult.OK) return false;
             using (Stream stream = File.Open(openOptionsDialog.FileName, FileMode.Open))
-                _bbsOptions = (BbsOptions) new BinaryFormatter().Deserialize(stream);
-            _bbsOptions.IndexToObject();
-            propertyGridControlOptions.SelectedObject = _bbsOptions;
-            propertyGridControlPack.SelectedObject = _bbsOptions;
-            propertyGridControlUnpack.SelectedObject = _bbsOptions;
+                BbsOptions = (BbsOptions) new BinaryFormatter().Deserialize(stream);
+            BbsOptions.IndexToObject();
+            propertyGridControlOptions.SelectedObject = BbsOptions;
+            propertyGridControlPack.SelectedObject = BbsOptions;
+            propertyGridControlUnpack.SelectedObject = BbsOptions;
             return true;
         }
 
@@ -392,18 +389,18 @@ namespace BBSApp
         {
             try
             {
-                _bbsOptions.ObjectToIndex();
-                using (var barcode = new Barcode(_bbsOptions.BarcodeIndex)
+                BbsOptions.ObjectToIndex();
+                using (var barcode = new Barcode(BbsOptions.BarcodeIndex)
                 {
-                    ArchiverIndex = _bbsOptions.ArchiverIndex,
-                    EccIndex = _bbsOptions.EccIndex,
-                    MixerIndex = _bbsOptions.MixerIndex,
-                    GammaIndex = _bbsOptions.GammaIndex,
-                    ExpandSize = _bbsOptions.ExpandSize,
-                    EccCodeSize = _bbsOptions.EccCodeSize,
-                    EccDataSize = _bbsOptions.EccDataSize,
-                    MaximumGamma = _bbsOptions.MaximumGamma,
-                    Key = _bbsOptions.Key
+                    ArchiverIndex = BbsOptions.ArchiverIndex,
+                    EccIndex = BbsOptions.EccIndex,
+                    MixerIndex = BbsOptions.MixerIndex,
+                    GammaIndex = BbsOptions.GammaIndex,
+                    ExpandSize = BbsOptions.ExpandSize,
+                    EccCodeSize = BbsOptions.EccCodeSize,
+                    EccDataSize = BbsOptions.EccDataSize,
+                    MaximumGamma = BbsOptions.MaximumGamma,
+                    Key = BbsOptions.Key
                 })
                 using (var image = new Image<Gray, byte>(barcode.Encode()))
                 using (var imageViewer = new ImageViewer(image, "Баркод"))
@@ -649,16 +646,16 @@ namespace BBSApp
                 {
                     case Mode.Pack:
                         SelectedMode = Mode.Unpack;
-                        _bbsOptions.ObjectToIndex();
+                        BbsOptions.ObjectToIndex();
                         unpackFile.RtfText = string.Empty;
                         unpackImage.Image = null;
                         unpackMedian.Image = null;
                         _inputBitmap = null;
                         _medianBitmap = null;
-                        _bbsOptions.InputBitmap = _inputBitmap = _outputBitmap;
+                        BbsOptions.InputBitmap = _inputBitmap = _outputBitmap;
                         unpackImage.Image = _inputBitmap.Bitmap;
-                        unpackFile.RtfText = BbsBuilder.Unpack(_bbsOptions);
-                        _medianBitmap = _bbsOptions.MedianBitmap;
+                        unpackFile.RtfText = BbsBuilder.Unpack(BbsOptions);
+                        _medianBitmap = BbsOptions.MedianBitmap;
                         unpackMedian.Image = _medianBitmap.Bitmap;
                         var check = string.Compare(unpackFile.RtfText, packFile.RtfText, StringComparison.Ordinal) == 0;
                         XtraMessageBox.Show(check ? "Проверка пройдена" : "Проверка не пройдена", "Проверка");
